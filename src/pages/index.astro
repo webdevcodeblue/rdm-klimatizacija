@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Hero from '../components/home/Hero.astro';
+import Categories from '../components/home/Categories.astro';
+import Features from '../components/home/Features.astro';
+import WhyChooseUs from '../components/home/WhyChooseUs.astro';
+import ProductShowcase from '../components/home/ProductShowcase.astro';
+import BrandLogos from '../components/home/BrandLogos.astro';
+import InquiryModal from '../components/InquiryModal.astro';
+---
+
+<BaseLayout
+  title="Početna"
+  description="RDM Klimatizacija - Vaš pouzdani partner za klimatizaciju. Prodaja, montaža i servis klima uređaja, dizalica topline i ventilacijskih sustava."
+>
+  <Header />
+
+  <main id="main">
+    <Hero />
+    <Features />
+    <Categories />
+    <ProductShowcase />
+    <WhyChooseUs />
+    <BrandLogos />
+  </main>
+
+  <Footer />
+  <InquiryModal />
+</BaseLayout>

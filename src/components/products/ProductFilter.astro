@@ -1,0 +1,524 @@
+---
+// ProductFilter komponenta za filtriranje proizvoda
+export interface Props {
+  manufacturers?: string[];
+  categories?: string[];
+  currentFilters?: {
+    manufacturer?: string;
+    category?: string;
+    power?: string;
+    area?: string;
+    priceMin?: number;
+    priceMax?: number;
+    energyClass?: string;
+  };
+}
+
+const { manufacturers = [], categories = [], currentFilters = {} } = Astro.props;
+
+// Opcije za filtriranje
+const powerOptions = [
+  { value: '2-2.5', label: '2.0 - 2.5 kW' },
+  { value: '2.5-3.5', label: '2.5 - 3.5 kW' },
+  { value: '3.5-5', label: '3.5 - 5.0 kW' },
+  { value: '5-7', label: '5.0 - 7.0 kW' },
+  { value: '7-10', label: '7.0 - 10.0 kW' },
+  { value: '10+', label: '10.0+ kW' }
+];
+
+const areaOptions = [
+  { value: '0-20', label: 'do 20 m²' },
+  { value: '20-30', label: '20 - 30 m²' },
+  { value: '30-40', label: '30 - 40 m²' },
+  { value: '40-60', label: '40 - 60 m²' },
+  { value: '60-80', label: '60 - 80 m²' },
+  { value: '80+', label: '80+ m²' }
+];
+
+const energyClassOptions = [
+  { value: 'A+++', label: 'A+++' },
+  { value: 'A++', label: 'A++' },
+  { value: 'A+', label: 'A+' },
+  { value: 'A', label: 'A' }
+];
+
+const sortOptions = [
+  { value: 'newest', label: 'Najnovije' },
+  { value: 'price-asc', label: 'Cijena: Najniža' },
+  { value: 'price-desc', label: 'Cijena: Najviša' },
+  { value: 'name-asc', label: 'Naziv: A-Z' },
+  { value: 'name-desc', label: 'Naziv: Z-A' },
+  { value: 'power-asc', label: 'Snaga: Rastuća' },
+  { value: 'power-desc', label: 'Snaga: Opadajuća' }
+];
+---
+
+<aside class="product-filter" id="productFilter">
+  <div class="filter__header">
+    <h3 class="filter__title">Filtriraj proizvode</h3>
+    <button class="filter__clear" id="clearFilters">
+      Očisti filtere
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+
+  <form class="filter__form" id="filterForm">
+    <!-- Kategorija -->
+    <div class="filter__group">
+      <h4 class="filter__group-title">Kategorija</h4>
+      <div class="filter__options">
+        {categories.map((category) => (
+          <label class="filter__checkbox">
+            <input
+              type="checkbox"
+              name="category"
+              value={category}
+              checked={currentFilters.category === category}
+            />
+            <span class="filter__checkbox-label">{category}</span>
+          </label>
+        ))}
+      </div>
+    </div>
+
+    <!-- Proizvođač -->
+    <div class="filter__group">
+      <h4 class="filter__group-title">Proizvođač</h4>
+      <div class="filter__options filter__options--scroll">
+        {manufacturers.map((manufacturer) => (
+          <label class="filter__checkbox">
+            <input
+              type="checkbox"
+              name="manufacturer"
+              value={manufacturer}
+              checked={currentFilters.manufacturer === manufacturer}
+            />
+            <span class="filter__checkbox-label">{manufacturer}</span>
+          </label>
+        ))}
+      </div>
+    </div>
+
+    <!-- Snaga -->
+    <div class="filter__group">
+      <h4 class="filter__group-title">Snaga hlađenja/grijanja</h4>
+      <select class="filter__select" name="power">
+        <option value="">Sve snage</option>
+        {powerOptions.map((option) => (
+          <option value={option.value} selected={currentFilters.power === option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    <!-- Površina -->
+    <div class="filter__group">
+      <h4 class="filter__group-title">Preporučena površina</h4>
+      <select class="filter__select" name="area">
+        <option value="">Sve površine</option>
+        {areaOptions.map((option) => (
+          <option value={option.value} selected={currentFilters.area === option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    <!-- Energetska klasa -->
+    <div class="filter__group">
+      <h4 class="filter__group-title">Energetska klasa</h4>
+      <div class="filter__options">
+        {energyClassOptions.map((option) => (
+          <label class="filter__checkbox">
+            <input
+              type="checkbox"
+              name="energyClass"
+              value={option.value}
+              checked={currentFilters.energyClass === option.value}
+            />
+            <span class="filter__checkbox-label filter__checkbox-label--energy">
+              {option.label}
+            </span>
+          </label>
+        ))}
+      </div>
+    </div>
+
+    <!-- Raspon cijene -->
+    <div class="filter__group">
+      <h4 class="filter__group-title">Raspon cijene (€)</h4>
+      <div class="filter__range">
+        <input
+          type="number"
+          class="filter__input"
+          name="priceMin"
+          placeholder="Min"
+          value={currentFilters.priceMin}
+          min="0"
+        />
+        <span class="filter__range-separator">-</span>
+        <input
+          type="number"
+          class="filter__input"
+          name="priceMax"
+          placeholder="Max"
+          value={currentFilters.priceMax}
+          min="0"
+        />
+      </div>
+    </div>
+
+    <!-- Dodatne opcije -->
+    <div class="filter__group">
+      <h4 class="filter__group-title">Dodatne opcije</h4>
+      <div class="filter__options">
+        <label class="filter__checkbox">
+          <input type="checkbox" name="inverter" value="true" />
+          <span class="filter__checkbox-label">Inverter</span>
+        </label>
+        <label class="filter__checkbox">
+          <input type="checkbox" name="wifi" value="true" />
+          <span class="filter__checkbox-label">Wi-Fi upravljanje</span>
+        </label>
+        <label class="filter__checkbox">
+          <input type="checkbox" name="heating" value="true" />
+          <span class="filter__checkbox-label">Funkcija grijanja</span>
+        </label>
+        <label class="filter__checkbox">
+          <input type="checkbox" name="silent" value="true" />
+          <span class="filter__checkbox-label">Tihi rad</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Sortiranje -->
+    <div class="filter__group">
+      <h4 class="filter__group-title">Sortiraj po</h4>
+      <select class="filter__select" name="sort">
+        {sortOptions.map((option) => (
+          <option value={option.value}>{option.label}</option>
+        ))}
+      </select>
+    </div>
+
+    <!-- Primjeni filtere -->
+    <button type="submit" class="filter__submit">
+      Primjeni filtere
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+      </svg>
+    </button>
+  </form>
+</aside>
+
+<!-- Mobile filter toggle -->
+<button class="filter-toggle" id="filterToggle" aria-label="Toggle filters">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+  </svg>
+  Filtriraj
+</button>
+
+<style>
+  .product-filter {
+    background: var(--color-white);
+    border-radius: var(--border-radius-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-card);
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-4));
+    max-height: calc(100vh - var(--header-height) - var(--space-8));
+    overflow-y: auto;
+  }
+
+  .filter__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-6);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .filter__title {
+    font-size: var(--text-xl);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+  }
+
+  .filter__clear {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-2) var(--space-3);
+    background: transparent;
+    color: var(--color-danger);
+    border: 1px solid var(--color-danger);
+    border-radius: var(--border-radius-base);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .filter__clear:hover {
+    background: var(--color-danger);
+    color: var(--color-white);
+  }
+
+  .filter__form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .filter__group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .filter__group-title {
+    font-size: var(--text-base);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+  }
+
+  .filter__options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .filter__options--scroll {
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: var(--space-2);
+  }
+
+  .filter__options--scroll::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .filter__options--scroll::-webkit-scrollbar-track {
+    background: var(--color-gray-100);
+    border-radius: var(--border-radius-full);
+  }
+
+  .filter__options--scroll::-webkit-scrollbar-thumb {
+    background: var(--color-gray-400);
+    border-radius: var(--border-radius-full);
+  }
+
+  .filter__checkbox {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    cursor: pointer;
+    padding: var(--space-2);
+    border-radius: var(--border-radius-base);
+    transition: background var(--transition-fast);
+  }
+
+  .filter__checkbox:hover {
+    background: var(--color-gray-50);
+  }
+
+  .filter__checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-base);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .filter__checkbox input[type="checkbox"]:checked {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  .filter__checkbox-label {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+  }
+
+  .filter__checkbox-label--energy {
+    padding: var(--space-1) var(--space-2);
+    background: var(--color-success);
+    color: var(--color-white);
+    border-radius: var(--border-radius-base);
+    font-weight: var(--font-semibold);
+  }
+
+  .filter__select {
+    padding: var(--space-3);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-base);
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+    background: var(--color-white);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .filter__select:hover {
+    border-color: var(--color-primary);
+  }
+
+  .filter__select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+  }
+
+  .filter__range {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .filter__input {
+    flex: 1;
+    padding: var(--space-3);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-base);
+    font-size: var(--text-sm);
+    transition: all var(--transition-fast);
+  }
+
+  .filter__input:hover {
+    border-color: var(--color-primary);
+  }
+
+  .filter__input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+  }
+
+  .filter__range-separator {
+    color: var(--text-muted);
+  }
+
+  .filter__submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    background: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--border-radius-lg);
+    font-size: var(--text-base);
+    font-weight: var(--font-semibold);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .filter__submit:hover {
+    background: var(--color-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Mobile filter toggle */
+  .filter-toggle {
+    display: none;
+    position: fixed;
+    bottom: var(--space-6);
+    right: var(--space-6);
+    z-index: 100;
+    padding: var(--space-3) var(--space-5);
+    background: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--border-radius-full);
+    box-shadow: var(--shadow-lg);
+    font-weight: var(--font-semibold);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .filter-toggle:hover {
+    background: var(--color-primary-hover);
+    transform: scale(1.05);
+  }
+
+  /* Mobile styles */
+  @media (max-width: 1024px) {
+    .product-filter {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1000;
+      max-height: 100vh;
+      border-radius: 0;
+      transform: translateX(-100%);
+      transition: transform var(--transition-base);
+    }
+
+    .product-filter.active {
+      transform: translateX(0);
+    }
+
+    .filter-toggle {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+  }
+</style>
+
+<script>
+  const filterForm = document.getElementById('filterForm');
+  const clearFilters = document.getElementById('clearFilters');
+  const filterToggle = document.getElementById('filterToggle');
+  const productFilter = document.getElementById('productFilter');
+
+  // Handle filter form submission
+  filterForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(filterForm);
+    const params = new URLSearchParams();
+
+    formData.forEach((value, key) => {
+      if (value) {
+        params.append(key, value);
+      }
+    });
+
+    // Update URL with filter params
+    window.location.href = `${window.location.pathname}?${params.toString()}`;
+  });
+
+  // Clear all filters
+  clearFilters?.addEventListener('click', () => {
+    window.location.href = window.location.pathname;
+  });
+
+  // Mobile filter toggle
+  filterToggle?.addEventListener('click', () => {
+    productFilter?.classList.toggle('active');
+    document.body.classList.toggle('filter-open');
+  });
+
+  // Close mobile filter when clicking outside
+  document.addEventListener('click', (e) => {
+    if (
+      productFilter?.classList.contains('active') &&
+      !productFilter.contains(e.target) &&
+      !filterToggle?.contains(e.target)
+    ) {
+      productFilter.classList.remove('active');
+      document.body.classList.remove('filter-open');
+    }
+  });
+</script>

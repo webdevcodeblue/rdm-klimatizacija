@@ -1,0 +1,109 @@
+---
+import '../styles/global.css';
+
+export interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  keywords?: string;
+}
+
+const {
+  title,
+  description = 'RDM Klimatizacija - Prodaja, montaža i servis klima uređaja, dizalica topline i ventilacijskih sustava. Ovlašteni serviser za vodeće svjetske proizvođače.',
+  image = '/images/og-default.jpg',
+  keywords = 'klima uređaji, klimatizacija, dizalice topline, multi split, inverter, montaža klima, servis klima, Mitsubishi, Daikin, Gree'
+} = Astro.props;
+
+const siteUrl = Astro.site || 'http://localhost:4321';
+const canonicalURL = new URL(Astro.url.pathname, siteUrl);
+---
+
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <!-- Meta osnovni -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content={Astro.generator}>
+
+  <!-- SEO Meta -->
+  <title>{title} | RDM Klimatizacija</title>
+  <meta name="description" content={description}>
+  <meta name="keywords" content={keywords}>
+  <meta name="author" content="RDM Klimatizacija">
+  <link rel="canonical" href={canonicalURL}>
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content={canonicalURL}>
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content={description}>
+  <meta property="og:image" content={new URL(image, siteUrl)}>
+  <meta property="og:site_name" content="RDM Klimatizacija">
+  <meta property="og:locale" content="hr_HR">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content={canonicalURL}>
+  <meta name="twitter:title" content={title}>
+  <meta name="twitter:description" content={description}>
+  <meta name="twitter:image" content={new URL(image, siteUrl)}>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HVACBusiness",
+      "name": "RDM Klimatizacija",
+      "description": "Prodaja, montaža i servis klima uređaja i dizalica topline",
+      "url": "https://rdm-klimatizacija.hr",
+      "telephone": "+385-XX-XXX-XXXX",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Adresa",
+        "addressLocality": "Grad",
+        "postalCode": "10000",
+        "addressCountry": "HR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 45.8150,
+        "longitude": 15.9819
+      },
+      "openingHours": "Mo-Fr 08:00-17:00, Sa 08:00-13:00",
+      "priceRange": "€€",
+      "areaServed": {
+        "@type": "Country",
+        "name": "Croatia"
+      }
+    }
+  </script>
+</head>
+<body>
+  <a href="#main" class="sr-only focus-trap">Preskoči na glavni sadržaj</a>
+
+  <slot />
+
+  <!-- Analytics placeholder -->
+  <script>
+    // Google Analytics ili Plausible će biti dodani ovdje
+  </script>
+</body>
+</html>
+
+<style>
+  /* Ovdje možemo dodati layout-specifične stilove ako je potrebno */
+</style>

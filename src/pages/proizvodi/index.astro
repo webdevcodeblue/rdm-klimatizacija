@@ -1,0 +1,806 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import ProductFilter from '../../components/products/ProductFilter.astro';
+import ProductCard from '../../components/products/ProductCard.astro';
+import InquiryModal from '../../components/InquiryModal.astro';
+
+// Temporary mock data - will be replaced with Strapi CMS
+const products = [
+  {
+    id: '1',
+    slug: 'mitsubishi-msz-ln25vg',
+    name: 'MSZ-LN25VG',
+    manufacturer: 'Mitsubishi Electric',
+    category: 'Klima uređaji',
+    price: 899,
+    originalPrice: 999,
+    power: '2.5 kW',
+    area: '25 m²',
+    energyClass: 'A+++',
+    seer: 8.5,
+    scop: 5.1,
+    features: ['Inverter', 'Wi-Fi', 'Tihi rad', '3D i-see senzor', 'Plasma Quad filter'],
+    badge: 'Akcija',
+    image: '/images/products/mitsubishi-ln25.jpg',
+    inStock: true
+  },
+  {
+    id: '2',
+    slug: 'daikin-ftxa25aw',
+    name: 'Stylish FTXA25AW',
+    manufacturer: 'Daikin',
+    category: 'Klima uređaji',
+    price: 1099,
+    originalPrice: null,
+    power: '2.5 kW',
+    area: '25 m²',
+    energyClass: 'A+++',
+    seer: 8.7,
+    scop: 5.2,
+    features: ['Inverter', 'Wi-Fi', 'Design', 'Coanda effect', '2-Area intelligent eye'],
+    badge: 'Novo',
+    image: '/images/products/daikin-stylish.jpg',
+    inStock: true
+  },
+  {
+    id: '3',
+    slug: 'gree-amber-gwh12yc',
+    name: 'Amber GWH12YC',
+    manufacturer: 'Gree',
+    category: 'Klima uređaji',
+    price: 649,
+    originalPrice: 749,
+    power: '3.5 kW',
+    area: '35 m²',
+    energyClass: 'A++',
+    seer: 6.1,
+    scop: 4.0,
+    features: ['Inverter', 'Wi-Fi', 'I-Feel', 'Turbo', 'Anti-Cold air'],
+    badge: null,
+    image: '/images/products/gree-amber.jpg',
+    inStock: true
+  },
+  {
+    id: '4',
+    slug: 'samsung-windfree-ar12txcaawk',
+    name: 'WindFree AR12TXCAAWK',
+    manufacturer: 'Samsung',
+    category: 'Klima uređaji',
+    price: 1299,
+    originalPrice: null,
+    power: '3.5 kW',
+    area: '35 m²',
+    energyClass: 'A+++',
+    seer: 8.8,
+    scop: 5.1,
+    features: ['WindFree', 'Wi-Fi', 'AI Control', 'Fast Cooling', 'Triple Protector Plus'],
+    badge: 'Premium',
+    image: '/images/products/samsung-windfree.jpg',
+    inStock: true
+  },
+  {
+    id: '5',
+    slug: 'lg-artcool-gallery',
+    name: 'ARTCOOL Gallery A09FR',
+    manufacturer: 'LG',
+    category: 'Klima uređaji',
+    price: 1449,
+    originalPrice: 1599,
+    power: '2.5 kW',
+    area: '25 m²',
+    energyClass: 'A+++',
+    seer: 8.5,
+    scop: 5.0,
+    features: ['Inverter', 'Wi-Fi', 'Personalizirani dizajn', 'AI ThinQ', 'UVnano'],
+    badge: null,
+    image: '/images/products/lg-artcool.jpg',
+    inStock: true
+  },
+  {
+    id: '6',
+    slug: 'panasonic-etherea-cs-xz25vkew',
+    name: 'Etherea CS-XZ25VKEW',
+    manufacturer: 'Panasonic',
+    category: 'Klima uređaji',
+    price: 1199,
+    originalPrice: null,
+    power: '2.5 kW',
+    area: '25 m²',
+    energyClass: 'A+++',
+    seer: 9.5,
+    scop: 5.2,
+    features: ['Inverter', 'Wi-Fi', 'nanoe™ X', 'Aerowings', 'ECONAVI'],
+    badge: null,
+    image: '/images/products/panasonic-etherea.jpg',
+    inStock: true
+  },
+  {
+    id: '7',
+    slug: 'toshiba-seiya-ras-b10e2kvg',
+    name: 'Seiya RAS-B10E2KVG-E',
+    manufacturer: 'Toshiba',
+    category: 'Klima uređaji',
+    price: 549,
+    originalPrice: null,
+    power: '2.5 kW',
+    area: '25 m²',
+    energyClass: 'A++',
+    seer: 6.5,
+    scop: 4.2,
+    features: ['Inverter', 'Quiet mode', 'ECO mode', 'Self-cleaning', '8°C heating'],
+    badge: null,
+    image: '/images/products/toshiba-seiya.jpg',
+    inStock: false
+  },
+  {
+    id: '8',
+    slug: 'bosch-climate-5000',
+    name: 'Climate 5000 RAC 3.5',
+    manufacturer: 'Bosch',
+    category: 'Klima uređaji',
+    price: 799,
+    originalPrice: 899,
+    power: '3.5 kW',
+    area: '35 m²',
+    energyClass: 'A++',
+    seer: 6.2,
+    scop: 4.0,
+    features: ['Inverter', 'Sleep mode', 'Timer', 'Auto restart', 'Healthy filters'],
+    badge: null,
+    image: '/images/products/bosch-climate.jpg',
+    inStock: true
+  }
+];
+
+// Get manufacturers and categories for filters
+const manufacturers = [...new Set(products.map(p => p.manufacturer))].sort();
+const categories = [...new Set(products.map(p => p.category))].sort();
+
+// Get filter params from URL
+const url = new URL(Astro.request.url);
+const currentFilters = {
+  manufacturer: url.searchParams.get('manufacturer') || undefined,
+  category: url.searchParams.get('category') || undefined,
+  power: url.searchParams.get('power') || undefined,
+  area: url.searchParams.get('area') || undefined,
+  energyClass: url.searchParams.get('energyClass') || undefined,
+  priceMin: url.searchParams.get('priceMin') ? Number(url.searchParams.get('priceMin')) : undefined,
+  priceMax: url.searchParams.get('priceMax') ? Number(url.searchParams.get('priceMax')) : undefined
+};
+
+// Filter products based on current filters
+let filteredProducts = products;
+// TODO: Implement filtering logic
+
+const viewMode = url.searchParams.get('view') || 'grid';
+---
+
+<BaseLayout
+  title="Proizvodi"
+  description="Pregledajte našu ponudu klima uređaja, dizalica topline i ventilacijskih sustava"
+  keywords="klima uređaji, split sustavi, multi split, dizalice topline, inverter, prodaja klima"
+>
+  <Header />
+
+  <main class="products-page">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <div class="container">
+        <nav aria-label="Breadcrumb">
+          <ol class="breadcrumb__list">
+            <li class="breadcrumb__item">
+              <a href="/">Početna</a>
+            </li>
+            <li class="breadcrumb__item active">
+              Proizvodi
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Page Header -->
+    <section class="page-header">
+      <div class="container">
+        <h1 class="page-header__title">Naši proizvodi</h1>
+        <p class="page-header__description">
+          Odaberite iz naše široke ponude klima uređaja, dizalica topline i ventilacijskih sustava
+        </p>
+      </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products-section">
+      <div class="container">
+        <div class="products-layout">
+          <!-- Sidebar Filters -->
+          <aside class="products-sidebar">
+            <ProductFilter
+              manufacturers={manufacturers}
+              categories={categories}
+              currentFilters={currentFilters}
+            />
+          </aside>
+
+          <!-- Main Content -->
+          <div class="products-main">
+            <!-- Toolbar -->
+            <div class="products-toolbar">
+              <div class="products-toolbar__info">
+                <span class="products-count">
+                  Prikazano <strong>{filteredProducts.length}</strong> proizvoda
+                </span>
+              </div>
+
+              <div class="products-toolbar__controls">
+                <div class="view-switcher">
+                  <button
+                    class={`view-switcher__btn ${viewMode === 'grid' ? 'active' : ''}`}
+                    data-view="grid"
+                    aria-label="Grid view"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="14" width="7" height="7"></rect>
+                      <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                  </button>
+                  <button
+                    class={`view-switcher__btn ${viewMode === 'list' ? 'active' : ''}`}
+                    data-view="list"
+                    aria-label="List view"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="8" y1="6" x2="21" y2="6"></line>
+                      <line x1="8" y1="12" x2="21" y2="12"></line>
+                      <line x1="8" y1="18" x2="21" y2="18"></line>
+                      <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                      <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                      <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Products Grid/List -->
+            <div class={`products-grid products-grid--${viewMode}`}>
+              {filteredProducts.map((product) => (
+                <ProductCard product={product} viewMode={viewMode} />
+              ))}
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+              <button class="pagination__btn pagination__btn--prev" disabled>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                Prethodna
+              </button>
+
+              <div class="pagination__pages">
+                <button class="pagination__page active">1</button>
+                <button class="pagination__page">2</button>
+                <button class="pagination__page">3</button>
+                <span class="pagination__ellipsis">...</span>
+                <button class="pagination__page">10</button>
+              </div>
+
+              <button class="pagination__btn pagination__btn--next">
+                Sljedeća
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta">
+          <div class="cta__content">
+            <h2 class="cta__title">Ne možete pronaći što tražite?</h2>
+            <p class="cta__description">
+              Kontaktirajte nas i pomoći ćemo vam odabrati idealni proizvod za vaše potrebe
+            </p>
+          </div>
+          <div class="cta__actions">
+            <a href="/kontakt" class="btn btn--primary btn--large">
+              Kontaktirajte nas
+            </a>
+            <a href="tel:+385991234567" class="btn btn--secondary btn--large">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+              099 123 4567
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+  <InquiryModal />
+</BaseLayout>
+
+<style>
+  /* Breadcrumb */
+  .breadcrumb {
+    background: var(--color-gray-50);
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .breadcrumb__list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .breadcrumb__item {
+    font-size: var(--text-sm);
+  }
+
+  .breadcrumb__item a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .breadcrumb__item a:hover {
+    color: var(--color-primary);
+  }
+
+  .breadcrumb__item.active {
+    color: var(--text-primary);
+    font-weight: var(--font-medium);
+  }
+
+  .breadcrumb__item:not(:last-child)::after {
+    content: '/';
+    margin: 0 var(--space-2);
+    color: var(--text-muted);
+  }
+
+  /* Page Header */
+  .page-header {
+    padding: var(--space-12) 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: var(--color-white);
+    text-align: center;
+  }
+
+  .page-header__title {
+    font-size: var(--text-5xl);
+    font-weight: var(--font-bold);
+    margin-bottom: var(--space-4);
+  }
+
+  .page-header__description {
+    font-size: var(--text-xl);
+    opacity: 0.95;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Products Section */
+  .products-section {
+    padding: var(--space-16) 0;
+    background: var(--bg-secondary);
+  }
+
+  .products-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: var(--space-8);
+  }
+
+  .products-sidebar {
+    position: relative;
+  }
+
+  /* Toolbar */
+  .products-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-6);
+    padding: var(--space-4);
+    background: var(--color-white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .products-count {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+  }
+
+  .products-count strong {
+    color: var(--text-primary);
+    font-weight: var(--font-semibold);
+  }
+
+  .products-toolbar__controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .view-switcher {
+    display: flex;
+    gap: var(--space-1);
+    padding: var(--space-1);
+    background: var(--color-gray-100);
+    border-radius: var(--border-radius-base);
+  }
+
+  .view-switcher__btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: var(--border-radius-base);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .view-switcher__btn:hover {
+    background: var(--color-white);
+    color: var(--text-primary);
+  }
+
+  .view-switcher__btn.active {
+    background: var(--color-white);
+    color: var(--color-primary);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Products Grid */
+  .products-grid {
+    display: grid;
+    gap: var(--space-6);
+    margin-bottom: var(--space-12);
+  }
+
+  .products-grid--grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  .products-grid--list {
+    grid-template-columns: 1fr;
+  }
+
+  /* Pagination */
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+  }
+
+  .pagination__btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-white);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    font-weight: var(--font-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .pagination__btn:hover:not(:disabled) {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-primary);
+  }
+
+  .pagination__btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .pagination__pages {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .pagination__page {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-white);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-base);
+    font-weight: var(--font-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .pagination__page:hover {
+    background: var(--color-gray-50);
+  }
+
+  .pagination__page.active {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-primary);
+  }
+
+  .pagination__ellipsis {
+    color: var(--text-muted);
+  }
+
+  /* CTA Section */
+  .cta-section {
+    padding: var(--space-16) 0;
+    background: var(--color-white);
+  }
+
+  .cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-12);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: var(--border-radius-2xl);
+    color: var(--color-white);
+  }
+
+  .cta__title {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    margin-bottom: var(--space-2);
+  }
+
+  .cta__description {
+    font-size: var(--text-lg);
+    opacity: 0.95;
+  }
+
+  .cta__actions {
+    display: flex;
+    gap: var(--space-4);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    border: none;
+    border-radius: var(--border-radius-lg);
+    font-weight: var(--font-semibold);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .btn--primary {
+    background: var(--color-white);
+    color: var(--color-primary);
+  }
+
+  .btn--primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .btn--secondary {
+    background: transparent;
+    color: var(--color-white);
+    border: 2px solid var(--color-white);
+  }
+
+  .btn--secondary:hover {
+    background: var(--color-white);
+    color: var(--color-primary);
+  }
+
+  .btn--large {
+    padding: var(--space-4) var(--space-8);
+    font-size: var(--text-lg);
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .products-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .products-sidebar {
+      display: none;
+    }
+
+    .page-header {
+      padding: var(--space-10) 0;
+    }
+
+    .page-header__title {
+      font-size: var(--text-4xl);
+    }
+
+    .products-section {
+      padding: var(--space-12) 0;
+    }
+
+    .cta {
+      flex-direction: column;
+      text-align: center;
+      gap: var(--space-8);
+      padding: var(--space-8);
+    }
+
+    .cta__title {
+      font-size: var(--text-2xl);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .breadcrumb {
+      padding: var(--space-2) 0;
+    }
+
+    .breadcrumb__item {
+      font-size: var(--text-xs);
+    }
+
+    .page-header {
+      padding: var(--space-8) 0;
+    }
+
+    .page-header__title {
+      font-size: var(--text-3xl);
+      padding: 0 var(--space-4);
+    }
+
+    .page-header__description {
+      font-size: var(--text-base);
+      padding: 0 var(--space-4);
+    }
+
+    .products-section {
+      padding: var(--space-8) 0;
+    }
+
+    .products-toolbar {
+      flex-direction: column;
+      gap: var(--space-3);
+      padding: var(--space-3);
+    }
+
+    .products-count {
+      text-align: center;
+    }
+
+    .products-toolbar__controls {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .products-grid {
+      gap: var(--space-4);
+    }
+
+    .products-grid--grid {
+      grid-template-columns: 1fr;
+    }
+
+    .pagination {
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+
+    .pagination__btn {
+      padding: var(--space-2) var(--space-3);
+      font-size: var(--text-sm);
+    }
+
+    .pagination__pages {
+      order: 3;
+      width: 100%;
+      justify-content: center;
+      margin-top: var(--space-3);
+    }
+
+    .pagination__page {
+      width: 36px;
+      height: 36px;
+      font-size: var(--text-sm);
+    }
+
+    .cta-section {
+      padding: var(--space-8) 0;
+    }
+
+    .cta {
+      padding: var(--space-6);
+      border-radius: var(--border-radius-xl);
+    }
+
+    .cta__title {
+      font-size: var(--text-xl);
+    }
+
+    .cta__description {
+      font-size: var(--text-base);
+    }
+
+    .cta__actions {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .btn {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .page-header__title {
+      font-size: var(--text-2xl);
+    }
+
+    .page-header__description {
+      font-size: var(--text-sm);
+    }
+
+    .products-toolbar {
+      padding: var(--space-2);
+    }
+
+    .cta {
+      padding: var(--space-4);
+    }
+
+    .cta__title {
+      font-size: var(--text-lg);
+    }
+
+    .cta__description {
+      font-size: var(--text-sm);
+    }
+
+    .btn--large {
+      padding: var(--space-3) var(--space-6);
+      font-size: var(--text-base);
+    }
+  }
+</style>
+
+<script>
+  // View switcher
+  document.querySelectorAll('.view-switcher__btn').forEach(button => {
+    button.addEventListener('click', () => {
+      const view = button.dataset.view;
+      const url = new URL(window.location.href);
+      url.searchParams.set('view', view);
+      window.location.href = url.toString();
+    });
+  });
+</script>

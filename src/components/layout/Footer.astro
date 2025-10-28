@@ -1,0 +1,531 @@
+---
+// Footer komponenta za RDM Klimatizacija
+const currentYear = new Date().getFullYear();
+
+const footerLinks = {
+  proizvodi: [
+    { label: 'Klima uređaji', href: '/klima-uredaji' },
+    { label: 'Multi klima uređaji', href: '/multi-klima' },
+    { label: 'Dizalice topline', href: '/dizalice-topline' },
+    { label: 'Mikroklima', href: '/mikroklima' },
+    { label: 'Alati i materijal', href: '/alati-materijal' }
+  ],
+  usluge: [
+    { label: 'Montaža', href: '/montaza' },
+    { label: 'Servis', href: '/servis' },
+    { label: 'Projektiranje', href: '/projektiranje' },
+    { label: 'Savjetovanje', href: '/savjetovanje' },
+    { label: 'Jamstvo', href: '/jamstvo' }
+  ],
+  informacije: [
+    { label: 'O nama', href: '/o-nama' },
+    { label: 'Kontakt', href: '/kontakt' },
+    { label: 'Česta pitanja', href: '/cesta-pitanja' },
+    { label: 'Uvjeti korištenja', href: '/uvjeti-koristenja' },
+    { label: 'Politika privatnosti', href: '/privatnost' }
+  ]
+};
+
+const paymentMethods = [
+  { name: 'Visa', icon: 'visa' },
+  { name: 'Mastercard', icon: 'mastercard' },
+  { name: 'Maestro', icon: 'maestro' },
+  { name: 'Diners', icon: 'diners' },
+  { name: 'American Express', icon: 'amex' }
+];
+---
+
+<footer class="footer">
+  <!-- Newsletter sekcija -->
+  <section class="newsletter">
+    <div class="container">
+      <div class="newsletter__content">
+        <div class="newsletter__info">
+          <h2 class="newsletter__title">Prijavite se na newsletter</h2>
+          <p class="newsletter__description">
+            Budite u toku s najnovijim proizvodima, akcijama i savjetima za održavanje klima uređaja
+          </p>
+        </div>
+        <form class="newsletter__form" action="/newsletter" method="POST">
+          <input
+            type="email"
+            name="email"
+            placeholder="Vaša email adresa"
+            class="newsletter__input"
+            required
+            aria-label="Email adresa za newsletter"
+          >
+          <button type="submit" class="newsletter__button">
+            Prijavite se
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main footer -->
+  <div class="footer__main">
+    <div class="container">
+      <div class="footer__grid">
+        <!-- Company info -->
+        <div class="footer__company">
+          <div class="footer__logo">
+            <strong>RDM</strong> Klimatizacija
+          </div>
+          <p class="footer__description">
+            Vaš pouzdani partner za klimatizaciju, grijanje i ventilaciju.
+            Ovlašteni serviser vodećih svjetskih proizvođača.
+          </p>
+          <div class="footer__contact">
+            <a href="tel:+385XXXXXXXX" class="contact__item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+              </svg>
+              +385 XX XXX XXXX
+            </a>
+            <a href="mailto:info@rdm-klimatizacija.hr" class="contact__item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+              </svg>
+              info@rdm-klimatizacija.hr
+            </a>
+            <div class="contact__item">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              Adresa, 10000 Zagreb
+            </div>
+          </div>
+        </div>
+
+        <!-- Proizvodi links -->
+        <div class="footer__column">
+          <h3 class="footer__heading">Proizvodi</h3>
+          <ul class="footer__links">
+            {footerLinks.proizvodi.map((link) => (
+              <li>
+                <a href={link.href} class="footer__link">{link.label}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Usluge links -->
+        <div class="footer__column">
+          <h3 class="footer__heading">Usluge</h3>
+          <ul class="footer__links">
+            {footerLinks.usluge.map((link) => (
+              <li>
+                <a href={link.href} class="footer__link">{link.label}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Informacije links -->
+        <div class="footer__column">
+          <h3 class="footer__heading">Informacije</h3>
+          <ul class="footer__links">
+            {footerLinks.informacije.map((link) => (
+              <li>
+                <a href={link.href} class="footer__link">{link.label}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <!-- Features -->
+      <div class="footer__features">
+        <div class="feature">
+          <svg class="feature__icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+          <div>
+            <strong class="feature__title">Brza dostava</strong>
+            <p class="feature__text">Besplatno iznad 200€</p>
+          </div>
+        </div>
+        <div class="feature">
+          <svg class="feature__icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          <div>
+            <strong class="feature__title">Stručna montaža</strong>
+            <p class="feature__text">Ovlašteni serviser</p>
+          </div>
+        </div>
+        <div class="feature">
+          <svg class="feature__icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 11H3v2h6v-2zm0-4H3v2h6V7zm0 8H3v2h6v-2zm12-8h-6v2h6V7zm0 4h-6v2h6v-2zm0 4h-6v2h6v-2z"/>
+          </svg>
+          <div>
+            <strong class="feature__title">Jamstvo kvalitete</strong>
+            <p class="feature__text">Do 7 godina jamstva</p>
+          </div>
+        </div>
+        <div class="feature">
+          <svg class="feature__icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+          </svg>
+          <div>
+            <strong class="feature__title">Sigurno plaćanje</strong>
+            <p class="feature__text">Sve vrste kartica</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom footer -->
+  <div class="footer__bottom">
+    <div class="container">
+      <div class="footer__bottom-content">
+        <div class="footer__copyright">
+          <p>&copy; {currentYear} RDM Klimatizacija. Sva prava pridržana.</p>
+          <p class="footer__design">Web dizajn i razvoj: <a href="https://example.com" target="_blank" rel="noopener">Vaša agencija</a></p>
+        </div>
+        <div class="footer__payment">
+          <span class="payment__label">Sigurno plaćanje:</span>
+          <div class="payment__methods">
+            {paymentMethods.map((method) => (
+              <span class="payment__method" title={method.name}>
+                {method.name}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-gray-900);
+    color: var(--color-gray-300);
+    margin-top: var(--space-20);
+  }
+
+  /* Newsletter */
+  .newsletter {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    padding: var(--space-12) 0;
+    margin-bottom: 0;
+  }
+
+  .newsletter__content {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-8);
+    align-items: center;
+  }
+
+  .newsletter__title {
+    color: var(--color-white);
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-2);
+  }
+
+  .newsletter__description {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: var(--text-lg);
+  }
+
+  .newsletter__form {
+    display: flex;
+    gap: var(--space-3);
+    min-width: 400px;
+  }
+
+  .newsletter__input {
+    flex: 1;
+    padding: var(--space-3) var(--space-4);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius-lg);
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-white);
+    font-size: var(--text-base);
+    transition: all var(--transition-fast);
+  }
+
+  .newsletter__input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .newsletter__input:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .newsletter__button {
+    padding: var(--space-3) var(--space-6);
+    background: var(--color-white);
+    color: var(--color-primary);
+    border: 2px solid var(--color-white);
+    border-radius: var(--border-radius-lg);
+    font-weight: var(--font-semibold);
+    font-size: var(--text-base);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .newsletter__button:hover {
+    background: transparent;
+    color: var(--color-white);
+  }
+
+  /* Main footer */
+  .footer__main {
+    padding: var(--space-16) 0 var(--space-12);
+  }
+
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: var(--space-12);
+    margin-bottom: var(--space-12);
+  }
+
+  .footer__logo {
+    font-size: var(--text-2xl);
+    font-family: var(--font-heading);
+    color: var(--color-white);
+    margin-bottom: var(--space-4);
+  }
+
+  .footer__logo strong {
+    color: var(--color-primary-light);
+    font-weight: var(--font-extrabold);
+  }
+
+  .footer__description {
+    margin-bottom: var(--space-6);
+    line-height: var(--leading-relaxed);
+  }
+
+  .footer__contact {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .contact__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-gray-400);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .contact__item:hover {
+    color: var(--color-white);
+  }
+
+  .footer__heading {
+    color: var(--color-white);
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    margin-bottom: var(--space-4);
+  }
+
+  .footer__links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .footer__link {
+    color: var(--color-gray-400);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+    padding: var(--space-1) 0;
+  }
+
+  .footer__link:hover {
+    color: var(--color-white);
+  }
+
+  /* Features */
+  .footer__features {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-6);
+    padding: var(--space-8) 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .feature {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .feature__icon {
+    flex-shrink: 0;
+    color: var(--color-primary-light);
+  }
+
+  .feature__title {
+    display: block;
+    color: var(--color-white);
+    font-size: var(--text-base);
+    margin-bottom: var(--space-1);
+  }
+
+  .feature__text {
+    font-size: var(--text-sm);
+    color: var(--color-gray-400);
+  }
+
+  /* Bottom footer */
+  .footer__bottom {
+    background: var(--color-black);
+    padding: var(--space-6) 0;
+  }
+
+  .footer__bottom-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  .footer__copyright {
+    font-size: var(--text-sm);
+    color: var(--color-gray-500);
+  }
+
+  .footer__copyright p {
+    margin: 0;
+  }
+
+  .footer__copyright a {
+    color: var(--color-primary-light);
+    text-decoration: none;
+  }
+
+  .footer__copyright a:hover {
+    text-decoration: underline;
+  }
+
+  .footer__payment {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .payment__label {
+    font-size: var(--text-sm);
+    color: var(--color-gray-500);
+  }
+
+  .payment__methods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .payment__method {
+    padding: var(--space-1) var(--space-2);
+    background: var(--color-gray-800);
+    border: 1px solid var(--color-gray-700);
+    border-radius: var(--border-radius-base);
+    font-size: var(--text-xs);
+    color: var(--color-gray-400);
+    white-space: nowrap;
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .newsletter__content {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+
+    .newsletter__form {
+      min-width: auto;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .footer__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-8);
+    }
+
+    .footer__company {
+      grid-column: 1 / -1;
+    }
+
+    .footer__features {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .newsletter {
+      padding: var(--space-8) 0;
+    }
+
+    .newsletter__title {
+      font-size: var(--text-2xl);
+    }
+
+    .newsletter__description {
+      font-size: var(--text-base);
+    }
+
+    .newsletter__form {
+      flex-direction: column;
+    }
+
+    .footer__grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+
+    .footer__features {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+
+    .footer__bottom-content {
+      flex-direction: column;
+      text-align: center;
+      gap: var(--space-4);
+    }
+
+    .footer__payment {
+      flex-direction: column;
+      gap: var(--space-2);
+      width: 100%;
+    }
+
+    .payment__methods {
+      justify-content: center;
+      width: 100%;
+    }
+
+    .payment__method {
+      font-size: 10px;
+      padding: var(--space-1) var(--space-1);
+      flex: 0 1 auto;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .payment__methods {
+      gap: var(--space-1);
+    }
+
+    .payment__method {
+      font-size: 9px;
+      padding: 6px 8px;
+    }
+  }
+</style>

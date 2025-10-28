@@ -1,0 +1,173 @@
+---
+// Brendovi koje zastupamo
+const brands = [
+  { name: 'Mitsubishi Electric', logo: 'mitsubishi' },
+  { name: 'Daikin', logo: 'daikin' },
+  { name: 'Gree', logo: 'gree' },
+  { name: 'Samsung', logo: 'samsung' },
+  { name: 'LG', logo: 'lg' },
+  { name: 'Panasonic', logo: 'panasonic' },
+  { name: 'Toshiba', logo: 'toshiba' },
+  { name: 'Bosch', logo: 'bosch' }
+];
+---
+
+<section class="brands">
+  <div class="container">
+    <div class="brands__header">
+      <h2 class="brands__title">Ovlašteni serviser vodećih brendova</h2>
+      <p class="brands__subtitle">Surađujemo s najboljim svjetskim proizvođačima</p>
+    </div>
+
+    <div class="brands__carousel">
+      <div class="brands__track">
+        {brands.map((brand) => (
+          <div class="brand-item">
+            <div class="brand-item__logo">
+              {brand.name}
+            </div>
+          </div>
+        ))}
+        <!-- Duplikat za beskonačni loop -->
+        {brands.map((brand) => (
+          <div class="brand-item">
+            <div class="brand-item__logo">
+              {brand.name}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .brands {
+    padding: var(--space-16) 0;
+    background: var(--color-white);
+    overflow: hidden;
+  }
+
+  .brands__header {
+    text-align: center;
+    margin-bottom: var(--space-12);
+  }
+
+  .brands__title {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-4);
+  }
+
+  .brands__subtitle {
+    font-size: var(--text-lg);
+    color: var(--text-secondary);
+  }
+
+  .brands__carousel {
+    position: relative;
+    overflow: hidden;
+    padding: var(--space-8) 0;
+  }
+
+  .brands__carousel::before,
+  .brands__carousel::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100px;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .brands__carousel::before {
+    left: 0;
+    background: linear-gradient(to right, var(--color-white) 0%, transparent 100%);
+  }
+
+  .brands__carousel::after {
+    right: 0;
+    background: linear-gradient(to left, var(--color-white) 0%, transparent 100%);
+  }
+
+  .brands__track {
+    display: flex;
+    animation: scroll 30s linear infinite;
+  }
+
+  .brand-item {
+    flex: 0 0 auto;
+    padding: 0 var(--space-8);
+  }
+
+  .brand-item__logo {
+    width: 150px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-gray-50);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    font-weight: var(--font-semibold);
+    color: var(--text-secondary);
+    transition: all var(--transition-base);
+    cursor: pointer;
+  }
+
+  .brand-item__logo:hover {
+    background: var(--color-white);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    transform: scale(1.05);
+    box-shadow: var(--shadow-md);
+  }
+
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .brands__track {
+      animation: none;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .brands__carousel::before,
+    .brands__carousel::after {
+      display: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .brands {
+      padding: var(--space-12) 0;
+    }
+
+    .brands__title {
+      font-size: var(--text-2xl);
+    }
+
+    .brands__subtitle {
+      font-size: var(--text-base);
+    }
+
+    .brand-item {
+      padding: 0 var(--space-4);
+    }
+
+    .brand-item__logo {
+      width: 120px;
+      height: 60px;
+      font-size: var(--text-sm);
+    }
+  }
+</style>

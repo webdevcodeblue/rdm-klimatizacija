@@ -52,6 +52,7 @@ const navigationItems = [
       <div class="header__content">
         <!-- Logo -->
         <a href="/" class="header__logo">
+          <img src="/logo.png" alt="RDM Klimatizacija Logo" class="logo__image" />
           <span class="logo__text">
             <strong>RDM</strong> Klimatizacija
           </span>
@@ -125,7 +126,8 @@ const navigationItems = [
     <div class="mobile-menu__content">
       <div class="mobile-menu__header">
         <a href="/" class="mobile-menu__logo">
-          <strong>RDM</strong> Klimatizacija
+          <img src="/logo.png" alt="RDM Klimatizacija Logo" class="mobile-menu__logo-image" />
+          <span><strong>RDM</strong> Klimatizacija</span>
         </a>
         <button class="mobile-menu__close" id="mobileMenuClose" aria-label="Zatvori meni">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -216,15 +218,38 @@ const navigationItems = [
   }
 
   .header.scrolled .header__main {
-    padding: var(--space-2) 0;
+    padding: var(--space-3) 0;
+  }
+
+  .header.scrolled .logo__image {
+    height: 36px;
   }
 
   .header.scrolled .logo__text {
-    font-size: var(--text-xl);
+    font-size: calc(var(--text-xl) * 0.95);
   }
 
   .header.scrolled .header__search {
     max-width: 400px;
+  }
+
+  .header.scrolled .search-form__input {
+    height: 52px;
+    font-size: var(--text-base);
+    padding: var(--space-3) var(--space-4);
+    padding-right: var(--space-12);
+  }
+
+  .header.scrolled .search-form__button {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .header.scrolled .search-form__button svg {
+    width: 18px;
+    height: 18px;
   }
 
   .header.scrolled .action-btn__text {
@@ -232,7 +257,18 @@ const navigationItems = [
   }
 
   .header.scrolled .action-btn {
-    padding: var(--space-2);
+    padding: var(--space-3);
+    width: 44px;
+    height: 44px;
+  }
+
+  .header.scrolled .action-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .header.scrolled .navigation__link {
+    padding: var(--space-4) var(--space-5);
   }
 
   /* Topbar */
@@ -313,7 +349,15 @@ const navigationItems = [
   .header__logo {
     display: flex;
     align-items: center;
+    gap: var(--space-3);
     text-decoration: none;
+  }
+
+  .logo__image {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+    transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .logo__text {
@@ -321,6 +365,7 @@ const navigationItems = [
     color: var(--text-primary);
     font-family: var(--font-heading);
     transition: font-size 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
   }
 
   .logo__text strong {
@@ -343,28 +388,47 @@ const navigationItems = [
   .search-form__input {
     flex: 1;
     padding: var(--space-3) var(--space-4);
-    padding-right: calc(var(--space-12) + var(--space-2));
+    padding-right: calc(var(--space-12) + var(--space-4));
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-full);
     font-size: var(--text-base);
+    height: 52px;
     transition: all var(--transition-fast);
   }
 
   .search-form__input:focus {
     border-color: var(--color-primary);
     box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+    outline: none;
   }
 
   .search-form__button {
     position: absolute;
-    right: var(--space-2);
+    right: 4px;
     top: 50%;
     transform: translateY(-50%);
-    padding: var(--space-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
     background: var(--color-primary);
     color: var(--color-white);
-    border-radius: var(--border-radius-full);
+    border-radius: 50%;
+    border: none;
     transition: background-color var(--transition-fast);
+    cursor: pointer;
+  }
+
+  .search-form__button svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+    stroke-width: 2.5;
+    flex-shrink: 0;
   }
 
   .search-form__button:hover {
@@ -532,10 +596,19 @@ const navigationItems = [
   }
 
   .mobile-menu__logo {
-    font-size: var(--text-2xl);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-xl);
     font-weight: var(--font-bold);
     color: var(--text-primary);
     text-decoration: none;
+  }
+
+  .mobile-menu__logo-image {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
   }
 
   .mobile-menu__logo strong {
@@ -712,6 +785,10 @@ const navigationItems = [
       display: none;
     }
 
+    .logo__image {
+      height: 40px;
+    }
+
     .logo__text {
       font-size: var(--text-xl);
     }
@@ -723,6 +800,16 @@ const navigationItems = [
     .mobile-menu {
       width: 100%;
       max-width: 100vw;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .logo__image {
+      height: 36px;
+    }
+
+    .logo__text {
+      font-size: var(--text-lg);
     }
   }
 </style>

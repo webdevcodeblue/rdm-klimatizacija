@@ -70,7 +70,8 @@ const paymentMethods = [
         <!-- Company info -->
         <div class="footer__company">
           <div class="footer__logo">
-            <strong>RDM</strong> Klimatizacija
+            <img src="/logo.png" alt="RDM Klimatizacija Logo" class="footer__logo-image" />
+            <span><strong>RDM</strong> Klimatizacija</span>
           </div>
           <p class="footer__description">
             Vaš pouzdani partner za klimatizaciju, grijanje i ventilaciju.
@@ -289,10 +290,19 @@ const paymentMethods = [
   }
 
   .footer__logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
     font-size: var(--text-2xl);
     font-family: var(--font-heading);
     color: var(--color-white);
     margin-bottom: var(--space-4);
+  }
+
+  .footer__logo-image {
+    height: 56px;
+    width: auto;
+    object-fit: contain;
   }
 
   .footer__logo strong {
@@ -484,6 +494,14 @@ const paymentMethods = [
       flex-direction: column;
     }
 
+    .footer__logo-image {
+      height: 48px;
+    }
+
+    .footer__logo {
+      font-size: var(--text-xl);
+    }
+
     .footer__grid {
       grid-template-columns: 1fr;
       gap: var(--space-6);
@@ -519,6 +537,14 @@ const paymentMethods = [
   }
 
   @media (max-width: 480px) {
+    .footer__logo-image {
+      height: 40px;
+    }
+
+    .footer__logo {
+      font-size: var(--text-lg);
+    }
+
     .payment__methods {
       gap: var(--space-1);
     }

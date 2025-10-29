@@ -53,102 +53,208 @@ const discountPercentage = product.originalPrice
         width="300"
         height="300"
       />
-      <div class="product-card__overlay">
-        <button class="product-card__quick-view" aria-label="Brzi pregled">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-            <circle cx="12" cy="12" r="3"></circle>
-          </svg>
-        </button>
-        <button class="product-card__compare" aria-label="Dodaj za usporedbu" data-product-id={product.id}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M18 4H6v16"></path>
-            <path d="m12 8-4 4 4 4"></path>
-            <path d="m16 12-4 4"></path>
-          </svg>
-        </button>
-      </div>
     </div>
   </a>
 
   <div class="product-card__content">
-    <div class="product-card__header">
-      <span class="product-card__manufacturer">{product.manufacturer}</span>
-      <span class="product-card__category">{product.category}</span>
-    </div>
-
-    <h3 class="product-card__name">
-      <a href={`/proizvodi/${product.slug}`}>{product.name}</a>
-    </h3>
-
-    <div class="product-card__specs">
-      <div class="spec" title="Snaga hlađenja/grijanja">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-        </svg>
-        <span>{product.power}</span>
+    <div class="product-card__main">
+      <div class="product-card__header">
+        <span class="product-card__manufacturer">{product.manufacturer}</span>
+        <span class="product-card__category">{product.category}</span>
       </div>
-      <div class="spec" title="Preporučena površina">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-        </svg>
-        <span>{product.area}</span>
-      </div>
-      <div class="spec spec--energy" title="Energetska klasa">
-        {product.energyClass}
-      </div>
-    </div>
 
-    {product.seer && product.scop && (
-      <div class="product-card__efficiency">
-        <span class="efficiency-badge" title="SEER - Sezonska energetska učinkovitost hlađenja">
-          SEER {product.seer}
-        </span>
-        <span class="efficiency-badge" title="SCOP - Sezonska energetska učinkovitost grijanja">
-          SCOP {product.scop}
-        </span>
-      </div>
-    )}
+      <h3 class="product-card__name">
+        <a href={`/proizvodi/${product.slug}`}>{product.name}</a>
+      </h3>
 
-    <div class="product-card__features">
-      {product.features.slice(0, 3).map((feature) => (
-        <span class="feature-tag">{feature}</span>
-      ))}
-      {product.features.length > 3 && (
-        <span class="feature-tag feature-tag--more">+{product.features.length - 3}</span>
+      {viewMode === 'list' && product.description && (
+        <p class="product-card__description">{product.description}</p>
+      )}
+
+      {viewMode === 'list' && (
+        <div class="product-card__features">
+          {product.features.map((feature) => (
+            <span class="feature-tag">{feature}</span>
+          ))}
+        </div>
+      )}
+
+      {viewMode === 'list' && (
+        <div class="product-card__quick-info">
+          <div class="quick-info-item">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="2" x2="12" y2="6"></line>
+              <line x1="12" y1="18" x2="12" y2="22"></line>
+              <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+              <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+              <line x1="2" y1="12" x2="6" y2="12"></line>
+              <line x1="18" y1="12" x2="22" y2="12"></line>
+              <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+              <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+            </svg>
+            <span class="quick-info-label">Snaga hlađenja</span>
+            <span class="quick-info-value">{product.power.split(' ')[0]} kW</span>
+          </div>
+          <div class="quick-info-item">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <span class="quick-info-label">Snaga grijanja</span>
+            <span class="quick-info-value">{product.power.split(' ')[0]} kW</span>
+          </div>
+          <div class="quick-info-item">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span class="quick-info-label">Prikladno za prostor</span>
+            <span class="quick-info-value">{product.area}</span>
+          </div>
+          <div class="quick-info-item quick-info-item--highlight">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 3h18v18H3V3z"></path>
+              <path d="M3 9h18"></path>
+              <path d="M3 15h18"></path>
+              <path d="M9 3v18"></path>
+              <path d="M15 3v18"></path>
+            </svg>
+            <span class="quick-info-label">Energetski razred</span>
+            <span class="quick-info-value">{product.energyClass}</span>
+          </div>
+        </div>
+      )}
+
+      <div class="product-card__specs" style="display: none;">
+        <div class="spec" title="Snaga hlađenja/grijanja">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+          <span>{product.power}</span>
+        </div>
+        <div class="spec" title="Preporučena površina">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          </svg>
+          <span>{product.area}</span>
+        </div>
+        <div class="spec spec--energy" title="Energetska klasa">
+          {product.energyClass}
+        </div>
+        {product.seer && product.scop && viewMode === 'list' && (
+          <div class="spec" title="Energetska učinkovitost">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 7h4l3 9 4-16 3 7h4"></path>
+            </svg>
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <span style="font-size: 10px; color: #6b7280;">SEER {product.seer}</span>
+              <span style="font-size: 10px; color: #6b7280;">SCOP {product.scop}</span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {product.seer && product.scop && viewMode === 'grid' && (
+        <div class="product-card__efficiency">
+          <span class="efficiency-badge" title="SEER - Sezonska energetska učinkovitost hlađenja">
+            SEER {product.seer}
+          </span>
+          <span class="efficiency-badge" title="SCOP - Sezonska energetska učinkovitost grijanja">
+            SCOP {product.scop}
+          </span>
+        </div>
+      )}
+
+      {viewMode === 'grid' && (
+        <div class="product-card__features">
+          {product.features.slice(0, 3).map((feature) => (
+            <span class="feature-tag">{feature}</span>
+          ))}
+          {product.features.length > 3 && (
+            <span class="feature-tag feature-tag--more">+{product.features.length - 3}</span>
+          )}
+        </div>
       )}
     </div>
 
-    <div class="product-card__footer">
-      <div class="product-card__price">
-        {product.originalPrice && (
-          <span class="price-original">{product.originalPrice.toLocaleString('hr-HR')}€</span>
+    {viewMode === 'list' && (
+      <div class="product-card__sidebar">
+        {product.inStock && (
+          <span class="product-card__stock">Proizvod je dostupan</span>
         )}
-        <span class="price-current">{product.price.toLocaleString('hr-HR')}€</span>
-        <span class="price-vat">s PDV-om</span>
-      </div>
 
-      <div class="product-card__actions">
-        {product.inStock ? (
-          <>
-            <button class="btn btn--primary btn--icon" data-product-id={product.id} data-action="inquiry">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M22 2L11 13"></path>
-                <path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
-              </svg>
-              Pošalji upit
-            </button>
-            <a href={`/proizvodi/${product.slug}`} class="btn btn--secondary">
-              Detalji
-            </a>
-          </>
-        ) : (
-          <span class="product-card__out-of-stock">
-            Trenutno nedostupno
-          </span>
-        )}
+        <div class="product-card__footer">
+          <div class="product-card__price">
+            {product.originalPrice && (
+              <span class="price-original">{product.originalPrice.toLocaleString('hr-HR')},00 €</span>
+            )}
+            <span class="price-current">{product.price.toLocaleString('hr-HR')},00 €</span>
+            <span class="price-vat">s PDV-om</span>
+          </div>
+
+          <div class="product-card__actions">
+            {product.inStock ? (
+              <>
+                <button class="btn btn--primary btn--icon" data-product-id={product.id} data-action="inquiry">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 2L11 13"></path>
+                    <path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
+                  </svg>
+                  Pošalji upit
+                </button>
+                <a href={`/proizvodi/${product.slug}`} class="btn btn--secondary">
+                  Informacijski list proizvoda
+                </a>
+              </>
+            ) : (
+              <span class="product-card__out-of-stock">
+                Trenutno nedostupno
+              </span>
+            )}
+          </div>
+        </div>
       </div>
-    </div>
+    )}
+
+    {viewMode === 'grid' && (
+      <div class="product-card__footer">
+        <div class="product-card__price">
+          {product.originalPrice && (
+            <span class="price-original">{product.originalPrice.toLocaleString('hr-HR')}€</span>
+          )}
+          <span class="price-current">{product.price.toLocaleString('hr-HR')}€</span>
+          <span class="price-vat">s PDV-om</span>
+        </div>
+
+        <div class="product-card__actions">
+          {product.inStock ? (
+            <>
+              <button class="btn btn--primary btn--icon" data-product-id={product.id} data-action="inquiry">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 2L11 13"></path>
+                  <path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
+                </svg>
+                Pošalji upit
+              </button>
+              <a href={`/proizvodi/${product.slug}`} class="btn btn--secondary">
+                Detalji
+              </a>
+            </>
+          ) : (
+            <span class="product-card__out-of-stock">
+              Trenutno nedostupno
+            </span>
+          )}
+        </div>
+      </div>
+    )}
   </div>
 </article>
 
@@ -230,47 +336,6 @@ const discountPercentage = product.originalPrice
     transform: scale(1.05);
   }
 
-  .product-card__overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-3);
-    opacity: 0;
-    transition: opacity var(--transition-fast);
-  }
-
-  .product-card:hover .product-card__overlay {
-    opacity: 1;
-  }
-
-  .product-card__quick-view,
-  .product-card__compare {
-    width: 44px;
-    height: 44px;
-    background: var(--color-white);
-    border: none;
-    border-radius: var(--border-radius-full);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transform: scale(0.8);
-    transition: all var(--transition-fast);
-  }
-
-  .product-card:hover .product-card__quick-view,
-  .product-card:hover .product-card__compare {
-    transform: scale(1);
-  }
-
-  .product-card__quick-view:hover,
-  .product-card__compare:hover {
-    background: var(--color-primary);
-    color: var(--color-white);
-  }
 
   .product-card__content {
     padding: var(--space-4);
@@ -466,54 +531,587 @@ const discountPercentage = product.originalPrice
     font-weight: var(--font-semibold);
   }
 
-  /* List view */
+  /* ==========================================
+     LIST VIEW - PROFESSIONAL LAYOUT
+     Based on klimakoncept.hr design
+     ========================================== */
+
   .product-card--list {
     flex-direction: row;
     height: auto;
+    padding: 0;
+    margin-bottom: 24px;
+  }
+
+  .product-card--list:hover {
+    transform: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  /* LEFT: Product Image */
+  .product-card--list .product-card__image-link {
+    flex-shrink: 0;
+    width: 280px;
   }
 
   .product-card--list .product-card__image {
-    height: 200px;
-    width: 200px;
-    flex-shrink: 0;
-  }
-
-  .product-card--list .product-card__content {
-    flex: 1;
-  }
-
-  .product-card--list .product-card__footer {
+    height: 280px;
+    width: 280px;
+    background: #f8f9fa;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
   }
 
-  .product-card--list .product-card__price {
+  .product-card--list .product-card__image img {
+    padding: 20px;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  /* CENTER + RIGHT: Content wrapper */
+  .product-card--list .product-card__content {
+    flex: 1;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 240px;
+    gap: 20px;
+    align-items: start;
+  }
+
+  /* CENTER: Main content area */
+  .product-card--list .product-card__main {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  /* Manufacturer and category header */
+  .product-card--list .product-card__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     margin-bottom: 0;
   }
 
-  /* Responsive */
+  .product-card--list .product-card__manufacturer {
+    font-size: 11px;
+    color: #6b7280;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .product-card--list .product-card__category {
+    display: none;
+  }
+
+  /* Product name/title */
+  .product-card--list .product-card__name {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin: 0;
+    color: #1f2937;
+  }
+
+  .product-card--list .product-card__name a {
+    color: inherit;
+  }
+
+  /* Red description text */
+  .product-card--list .product-card__description {
+    font-size: 12px;
+    color: #dc2626;
+    font-weight: 500;
+    line-height: 1.4;
+    margin: 0;
+  }
+
+  /* Features list with bullet points */
+  .product-card--list .product-card__features {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+  }
+
+  .product-card--list .feature-tag {
+    font-size: 13px;
+    padding: 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    background: transparent;
+    color: #374151;
+    line-height: 1.5;
+  }
+
+  .product-card--list .feature-tag::before {
+    content: '•';
+    color: #6b7280;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-size: 16px;
+  }
+
+  /* Quick info cards - VERTICAL CENTERED */
+  .product-card--list .product-card__quick-info {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 0;
+  }
+
+  .quick-info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 3px;
+    padding: 8px 6px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    min-height: 75px;
+  }
+
+  /* Hlađenje - Plava pozadina */
+  .quick-info-item:nth-child(1) {
+    background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+    border-color: #bfdbfe;
+  }
+
+  /* Grijanje - Narančasto-žuta pozadina */
+  .quick-info-item:nth-child(2) {
+    background: linear-gradient(135deg, #fef3c7 0%, #fef9e7 100%);
+    border-color: #fde68a;
+  }
+
+  /* Prostor - Svijetlo plava pozadina */
+  .quick-info-item:nth-child(3) {
+    background: linear-gradient(135deg, #f0f9ff 0%, #f8fafc 100%);
+    border-color: #e0f2fe;
+  }
+
+  .quick-info-item svg {
+    width: 28px;
+    height: 28px;
+    color: #2563eb;
+    flex-shrink: 0;
+    margin-bottom: 2px;
+  }
+
+  /* Snijeg ikona - plava */
+  .quick-info-item:nth-child(1) svg {
+    color: #3b82f6;
+  }
+
+  /* Sunce ikona - žuto-narandžasta */
+  .quick-info-item:nth-child(2) svg {
+    color: #f59e0b;
+  }
+
+  /* Kuća ikona - plava */
+  .quick-info-item:nth-child(3) svg {
+    color: #0284c7;
+  }
+
+  .quick-info-item--highlight {
+    background: #22c55e;
+    border-color: #22c55e;
+  }
+
+  .quick-info-item--highlight svg {
+    color: #ffffff;
+  }
+
+  .quick-info-item--highlight .quick-info-label {
+    color: #ffffff;
+  }
+
+  .quick-info-item--highlight .quick-info-value {
+    color: #ffffff;
+  }
+
+  .quick-info-label {
+    font-size: 10px;
+    color: #6b7280;
+    line-height: 1.2;
+    font-weight: 500;
+  }
+
+  .quick-info-value {
+    font-size: 14px;
+    color: #dc2626;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-top: 2px;
+  }
+
+  /* Specifications grid (4 boxes) */
+  .product-card--list .product-card__specs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 0;
+  }
+
+  .product-card--list .spec {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 8px;
+    padding: 12px 8px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    min-height: 70px;
+  }
+
+  .product-card--list .spec svg {
+    width: 24px;
+    height: 24px;
+    color: var(--color-primary);
+    flex-shrink: 0;
+  }
+
+  .product-card--list .spec span {
+    font-weight: 700;
+    color: #1f2937;
+    font-size: 13px;
+    line-height: 1.2;
+  }
+
+  .product-card--list .spec--energy {
+    background: #22c55e;
+    color: #ffffff;
+    border-color: #22c55e;
+    font-size: 18px;
+    font-weight: 800;
+    padding: 12px 8px;
+  }
+
+  /* RIGHT: Sidebar with price and actions */
+  .product-card--list .product-card__sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 240px;
+    flex-shrink: 0;
+  }
+
+  /* Stock status badge */
+  .product-card--list .product-card__stock {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: #22c55e;
+    color: #ffffff;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .product-card--list .product-card__stock::before {
+    content: '✓';
+    font-size: 14px;
+    font-weight: 900;
+  }
+
+  /* Price section */
+  .product-card--list .product-card__footer {
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .product-card--list .product-card__price {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .product-card--list .price-original {
+    font-size: 14px;
+    color: #9ca3af;
+    text-decoration: line-through;
+    order: -1;
+  }
+
+  .product-card--list .price-current {
+    font-size: 32px;
+    font-weight: 900;
+    color: #dc2626;
+    line-height: 1;
+    letter-spacing: -0.5px;
+  }
+
+  .product-card--list .price-vat {
+    font-size: 11px;
+    color: #6b7280;
+    text-transform: lowercase;
+  }
+
+  /* Action buttons */
+  .product-card--list .product-card__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .product-card--list .btn {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 4px;
+    text-align: center;
+    transition: all 0.2s ease;
+  }
+
+  .product-card--list .btn--primary {
+    background: #2563eb;
+    color: #ffffff;
+    border: none;
+  }
+
+  .product-card--list .btn--primary:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+  }
+
+  .product-card--list .btn--secondary {
+    background: #ffffff;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    font-size: 11px;
+    padding: 10px 16px;
+  }
+
+  .product-card--list .btn--secondary:hover {
+    border-color: #2563eb;
+    color: #2563eb;
+    background: #eff6ff;
+  }
+
+  /* Efficiency badges in list view */
+  .product-card--list .product-card__efficiency {
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+  }
+
+  .product-card--list .efficiency-badge {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-sm);
+  }
+
+  /* Responsive - Tablet and Mobile */
+  @media (max-width: 1024px) {
+    /* Tablet - Smanjit quick-info grid na 2x2 */
+    .product-card--list .product-card__quick-info {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+  }
+
   @media (max-width: 768px) {
+    /* Mobile - Vertikalan layout */
     .product-card--list {
       flex-direction: column;
+      padding: 0;
     }
 
+    /* Slika link - puna širina */
+    .product-card--list .product-card__image-link {
+      width: 100%;
+    }
+
+    /* Slika - puna širina */
     .product-card--list .product-card__image {
       width: 100%;
+      height: 250px;
+      border-radius: 0;
+    }
+
+    /* Content - vertikalni grid (ne horizontalni!) */
+    .product-card--list .product-card__content {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      grid-template-columns: none;
+      gap: 12px;
+    }
+
+    .product-card--list .product-card__main {
+      width: 100%;
+      padding: 0;
+      order: 1;
+    }
+
+    .product-card--list .product-card__sidebar {
+      order: 2;
+    }
+
+    /* Sakrij opise i feature tagove na mobile */
+    .product-card--list .product-card__description {
+      display: none;
+    }
+
+    .product-card--list .product-card__features {
+      display: none;
+    }
+
+    /* Header - puna širina */
+    .product-card--list .product-card__header {
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    /* Naziv proizvoda - manji font */
+    .product-card--list .product-card__name {
+      font-size: 16px;
+      margin-bottom: 12px;
+      width: 100%;
+    }
+
+    /* Quick-info cards - 2x2 grid */
+    .product-card--list .product-card__quick-info {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+      width: 100%;
+    }
+
+    .quick-info-item {
+      min-height: 85px;
+      padding: 10px 6px;
+      gap: 4px;
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    .quick-info-item svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    .quick-info-label {
+      font-size: 10px;
+      line-height: 1.3;
+    }
+
+    .quick-info-value {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    /* Sidebar - puna širina */
+    .product-card--list .product-card__sidebar {
+      width: 100% !important;
+      max-width: 100%;
+      padding: 16px;
+      border-left: none;
+      border-top: 1px solid #e5e7eb;
+      flex-shrink: 1;
+    }
+
+    /* Status badge */
+    .product-card--list .product-card__availability {
+      margin-bottom: 12px;
+    }
+
+    .product-card--list .availability-badge {
+      font-size: 11px;
+      padding: 6px 12px;
+    }
+
+    /* Cijena */
+    .product-card--list .product-card__price {
+      margin-bottom: 12px;
+    }
+
+    .product-card--list .price-label {
+      font-size: 11px;
+    }
+
+    .product-card--list .price-current {
+      font-size: 28px;
+    }
+
+    .product-card--list .price-vat {
+      font-size: 10px;
+    }
+
+    /* Informacijski list button */
+    .product-card--list .product-card__info-button {
+      margin-bottom: 12px;
+    }
+
+    .product-card--list .btn--info {
+      font-size: 12px;
+      padding: 10px 14px;
+    }
+
+    /* Action buttons - vertikalno */
+    .product-card--list .product-card__actions {
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .product-card--list .btn--primary,
+    .product-card--list .btn--secondary {
+      width: 100%;
+      font-size: 13px;
+      padding: 12px 16px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    /* Extra small mobile - još kompaktnije */
+    .product-card--list .product-card__image {
       height: 200px;
     }
 
-    .product-card--list .product-card__footer {
-      flex-direction: column;
-      gap: var(--space-3);
+    .product-card--list .product-card__content {
+      padding: 12px;
     }
 
-    .product-card--list .product-card__price {
-      margin-bottom: var(--space-3);
+    .product-card--list .product-card__sidebar {
+      padding: 12px;
     }
 
-    .btn {
-      width: 100%;
+    .product-card--list .product-card__name {
+      font-size: 14px;
+    }
+
+    .quick-info-item {
+      min-height: 65px;
+      padding: 6px 2px;
+    }
+
+    .quick-info-label {
+      font-size: 8px;
+    }
+
+    .quick-info-value {
+      font-size: 11px;
+    }
+
+    .product-card--list .price-current {
+      font-size: 24px;
     }
   }
 </style>

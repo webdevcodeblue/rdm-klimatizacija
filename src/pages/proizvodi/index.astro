@@ -311,7 +311,32 @@ const viewMode = url.searchParams.get('view') || 'list';
   }
 
   .products-sidebar {
-    position: relative;
+    position: sticky;
+    top: 20px;
+    align-self: start;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f1f5f9;
+  }
+
+  .products-sidebar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .products-sidebar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+  }
+
+  .products-sidebar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+
+  .products-sidebar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
   }
 
   /* Toolbar */
@@ -538,6 +563,9 @@ const viewMode = url.searchParams.get('view') || 'list';
 
     .products-sidebar {
       display: none;
+      position: static;
+      max-height: none;
+      overflow: visible;
     }
 
     .page-header {

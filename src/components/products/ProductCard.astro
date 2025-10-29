@@ -119,13 +119,13 @@ const discountPercentage = product.originalPrice
             <span class="quick-info-value">{product.area}</span>
           </div>
           <div class="quick-info-item quick-info-item--highlight">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M3 3h18v18H3V3z"></path>
-              <path d="M3 9h18"></path>
-              <path d="M3 15h18"></path>
-              <path d="M9 3v18"></path>
-              <path d="M15 3v18"></path>
-            </svg>
+            <img
+              src="/images/icons/energy-efficiency-class.jpg"
+              alt="Energetski razred"
+              class="energy-icon"
+              width="32"
+              height="32"
+            />
             <span class="quick-info-label">Energetski razred</span>
             <span class="quick-info-value">{product.energyClass}</span>
           </div>
@@ -671,8 +671,8 @@ const discountPercentage = product.originalPrice
     align-items: center;
     justify-content: center;
     text-align: center;
-    gap: 3px;
-    padding: 8px 6px;
+    gap: 2px;
+    padding: 6px 4px;
     background: #ffffff;
     border: 1px solid #e5e7eb;
     border-radius: 6px;
@@ -727,6 +727,16 @@ const discountPercentage = product.originalPrice
 
   .quick-info-item--highlight svg {
     color: #ffffff;
+  }
+
+  /* Energy icon image styling */
+  .energy-icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    flex-shrink: 0;
+    margin-bottom: 0;
+    border-radius: 4px;
   }
 
   .quick-info-item--highlight .quick-info-label {
@@ -997,15 +1007,20 @@ const discountPercentage = product.originalPrice
 
     .quick-info-item {
       min-height: 85px;
-      padding: 10px 6px;
-      gap: 4px;
+      padding: 6px 4px;
+      gap: 2px;
       box-sizing: border-box;
       width: 100%;
     }
 
     .quick-info-item svg {
-      width: 26px;
-      height: 26px;
+      width: 32px;
+      height: 32px;
+    }
+
+    .energy-icon {
+      width: 42px;
+      height: 42px;
     }
 
     .quick-info-label {
@@ -1099,7 +1114,12 @@ const discountPercentage = product.originalPrice
 
     .quick-info-item {
       min-height: 65px;
-      padding: 6px 2px;
+      padding: 4px 2px;
+    }
+
+    .energy-icon {
+      width: 36px;
+      height: 36px;
     }
 
     .quick-info-label {

@@ -35,73 +35,55 @@ const discountPercentage = product.originalPrice
   </h1>
   <p class="product-info__model">{product.model}</p>
 
-  <!-- Quick Specifications Grid -->
-  <div class="product-info__specs">
-    <div class="spec-card">
-      <div class="spec-card__icon spec-card__icon--cooling">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="12" y1="2" x2="12" y2="6"></line>
-          <line x1="12" y1="18" x2="12" y2="22"></line>
-          <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
-          <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
-          <line x1="2" y1="12" x2="6" y2="12"></line>
-          <line x1="18" y1="12" x2="22" y2="12"></line>
-          <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
-          <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
-        </svg>
-      </div>
-      <div class="spec-card__content">
-        <span class="spec-card__label">Hlađenje</span>
-        <span class="spec-card__value">{product.specifications.cooling}</span>
-      </div>
+  <!-- Quick Info Cards -->
+  <div class="product-info__quick-info">
+    <div class="quick-info-item">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="2" x2="12" y2="6"></line>
+        <line x1="12" y1="18" x2="12" y2="22"></line>
+        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+        <line x1="2" y1="12" x2="6" y2="12"></line>
+        <line x1="18" y1="12" x2="22" y2="12"></line>
+        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+        <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+      </svg>
+      <span class="quick-info-label">Snaga hlađenja</span>
+      <span class="quick-info-value">{product.specifications.cooling}</span>
     </div>
-
-    <div class="spec-card">
-      <div class="spec-card__icon spec-card__icon--heating">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="5"></circle>
-          <line x1="12" y1="1" x2="12" y2="3"></line>
-          <line x1="12" y1="21" x2="12" y2="23"></line>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-          <line x1="1" y1="12" x2="3" y2="12"></line>
-          <line x1="21" y1="12" x2="23" y2="12"></line>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        </svg>
-      </div>
-      <div class="spec-card__content">
-        <span class="spec-card__label">Grijanje</span>
-        <span class="spec-card__value">{product.specifications.heating}</span>
-      </div>
+    <div class="quick-info-item">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <span class="quick-info-label">Snaga grijanja</span>
+      <span class="quick-info-value">{product.specifications.heating}</span>
     </div>
-
-    <div class="spec-card">
-      <div class="spec-card__icon spec-card__icon--area">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-          <polyline points="9 22 9 12 15 12 15 22"></polyline>
-        </svg>
-      </div>
-      <div class="spec-card__content">
-        <span class="spec-card__label">Površina</span>
-        <span class="spec-card__value">{product.specifications.area}</span>
-      </div>
+    <div class="quick-info-item">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+      <span class="quick-info-label">Prikladno za prostor</span>
+      <span class="quick-info-value">{product.specifications.area}</span>
     </div>
-
-    <div class="spec-card">
-      <div class="spec-card__icon spec-card__icon--energy">
-        <img
-          src="/images/icons/energy-efficiency-class.jpg"
-          alt="Energetski razred"
-          width="24"
-          height="24"
-        />
-      </div>
-      <div class="spec-card__content">
-        <span class="spec-card__label">Energija</span>
-        <span class="spec-card__value">{product.specifications.energyClass}</span>
-      </div>
+    <div class="quick-info-item quick-info-item--highlight">
+      <img
+        src="/images/icons/energy-efficiency-class.jpg"
+        alt="Energetski razred"
+        class="energy-icon"
+        width="32"
+        height="32"
+      />
+      <span class="quick-info-label">Energetski razred</span>
+      <span class="quick-info-value">{product.specifications.energyClass}</span>
     </div>
   </div>
 
@@ -186,7 +168,7 @@ const discountPercentage = product.originalPrice
       Pošaljite upit za proizvod
     </button>
 
-    <a href={`/docs/${product.slug}-datasheet.pdf`} class="btn btn--secondary" download>
+    <a href={`/docs/${product.slug}-datasheet.pdf`} class="btn btn--secondary btn--desktop-only" download>
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
         <polyline points="7 10 12 15 17 10"></polyline>
@@ -195,7 +177,7 @@ const discountPercentage = product.originalPrice
       Informacijski list
     </a>
 
-    <button class="btn btn--ghost" data-action="share">
+    <button class="btn btn--ghost btn--desktop-only" data-action="share">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="18" cy="5" r="3"></circle>
         <circle cx="6" cy="12" r="3"></circle>
@@ -206,6 +188,18 @@ const discountPercentage = product.originalPrice
       Podijeli
     </button>
   </div>
+
+  <!-- Share Button for Mobile - Inside content area -->
+  <button class="btn btn--share-mobile" data-action="share">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="18" cy="5" r="3"></circle>
+      <circle cx="6" cy="12" r="3"></circle>
+      <circle cx="18" cy="19" r="3"></circle>
+      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+    </svg>
+    Podijeli proizvod
+  </button>
 </div>
 
 <style>
@@ -285,66 +279,109 @@ const discountPercentage = product.originalPrice
     margin: 0;
   }
 
-  /* Specification Cards */
-  .product-info__specs {
+  /* Quick Info Cards */
+  .product-info__quick-info {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-3);
-    background: var(--color-gray-50);
-    padding: var(--space-4);
-    border-radius: var(--border-radius-lg);
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 0;
   }
 
-  .spec-card {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    background: var(--color-white);
-    padding: var(--space-3);
-    border-radius: var(--border-radius-md);
-    border: 1px solid var(--color-gray-200);
-  }
-
-  .spec-card__icon {
-    width: 48px;
-    height: 48px;
-    border-radius: var(--border-radius-md);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .spec-card__icon--cooling {
-    background: linear-gradient(135deg, #667eea 0%, #4c1d95 100%);
-    color: var(--color-white);
-  }
-
-  .spec-card__icon--heating {
-    background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
-    color: var(--color-white);
-  }
-
-  .spec-card__icon--area {
-    background: linear-gradient(135deg, #10b981 0%, #047857 100%);
-    color: var(--color-white);
-  }
-
-  .spec-card__icon--energy {
-    background: var(--color-white);
-    padding: var(--space-1);
-  }
-
-  .spec-card__icon--energy img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-
-  .spec-card__content {
+  .quick-info-item {
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 2px;
+    padding: 12px 8px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    min-height: 95px;
+  }
+
+  /* Hlađenje - Plava pozadina */
+  .quick-info-item:nth-child(1) {
+    background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+    border-color: #bfdbfe;
+  }
+
+  /* Grijanje - Narančasto-žuta pozadina */
+  .quick-info-item:nth-child(2) {
+    background: linear-gradient(135deg, #fef3c7 0%, #fef9e7 100%);
+    border-color: #fde68a;
+  }
+
+  /* Prostor - Svijetlo plava pozadina */
+  .quick-info-item:nth-child(3) {
+    background: linear-gradient(135deg, #f0f9ff 0%, #f8fafc 100%);
+    border-color: #e0f2fe;
+  }
+
+  .quick-info-item svg {
+    width: 32px;
+    height: 32px;
+    color: #2563eb;
+    flex-shrink: 0;
+    margin-bottom: 4px;
+  }
+
+  /* Snijeg ikona - plava */
+  .quick-info-item:nth-child(1) svg {
+    color: #3b82f6;
+  }
+
+  /* Sunce ikona - žuto-narandžasta */
+  .quick-info-item:nth-child(2) svg {
+    color: #f59e0b;
+  }
+
+  /* Kuća ikona - plava */
+  .quick-info-item:nth-child(3) svg {
+    color: #0284c7;
+  }
+
+  .quick-info-item--highlight {
+    background: #22c55e;
+    border-color: #22c55e;
+  }
+
+  .quick-info-item--highlight svg {
+    color: #ffffff;
+  }
+
+  /* Energy icon image styling */
+  .energy-icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    flex-shrink: 0;
+    margin-bottom: 2px;
+    border-radius: 4px;
+  }
+
+  .quick-info-item--highlight .quick-info-label {
+    color: #ffffff;
+  }
+
+  .quick-info-item--highlight .quick-info-value {
+    color: #ffffff;
+  }
+
+  .quick-info-label {
+    font-size: 11px;
+    color: #6b7280;
+    line-height: 1.2;
+    font-weight: 500;
+  }
+
+  .quick-info-value {
+    font-size: 16px;
+    color: #dc2626;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-top: 2px;
   }
 
   .spec-card__label {
@@ -562,18 +599,78 @@ const discountPercentage = product.originalPrice
     color: var(--text-primary);
   }
 
+  /* Share button for mobile - visible in content area */
+  .btn--share-mobile {
+    display: none;
+    background: var(--color-white);
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+    margin-top: var(--space-4);
+  }
+
+  .btn--share-mobile:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  /* Desktop only buttons */
+  .btn--desktop-only {
+    display: inline-flex;
+  }
+
   /* Responsive */
+  @media (max-width: 1024px) {
+    .product-info__quick-info {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .quick-info-item {
+      min-height: 85px;
+      padding: 10px 6px;
+    }
+  }
+
   @media (max-width: 768px) {
     .product-info__title {
       font-size: var(--text-2xl);
     }
 
-    .product-info__specs {
-      grid-template-columns: 1fr;
+    .product-info__quick-info {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .quick-info-item {
+      min-height: 80px;
+      padding: 10px 6px;
+    }
+
+    .quick-info-label {
+      font-size: 12px;
+    }
+
+    .quick-info-value {
+      font-size: 16px;
+    }
+
+    .quick-info-item svg {
+      width: 30px;
+      height: 30px;
     }
 
     .pricing-box__price {
       font-size: var(--text-3xl);
+    }
+
+    /* Hide desktop buttons on mobile */
+    .btn--desktop-only {
+      display: none;
+    }
+
+    /* Show share button in content area */
+    .btn--share-mobile {
+      display: inline-flex;
     }
 
     .product-info__actions {
@@ -603,17 +700,32 @@ const discountPercentage = product.originalPrice
       font-size: var(--text-base);
     }
 
-    .spec-card {
-      padding: var(--space-2);
+    .product-info__quick-info {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
     }
 
-    .spec-card__icon {
-      width: 40px;
-      height: 40px;
+    .quick-info-item {
+      min-height: 75px;
+      padding: 8px 4px;
     }
 
-    .spec-card__value {
-      font-size: var(--text-base);
+    .quick-info-label {
+      font-size: 12px;
+    }
+
+    .quick-info-value {
+      font-size: 15px;
+    }
+
+    .quick-info-item svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .energy-icon {
+      width: 36px;
+      height: 36px;
     }
   }
 </style>

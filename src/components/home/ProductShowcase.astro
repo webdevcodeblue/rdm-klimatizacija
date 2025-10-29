@@ -22,7 +22,8 @@ const products = featuredProducts.map(p => ({
   energyClass: p.specifications.energyClass,
   features: p.features.slice(0, 3), // First 3 features
   badge: p.badge,
-  image: p.image
+  image: p.image,
+  inStock: p.inStock !== false // Default to true if not specified
 }));
 ---
 
@@ -51,6 +52,13 @@ const products = featuredProducts.map(p => ({
               </svg>
             </button>
           </div>
+
+          {product.inStock && (
+            <div class="product-card__stock-status">
+              <span class="stock-indicator">✓</span>
+              <span class="stock-text">Proizvod je dostupan</span>
+            </div>
+          )}
 
           <div class="product-card__content">
             <span class="product-card__category">{product.category}</span>
@@ -226,6 +234,31 @@ const products = featuredProducts.map(p => ({
   .product-card__quick-view:hover {
     background: var(--color-primary);
     color: var(--color-white);
+  }
+
+  /* Stock status - simple style */
+  .product-card__stock-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: transparent;
+    color: #10b981;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .stock-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    background: #10b981;
+    color: #ffffff;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 900;
   }
 
   .product-card__content {

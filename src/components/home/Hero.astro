@@ -1,9 +1,20 @@
 ---
 // Hero sekcija za homepage
+import { Image } from 'astro:assets';
+import heroImage from '../../assets/images/hero/klima_uredaji_za_dom.jpg';
 ---
 
 <section class="hero">
   <div class="hero__background">
+    <Image
+      src={heroImage}
+      alt="Klima uređaji za dom - RDM Klimatizacija"
+      class="hero__image"
+      widths={[400, 768, 1024, 1920]}
+      sizes="100vw"
+      loading="eager"
+      quality={90}
+    />
     <div class="hero__overlay"></div>
   </div>
 
@@ -95,16 +106,25 @@
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    overflow: hidden;
+  }
+
+  .hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
   }
 
   .hero__overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.2);
-    background-image:
-      radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+    background: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.7) 0%,
+      rgba(0, 0, 0, 0.5) 50%,
+      rgba(0, 0, 0, 0.3) 100%
+    );
   }
 
   .hero__content {
@@ -120,14 +140,13 @@
     line-height: var(--leading-tight);
     margin-bottom: var(--space-6);
     animation: fadeInUp 0.8s ease-out;
+    color: var(--color-white);
   }
 
   .hero__highlight {
     display: block;
-    background: linear-gradient(90deg, #ffd700, #ffed4e);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #60a5fa;
+    text-shadow: 0 2px 8px rgba(96, 165, 250, 0.3);
   }
 
   .hero__description {

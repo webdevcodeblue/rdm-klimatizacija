@@ -1,26 +1,17 @@
 // Export all product data
 export { klimaProducts } from './klima-uredaji';
 export { multiKlimaProducts } from './multi-klima';
-export { dizaliceProducts } from './dizalice-topline';
-export { mikroklimaProducts } from './mikroklima';
-export { alatiProducts } from './alati-materijali';
 
 // Import all products
 import { klimaProducts } from './klima-uredaji';
 import { multiKlimaProducts } from './multi-klima';
-import { dizaliceProducts } from './dizalice-topline';
-import { mikroklimaProducts } from './mikroklima';
-import { alatiProducts } from './alati-materijali';
 
 import type { Product } from '../types';
 
 // Combine all products
 export const allProducts: Product[] = [
   ...klimaProducts,
-  ...multiKlimaProducts,
-  ...dizaliceProducts,
-  ...mikroklimaProducts,
-  ...alatiProducts
+  ...multiKlimaProducts
 ];
 
 // Get products on sale

@@ -1,0 +1,628 @@
+---
+export interface Props {
+  product: any;
+}
+
+const { product } = Astro.props;
+---
+
+<div class="product-tabs">
+  <div class="tabs">
+    <button class="tabs__button tabs__button--active" data-tab="description">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+        <line x1="16" y1="13" x2="8" y2="13"></line>
+        <line x1="16" y1="17" x2="8" y2="17"></line>
+        <polyline points="10 9 9 9 8 9"></polyline>
+      </svg>
+      Opis proizvoda
+    </button>
+    <button class="tabs__button" data-tab="technical">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="16 18 22 12 16 6"></polyline>
+        <polyline points="8 6 2 12 8 18"></polyline>
+      </svg>
+      Tehnički podaci
+    </button>
+    <button class="tabs__button" data-tab="documents">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 15 17 10"></polyline>
+        <line x1="12" y1="15" x2="12" y2="3"></line>
+      </svg>
+      Dokumenti
+    </button>
+  </div>
+
+  <div class="tabs__content">
+    <!-- Description Tab -->
+    <div class="tab-panel tab-panel--active" data-panel="description">
+      <div class="tab-panel__content">
+        <h3>Opis proizvoda</h3>
+        <div class="description" set:html={product.description} />
+
+        {product.features && product.features.length > 0 && (
+          <>
+            <h4>Glavne značajke:</h4>
+            <div class="features-grid">
+              {product.features.map((feature: string) => (
+                <div class="feature-item">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  <span>{feature}</span>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        <div class="benefits">
+          <h4>Prednosti ovog modela:</h4>
+          <div class="benefits-grid">
+            <div class="benefit-card">
+              <div class="benefit-card__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+              </div>
+              <h5>Ušteda energije</h5>
+              <p>Inverter tehnologija omogućava do 30% manju potrošnju električne energije</p>
+            </div>
+            <div class="benefit-card">
+              <div class="benefit-card__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path>
+                </svg>
+              </div>
+              <h5>Tihi rad</h5>
+              <p>Posebno dizajniran za minimalan nivo buke, idealan za spavaće sobe</p>
+            </div>
+            <div class="benefit-card">
+              <div class="benefit-card__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+              </div>
+              <h5>Ekološki prihvatljiv</h5>
+              <p>Koristi R32 rashladni plin koji ima manji utjecaj na okoliš</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Technical Tab -->
+    <div class="tab-panel" data-panel="technical">
+      <div class="tab-panel__content">
+        <h3>Tehnički podaci</h3>
+
+        {Object.entries(product.technicalSpecs || {}).map(([section, specs]) => (
+          <div class="specs-section">
+            <h4>{
+              section === 'general' ? 'Opći podaci' :
+              section === 'performance' ? 'Performanse' :
+              section === 'technical' ? 'Tehnički podaci' :
+              section === 'dimensions' ? 'Dimenzije i težina' :
+              section
+            }</h4>
+            <table class="specs-table">
+              <tbody>
+                {Object.entries(specs).map(([key, value]) => (
+                  <tr>
+                    <td class="specs-table__label">{key}</td>
+                    <td class="specs-table__value">{value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))}
+
+        <div class="energy-label">
+          <h4>Energetska oznaka</h4>
+          <div class="energy-label__content">
+            <img
+              src="/images/energy-label-sample.png"
+              alt="Energetska oznaka"
+              class="energy-label__image"
+            />
+            <div class="energy-label__info">
+              <p>Energetski razred: <strong>{product.specifications.energyClass}</strong></p>
+              <p>SEER: <strong>{product.specifications.seer}</strong></p>
+              <p>SCOP: <strong>{product.specifications.scop}</strong></p>
+              <a href="#" class="energy-label__link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Preuzmite energetsku oznaku (PDF)
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Documents Tab -->
+    <div class="tab-panel" data-panel="documents">
+      <div class="tab-panel__content">
+        <h3>Dokumentacija</h3>
+
+        <div class="documents-grid">
+          <a href="#" class="document-card">
+            <div class="document-card__icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+            </div>
+            <div class="document-card__content">
+              <h5>Informacijski list proizvoda</h5>
+              <span class="document-card__meta">PDF • 2.3 MB</span>
+            </div>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="document-card__download">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </a>
+
+          <a href="#" class="document-card">
+            <div class="document-card__icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+            </div>
+            <div class="document-card__content">
+              <h5>Uputstvo za korištenje</h5>
+              <span class="document-card__meta">PDF • 5.1 MB</span>
+            </div>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="document-card__download">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </a>
+
+          <a href="#" class="document-card">
+            <div class="document-card__icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+            </div>
+            <div class="document-card__content">
+              <h5>Uputstvo za montažu</h5>
+              <span class="document-card__meta">PDF • 3.7 MB</span>
+            </div>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="document-card__download">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </a>
+
+          <a href="#" class="document-card">
+            <div class="document-card__icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+            </div>
+            <div class="document-card__content">
+              <h5>Garancijski list</h5>
+              <span class="document-card__meta">PDF • 1.2 MB</span>
+            </div>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="document-card__download">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </a>
+        </div>
+
+        <div class="documents-info">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          <p>Svi dokumenti su u PDF formatu. Za pregled trebate Adobe Acrobat Reader ili sličan program.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .product-tabs {
+    width: 100%;
+  }
+
+  /* Tab Navigation */
+  .tabs {
+    display: flex;
+    gap: var(--space-2);
+    border-bottom: 2px solid var(--color-gray-200);
+    margin-bottom: var(--space-6);
+    overflow-x: auto;
+  }
+
+  .tabs__button {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--color-gray-600);
+    font-size: var(--text-base);
+    font-weight: var(--font-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+  }
+
+  .tabs__button:hover {
+    color: var(--text-primary);
+    background: var(--color-gray-50);
+  }
+
+  .tabs__button--active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+  }
+
+  .tabs__button svg {
+    flex-shrink: 0;
+  }
+
+  /* Tab Panels */
+  .tabs__content {
+    min-height: 400px;
+  }
+
+  .tab-panel {
+    display: none;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .tab-panel--active {
+    display: block;
+  }
+
+  .tab-panel__content h3 {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    margin: 0 0 var(--space-6) 0;
+  }
+
+  .tab-panel__content h4 {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin: var(--space-6) 0 var(--space-4) 0;
+  }
+
+  .tab-panel__content h5 {
+    font-size: var(--text-base);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin: 0 0 var(--space-2) 0;
+  }
+
+  /* Description Tab */
+  .description {
+    color: var(--text-secondary);
+    line-height: 1.8;
+  }
+
+  .description p {
+    margin-bottom: var(--space-4);
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    background: var(--color-gray-50);
+    border-radius: var(--border-radius-md);
+  }
+
+  .feature-item svg {
+    color: var(--color-green-600);
+    flex-shrink: 0;
+  }
+
+  /* Benefits Section */
+  .benefits {
+    margin-top: var(--space-8);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-gray-200);
+  }
+
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+  }
+
+  .benefit-card {
+    padding: var(--space-4);
+    background: var(--color-gray-50);
+    border-radius: var(--border-radius-lg);
+    text-align: center;
+  }
+
+  .benefit-card__icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto var(--space-3);
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .benefit-card p {
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    margin: 0;
+  }
+
+  /* Technical Tab */
+  .specs-section {
+    margin-bottom: var(--space-6);
+  }
+
+  .specs-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .specs-table tr {
+    border-bottom: 1px solid var(--color-gray-200);
+  }
+
+  .specs-table td {
+    padding: var(--space-3);
+  }
+
+  .specs-table__label {
+    color: var(--color-gray-600);
+    font-size: var(--text-sm);
+    width: 40%;
+  }
+
+  .specs-table__value {
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+  }
+
+  /* Energy Label */
+  .energy-label {
+    margin-top: var(--space-8);
+    padding: var(--space-6);
+    background: var(--color-gray-50);
+    border-radius: var(--border-radius-lg);
+  }
+
+  .energy-label__content {
+    display: flex;
+    gap: var(--space-6);
+    align-items: center;
+  }
+
+  .energy-label__image {
+    width: 200px;
+    height: auto;
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--border-radius-md);
+  }
+
+  .energy-label__info p {
+    margin-bottom: var(--space-2);
+    color: var(--text-secondary);
+  }
+
+  .energy-label__info strong {
+    color: var(--text-primary);
+  }
+
+  .energy-label__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+    color: var(--color-primary);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+  }
+
+  .energy-label__link:hover {
+    text-decoration: underline;
+  }
+
+  /* Documents Tab */
+  .documents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  .document-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--border-radius-lg);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+  }
+
+  .document-card:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .document-card__icon {
+    width: 48px;
+    height: 48px;
+    background: var(--color-gray-100);
+    border-radius: var(--border-radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-gray-600);
+    flex-shrink: 0;
+  }
+
+  .document-card__content {
+    flex: 1;
+  }
+
+  .document-card__content h5 {
+    color: var(--text-primary);
+    font-size: var(--text-base);
+    font-weight: var(--font-semibold);
+    margin: 0 0 var(--space-1) 0;
+  }
+
+  .document-card__meta {
+    color: var(--color-gray-500);
+    font-size: var(--text-sm);
+  }
+
+  .document-card__download {
+    color: var(--color-primary);
+    flex-shrink: 0;
+  }
+
+  .documents-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    background: var(--color-blue-50);
+    border-radius: var(--border-radius-md);
+    color: var(--color-blue-700);
+  }
+
+  .documents-info svg {
+    flex-shrink: 0;
+  }
+
+  .documents-info p {
+    margin: 0;
+    font-size: var(--text-sm);
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .tabs {
+      gap: 0;
+    }
+
+    .tabs__button {
+      font-size: var(--text-sm);
+      padding: var(--space-2) var(--space-3);
+    }
+
+    .tabs__button svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .tab-panel__content h3 {
+      font-size: var(--text-xl);
+    }
+
+    .features-grid,
+    .benefits-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .energy-label__content {
+      flex-direction: column;
+    }
+
+    .energy-label__image {
+      width: 100%;
+      max-width: 200px;
+    }
+
+    .documents-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .tabs__button span {
+      display: none;
+    }
+
+    .tabs__button {
+      justify-content: center;
+      flex: 1;
+    }
+  }
+</style>
+
+<script>
+  // Tab functionality
+  const tabButtons = document.querySelectorAll('.tabs__button');
+  const tabPanels = document.querySelectorAll('.tab-panel');
+
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const targetTab = button.getAttribute('data-tab');
+
+      // Update buttons
+      tabButtons.forEach(btn => btn.classList.remove('tabs__button--active'));
+      button.classList.add('tabs__button--active');
+
+      // Update panels
+      tabPanels.forEach(panel => {
+        if (panel.getAttribute('data-panel') === targetTab) {
+          panel.classList.add('tab-panel--active');
+        } else {
+          panel.classList.remove('tab-panel--active');
+        }
+      });
+    });
+  });
+</script>

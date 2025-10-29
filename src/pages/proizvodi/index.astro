@@ -5,74 +5,43 @@ import Footer from '../../components/layout/Footer.astro';
 import ProductFilter from '../../components/products/ProductFilter.astro';
 import ProductCard from '../../components/products/ProductCard.astro';
 import InquiryModal from '../../components/InquiryModal.astro';
+import { klimaProducts } from '../../data/products/klima-uredaji';
 
-// Temporary mock data - will be replaced with Strapi CMS
-const products = [
-  {
-    id: '1',
-    slug: 'toshiba-seiya-ras-b16e2kvg',
-    name: 'RAS-B16E2KVG-E/RAS-16E2AVG-E',
-    manufacturer: 'Toshiba',
-    category: 'Klima uređaji',
-    price: 954,
-    originalPrice: null,
-    power: '4.2 kW',
-    area: '35-40 m²',
-    energyClass: 'A++',
-    seer: 6.1,
-    scop: 4.0,
-    features: ['Moderni kompaktni inverter', 'Ultra fresh filter', 'Silent način rada', 'Novi ekološko plin R32', 'Wi-Fi upravljanje - može se ugraditi (plaća se posebno)', 'Tvorničko jamstvo: 3 godine'],
-    badge: 'Akcija',
-    image: '/images/products/klima.jpg',
-    inStock: true,
-    description: 'SEIYA NEW INVERTER - komplet sjajna bijela zidna unutarnja i vanjska jedinica'
-  },
-  {
-    id: '2',
-    slug: 'mitsubishi-msz-ln25vg',
-    name: 'MSZ-LN25VGW / MUZ-LN25VGHZ',
-    manufacturer: 'Mitsubishi Electric',
-    category: 'Klima uređaji',
-    price: 1299,
-    originalPrice: 1499,
-    power: '2.5 kW',
-    area: '25 m²',
-    energyClass: 'A+++',
-    seer: 8.5,
-    scop: 5.1,
-    features: ['Premium inverter tehnologija', 'Wi-Fi ready', '3D i-see senzor', 'Plasma Quad filter', 'Tihi rad 19dB', 'Hyper Heating grijanje do -25°C'],
-    badge: 'Premium',
-    image: '/images/products/klima.jpg',
-    inStock: true,
-    description: 'Premium klima uređaj s najnaprednijom tehnologijom i energetskom učinkovitošću'
-  },
-  {
-    id: '3',
-    slug: 'daikin-ftxa25aw',
-    name: 'Stylish FTXA25AW / RXA25A',
-    manufacturer: 'Daikin',
-    category: 'Klima uređaji',
-    price: 1199,
-    originalPrice: null,
-    power: '2.5 kW',
-    area: '25 m²',
-    energyClass: 'A+++',
-    seer: 8.7,
-    scop: 5.2,
-    features: ['Stylish design', 'Wi-Fi integriran', 'Coanda effect', '2-Area intelligent eye', 'Flash Streamer tehnologija', 'Tihi rad'],
-    badge: 'Novo',
-    image: '/images/products/klima.jpg',
-    inStock: true,
-    description: 'Elegantni dizajn s naprednim funkcijama za maksimalnu udobnost'
-  }
-];
+// Convert new data structure to match old format for ProductCard
+const products = klimaProducts.map(p => ({
+  id: p.id,
+  slug: p.slug,
+  name: p.name,
+  manufacturer: p.manufacturer,
+  category: 'Klima uređaji',
+  price: p.price,
+  originalPrice: p.originalPrice,
+  power: p.specifications.power,
+  cooling: p.specifications.cooling,
+  heating: p.specifications.heating,
+  area: p.specifications.area,
+  energyClass: p.specifications.energyClass,
+  seer: p.specifications.seer,
+  scop: p.specifications.scop,
+  features: p.features,
+  badge: p.badge,
+  image: p.image,
+  inStock: p.inStock,
+  description: p.description
+}));
 
 // Get manufacturers and categories for filters
 const manufacturers = [...new Set(products.map(p => p.manufacturer))].sort();
 const categories = [...new Set(products.map(p => p.category))].sort();
 
 // Get filter params from URL
-const url = new URL(Astro.request.url);
+const url = Astro.url; // Koristim Astro.url direktno umjesto new URL()
+const brandFilter = url.searchParams.get('brand'); // za dropdown u navigaciji
+
+console.log('Full URL:', url.href);
+console.log('Search params:', url.search);
+console.log('All params:', Array.from(url.searchParams.entries()));
+
 const currentFilters = {
   manufacturer: url.searchParams.get('manufacturer') || undefined,
   category: url.searchParams.get('category') || undefined,
@@ -85,7 +54,28 @@ const currentFilters = {
 
 // Filter products based on current filters
 let filteredProducts = products;
-// TODO: Implement filtering logic
+
+// Debug: log all manufacturers
+console.log('All manufacturers:', products.map(p => p.manufacturer));
+console.log('Brand filter from URL:', brandFilter);
+
+// Filter by brand from navigation dropdown
+if (brandFilter) {
+  console.log('Filtering by brand:', brandFilter);
+  filteredProducts = filteredProducts.filter(p => {
+    const matches = p.manufacturer?.toLowerCase() === brandFilter.toLowerCase();
+    console.log(`${p.manufacturer} vs ${brandFilter}: ${matches}`);
+    return matches;
+  });
+  console.log('Filtered count:', filteredProducts.length);
+}
+
+// Filter by manufacturer from sidebar
+if (currentFilters.manufacturer) {
+  filteredProducts = filteredProducts.filter(p =>
+    p.manufacturer === currentFilters.manufacturer
+  );
+}
 
 const viewMode = url.searchParams.get('view') || 'list';
 ---

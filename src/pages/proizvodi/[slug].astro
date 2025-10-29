@@ -7,204 +7,106 @@ import ProductInfo from '../../components/products/ProductInfo.astro';
 import ProductTabs from '../../components/products/ProductTabs.astro';
 import RelatedProducts from '../../components/products/RelatedProducts.astro';
 import InquiryModal from '../../components/InquiryModal.astro';
+import { klimaProducts } from '../../data/products/klima-uredaji';
 
-export function getStaticPaths() {
-  // Temporary mock data - will be replaced with Strapi API
-  const products = [
-    {
-      slug: 'toshiba-seiya-ras-b16e2kvg',
-      id: '1',
-      name: 'RAS-B16E2KVG-E/RAS-16E2AVG-E',
-      manufacturer: 'Toshiba',
-      model: 'SEIYA NEW INVERTER',
-      category: 'Klima uređaji',
-      price: 954,
-      originalPrice: null,
-      warranty: '3 godine',
-      images: [
-        '/images/products/klima.jpg',
-        '/images/products/klima-2.jpg',
-        '/images/products/klima-3.jpg',
-      ],
-      specifications: {
-        cooling: '4.2 kW',
-        heating: '4.2 kW',
-        area: '35-40 m²',
-        energyClass: 'A++',
-        seer: 6.1,
-        scop: 4.0,
-        soundLevel: '45/25 dB(A)',
-        refrigerant: 'R32',
-        dimensions: {
-          indoor: '820 x 285 x 209 mm',
-          outdoor: '660 x 530 x 285 mm'
-        },
-        weight: {
-          indoor: '9 kg',
-          outdoor: '26 kg'
-        }
-      },
-      features: [
-        'Moderni kompaktni inverter',
-        'Ultra fresh filter',
-        'Silent način rada',
-        'Novi ekološko plin R32',
-        'Wi-Fi upravljanje (opciono)',
-        'Auto restart funkcija',
-        'Timer 24h',
-        'Sleep mode'
-      ],
-      description: `
-        <p>SEIYA NEW INVERTER predstavlja savršenu kombinaciju elegancije i performansi.
-        Ovaj model klima uređaja dizajniran je za maksimalnu energetsku učinkovitost uz
-        minimalan utjecaj na okoliš zahvaljujući ekološkom rashladnom plinu R32.</p>
+// Get slug from URL params
+const { slug } = Astro.params;
 
-        <p>Napredna inverter tehnologija omogućava preciznu kontrolu temperature uz značajne
-        uštede energije. Silent način rada osigurava gotovo nečujan rad, što ga čini
-        idealnim za spavaće sobe.</p>
-      `,
-      technicalSpecs: {
-        general: {
-          'Tip uređaja': 'Inverter split sistem',
-          'Namjena': 'Hlađenje i grijanje',
-          'Energetska klasa hlađenja': 'A++',
-          'Energetska klasa grijanja': 'A+',
-        },
-        performance: {
-          'Kapacitet hlađenja': '4.2 kW',
-          'Kapacitet grijanja': '4.2 kW',
-          'SEER': '6.1',
-          'SCOP': '4.0',
-          'Preporučena površina': '35-40 m²'
-        },
-        technical: {
-          'Rashladni plin': 'R32',
-          'Količina plina': '0.7 kg',
-          'Napajanje': '220-240V / 50Hz',
-          'Priključna snaga': '1.3 kW',
-          'Struja (max)': '6.5 A'
-        },
-        dimensions: {
-          'Unutarnja jedinica': '820 x 285 x 209 mm',
-          'Vanjska jedinica': '660 x 530 x 285 mm',
-          'Težina unutarnje': '9 kg',
-          'Težina vanjske': '26 kg'
-        }
-      },
-      inStock: true,
-      badge: 'Akcija',
-      relatedProducts: ['2', '3'] // IDs of related products
-    },
-    {
-      slug: 'mitsubishi-msz-ln25vg',
-      id: '2',
-      name: 'MSZ-LN25VGW / MUZ-LN25VGHZ',
-      manufacturer: 'Mitsubishi Electric',
-      model: 'Diamond Series',
-      category: 'Klima uređaji',
-      price: 1299,
-      originalPrice: 1499,
-      warranty: '5 godina',
-      images: [
-        '/images/products/klima.jpg',
-      ],
-      specifications: {
-        cooling: '2.5 kW',
-        heating: '2.5 kW',
-        area: '25 m²',
-        energyClass: 'A+++',
-        seer: 8.5,
-        scop: 5.1,
-        soundLevel: '19 dB(A)',
-        refrigerant: 'R32',
-        dimensions: {
-          indoor: '890 x 307 x 233 mm',
-          outdoor: '800 x 550 x 285 mm'
-        },
-        weight: {
-          indoor: '14 kg',
-          outdoor: '35 kg'
-        }
-      },
-      features: [
-        'Premium inverter tehnologija',
-        'Wi-Fi ready',
-        '3D i-see senzor',
-        'Plasma Quad filter',
-        'Tihi rad 19dB',
-        'Hyper Heating grijanje do -25°C'
-      ],
-      description: `<p>Premium klima uređaj s najnaprednijom tehnologijom.</p>`,
-      technicalSpecs: {
-        general: {
-          'Tip uređaja': 'Premium inverter',
-          'Namjena': 'Hlađenje i grijanje'
-        }
-      },
-      inStock: true,
-      badge: 'Premium',
-      relatedProducts: ['1', '3']
-    },
-    {
-      slug: 'daikin-ftxa25aw',
-      id: '3',
-      name: 'Stylish FTXA25AW / RXA25A',
-      manufacturer: 'Daikin',
-      model: 'Stylish',
-      category: 'Klima uređaji',
-      price: 1199,
-      originalPrice: null,
-      warranty: '3 godine',
-      images: [
-        '/images/products/klima.jpg',
-      ],
-      specifications: {
-        cooling: '2.5 kW',
-        heating: '2.5 kW',
-        area: '25 m²',
-        energyClass: 'A+++',
-        seer: 8.7,
-        scop: 5.2,
-        soundLevel: '21 dB(A)',
-        refrigerant: 'R32',
-        dimensions: {
-          indoor: '798 x 294 x 189 mm',
-          outdoor: '734 x 870 x 373 mm'
-        },
-        weight: {
-          indoor: '10 kg',
-          outdoor: '39 kg'
-        }
-      },
-      features: [
-        'Stylish design',
-        'Wi-Fi integriran',
-        'Coanda effect',
-        '2-Area intelligent eye',
-        'Flash Streamer tehnologija',
-        'Tihi rad'
-      ],
-      description: `<p>Elegantni dizajn s naprednim funkcijama.</p>`,
-      technicalSpecs: {
-        general: {
-          'Tip uređaja': 'Design inverter',
-          'Namjena': 'Hlađenje i grijanje'
-        }
-      },
-      inStock: true,
-      badge: 'Novo',
-      relatedProducts: ['1', '2']
-    }
-  ];
+// Find product by slug
+const rawProduct = klimaProducts.find(p => p.slug === slug);
 
-  return products.map(product => ({
-    params: { slug: product.slug },
-    props: { product, allProducts: products }
-  }));
+// If product not found, return 404
+if (!rawProduct) {
+  return Astro.redirect('/404');
 }
 
-const { product, allProducts } = Astro.props;
-const relatedProducts = allProducts.filter(p => product.relatedProducts?.includes(p.id));
+// Convert new data structure to format expected by components
+const product = {
+  slug: rawProduct.slug,
+  id: rawProduct.id,
+  name: rawProduct.name,
+  manufacturer: rawProduct.manufacturer,
+  model: rawProduct.model,
+  category: rawProduct.category,
+  price: rawProduct.price,
+  originalPrice: rawProduct.originalPrice,
+  warranty: rawProduct.warranty,
+  images: rawProduct.images || [rawProduct.image], // Use images array or single image
+  specifications: {
+    cooling: rawProduct.specifications.cooling,
+    heating: rawProduct.specifications.heating,
+    area: rawProduct.specifications.area,
+    energyClass: rawProduct.specifications.energyClass,
+    seer: rawProduct.specifications.seer,
+    scop: rawProduct.specifications.scop,
+    soundLevel: rawProduct.specifications.soundLevel,
+    refrigerant: rawProduct.specifications.refrigerant,
+    dimensions: {
+      indoor: rawProduct.specifications.dimensions?.indoor || 'N/A',
+      outdoor: rawProduct.specifications.dimensions?.outdoor || 'N/A'
+    },
+    weight: {
+      indoor: rawProduct.specifications.weight?.indoor || 'N/A',
+      outdoor: rawProduct.specifications.weight?.outdoor || 'N/A'
+    }
+  },
+  features: rawProduct.features,
+  description: rawProduct.description,
+  technicalSpecs: {
+    general: {
+      'Tip uređaja': 'Inverter split sistem',
+      'Namjena': 'Hlađenje i grijanje',
+      'Energetska klasa hlađenja': rawProduct.specifications.energyClass,
+      'Energetska klasa grijanja': rawProduct.specifications.energyClass,
+    },
+    performance: {
+      'Kapacitet hlađenja': rawProduct.specifications.cooling,
+      'Kapacitet grijanja': rawProduct.specifications.heating,
+      'SEER': rawProduct.specifications.seer.toString(),
+      'SCOP': rawProduct.specifications.scop.toString(),
+      'Preporučena površina': rawProduct.specifications.area
+    },
+    technical: {
+      'Rashladni plin': rawProduct.specifications.refrigerant,
+      'Napajanje': '220-240V / 50Hz',
+      'Bučnost unutarnje': rawProduct.specifications.soundLevel
+    },
+    dimensions: {
+      'Unutarnja jedinica': rawProduct.specifications.dimensions?.indoor || 'N/A',
+      'Vanjska jedinica': rawProduct.specifications.dimensions?.outdoor || 'N/A',
+      'Težina unutarnje': rawProduct.specifications.weight?.indoor || 'N/A',
+      'Težina vanjske': rawProduct.specifications.weight?.outdoor || 'N/A'
+    }
+  },
+  inStock: rawProduct.inStock,
+  badge: rawProduct.badge
+};
+
+// Get related products (same manufacturer, different model)
+const allProducts = klimaProducts.map(p => ({
+  id: p.id,
+  slug: p.slug,
+  name: p.name,
+  manufacturer: p.manufacturer,
+  model: p.model,
+  price: p.price,
+  originalPrice: p.originalPrice,
+  image: p.image,
+  images: p.images || [p.image],
+  specifications: p.specifications,
+  features: p.features,
+  inStock: p.inStock,
+  badge: p.badge
+}));
+
+// Get related products - show 4 different products (exclude current one)
+const relatedProducts = allProducts
+  .filter(p => p.id !== product.id) // Exclude current product
+  .slice(0, 4) // Show 4 related products
+  .map(p => ({
+    ...p,
+    images: p.images || [p.image]
+  }));
 
 // SEO meta data
 const pageTitle = `${product.manufacturer} ${product.name} - RDM Klimatizacija`;

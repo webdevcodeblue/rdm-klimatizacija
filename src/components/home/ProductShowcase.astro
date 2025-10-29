@@ -1,57 +1,29 @@
 ---
-// Showcase proizvoda - placeholder dok ne integriramo CMS
-const products = [
-  {
-    id: 1,
-    name: 'Mitsubishi Electric MSZ-LN25VG',
-    category: 'Klima uređaji',
-    price: '899',
-    originalPrice: '999',
-    power: '2.5 kW',
-    area: '25 m²',
-    energyClass: 'A+++',
-    features: ['Inverter', 'Wi-Fi', 'Tihi rad'],
-    badge: 'Akcija',
-    image: '/images/products/mitsubishi-ln25.jpg'
-  },
-  {
-    id: 2,
-    name: 'Daikin Stylish FTXA25AW',
-    category: 'Klima uređaji',
-    price: '1.099',
-    power: '2.5 kW',
-    area: '25 m²',
-    energyClass: 'A+++',
-    features: ['Inverter', 'Wi-Fi', 'Design'],
-    badge: 'Novo',
-    image: '/images/products/daikin-stylish.jpg'
-  },
-  {
-    id: 3,
-    name: 'Gree Amber GWH12YC',
-    category: 'Klima uređaji',
-    price: '649',
-    originalPrice: '749',
-    power: '3.5 kW',
-    area: '35 m²',
-    energyClass: 'A++',
-    features: ['Inverter', 'Wi-Fi'],
-    badge: 'Top cijena',
-    image: '/images/products/gree-amber.jpg'
-  },
-  {
-    id: 4,
-    name: 'Samsung WindFree AR12TXCAAWK',
-    category: 'Klima uređaji',
-    price: '1.299',
-    power: '3.5 kW',
-    area: '35 m²',
-    energyClass: 'A+++',
-    features: ['WindFree', 'Wi-Fi', 'AI Control'],
-    badge: 'Premium',
-    image: '/images/products/samsung-windfree.jpg'
-  }
+import { klimaProducts } from '../../data/products/klima-uredaji';
+
+// Featured products - prikazujemo 4 proizvoda (2 manja, 2 veća)
+const featuredProducts = [
+  klimaProducts[0], // Toshiba SEIYA 2.5kW
+  klimaProducts[2], // Haier TIDE 2.5kW
+  klimaProducts[1], // Toshiba SHORAI 4.6kW
+  klimaProducts[3]  // Haier PEARL 5kW
 ];
+
+// Format products for display
+const products = featuredProducts.map(p => ({
+  id: p.id,
+  slug: p.slug,
+  name: p.name,
+  category: 'Klima uređaji',
+  price: p.price.toString(),
+  originalPrice: p.originalPrice ? p.originalPrice.toString() : null,
+  power: p.specifications.power,
+  area: p.specifications.area,
+  energyClass: p.specifications.energyClass,
+  features: p.features.slice(0, 3), // First 3 features
+  badge: p.badge,
+  image: p.image
+}));
 ---
 
 <section class="showcase">
@@ -173,6 +145,8 @@ const products = [
     overflow: hidden;
     box-shadow: var(--shadow-card);
     transition: all var(--transition-base);
+    display: flex;
+    flex-direction: column;
   }
 
   .product-card:hover {
@@ -256,6 +230,9 @@ const products = [
 
   .product-card__content {
     padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
   }
 
   .product-card__category {
@@ -320,7 +297,7 @@ const products = [
     justify-content: space-between;
     padding-top: var(--space-4);
     border-top: 1px solid var(--border-color);
-    margin-top: var(--space-4);
+    margin-top: auto;
   }
 
   .product-card__price {
@@ -338,7 +315,7 @@ const products = [
   .price-current {
     font-size: var(--text-2xl);
     font-weight: var(--font-bold);
-    color: var(--color-primary);
+    color: var(--color-danger);
   }
 
   .product-card__action {

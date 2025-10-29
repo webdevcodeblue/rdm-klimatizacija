@@ -3,13 +3,85 @@
 const currentPath = Astro.url.pathname;
 
 const navigationItems = [
-  { label: 'KLIMA UREĐAJI', href: '/klima-uredaji', hasDropdown: true },
-  { label: 'MULTI KLIMA UREĐAJI', href: '/multi-klima', hasDropdown: true },
-  { label: 'DIZALICE TOPLINE', href: '/dizalice-topline', hasDropdown: true },
-  { label: 'MIKROKLIMA', href: '/mikroklima', hasDropdown: false },
-  { label: 'ALATI I MATERIJAL', href: '/alati-materijal', hasDropdown: true },
-  { label: 'MONTAŽA I SERVIS', href: '/montaza-servis', hasDropdown: false },
-  { label: 'AKCIJE', href: '/akcije', hasDropdown: false, highlight: true }
+  {
+    label: 'KLIMA UREĐAJI',
+    href: '/proizvodi',
+    hasDropdown: true,
+    dropdownItems: [
+      { label: 'Svi proizvodi', href: '/proizvodi' },
+      { label: 'Toshiba', href: '/proizvodi?brand=toshiba' },
+      { label: 'Haier', href: '/proizvodi?brand=haier' },
+      { label: 'Maxon', href: '/proizvodi?brand=maxon' }
+    ]
+  },
+  {
+    label: 'MULTI KLIMA',
+    href: '/multi-klima',
+    hasDropdown: true,
+    dropdownItems: [
+      { label: 'Svi sustavi', href: '/multi-klima' },
+      { label: 'Toshiba', href: '/multi-klima?brand=toshiba' },
+      { label: 'Haier', href: '/multi-klima?brand=haier' },
+      { label: 'Maxon', href: '/multi-klima?brand=maxon' },
+      { divider: true },
+      { label: '2 jedinice', href: '/multi-klima?units=2' },
+      { label: '3 jedinice', href: '/multi-klima?units=3' },
+      { label: '4 jedinice', href: '/multi-klima?units=4' }
+    ]
+  },
+  {
+    label: 'DIZALICE TOPLINE',
+    href: '/dizalice-topline',
+    hasDropdown: true,
+    dropdownItems: [
+      { label: 'Sve dizalice', href: '/dizalice-topline' },
+      { label: 'Toshiba', href: '/dizalice-topline?brand=toshiba' },
+      { label: 'Haier', href: '/dizalice-topline?brand=haier' },
+      { label: 'Maxon', href: '/dizalice-topline?brand=maxon' },
+      { divider: true },
+      { label: 'Zrak-voda', href: '/dizalice-topline?type=zrak-voda' },
+      { label: 'Zrak-zrak', href: '/dizalice-topline?type=zrak-zrak' }
+    ]
+  },
+  {
+    label: 'MIKROKLIMA',
+    href: '/mikroklima',
+    hasDropdown: true,
+    dropdownItems: [
+      { label: 'Svi uređaji', href: '/mikroklima' },
+      { label: 'Toshiba', href: '/mikroklima?brand=toshiba' },
+      { label: 'Haier', href: '/mikroklima?brand=haier' },
+      { label: 'Maxon', href: '/mikroklima?brand=maxon' }
+    ]
+  },
+  {
+    label: 'ALATI I MATERIJALI',
+    href: '/alati-materijali',
+    hasDropdown: true,
+    dropdownItems: [
+      { label: 'Svi proizvodi', href: '/alati-materijali' },
+      { label: 'Cijevi', href: '/alati-materijali?category=cijevi' },
+      { label: 'Držači', href: '/alati-materijali?category=drzaci' },
+      { label: 'Alati', href: '/alati-materijali?category=alati' },
+      { label: 'Dodatna oprema', href: '/alati-materijali?category=oprema' }
+    ]
+  },
+  {
+    label: 'MONTAŽA I SERVIS',
+    href: '/montaza-servis',
+    hasDropdown: true,
+    dropdownItems: [
+      { label: 'Montaža klima uređaja', href: '/montaza' },
+      { label: 'Servis i održavanje', href: '/servis' },
+      { label: 'Čišćenje klima uređaja', href: '/ciscenje' }
+    ]
+  },
+  {
+    label: 'AKCIJE',
+    href: '/akcije',
+    hasDropdown: false,
+    highlight: true
+  }
 ];
 ---
 
@@ -115,6 +187,23 @@ const navigationItems = [
                 </svg>
               )}
             </a>
+            {item.hasDropdown && item.dropdownItems && (
+              <div class="navigation__dropdown">
+                <ul class="dropdown__list">
+                  {item.dropdownItems.map((dropdownItem) => (
+                    dropdownItem.divider ? (
+                      <li class="dropdown__divider" role="separator"></li>
+                    ) : (
+                      <li class="dropdown__item">
+                        <a href={dropdownItem.href} class="dropdown__link">
+                          {dropdownItem.label}
+                        </a>
+                      </li>
+                    )
+                  ))}
+                </ul>
+              </div>
+            )}
           </li>
         ))}
       </ul>
@@ -157,11 +246,39 @@ const navigationItems = [
       <nav class="mobile-menu__nav">
         <h3 class="mobile-menu__title">Proizvodi</h3>
         <ul class="mobile-menu__list">
-          {navigationItems.map((item) => (
+          {navigationItems.map((item, index) => (
             <li class="mobile-menu__item">
-              <a href={item.href} class={`mobile-menu__link ${item.highlight ? 'mobile-menu__link--highlight' : ''}`}>
-                {item.label}
-              </a>
+              {item.hasDropdown && item.dropdownItems ? (
+                <>
+                  <button
+                    class="mobile-menu__toggle"
+                    data-menu-index={index}
+                    aria-expanded="false"
+                  >
+                    <span>{item.label}</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </button>
+                  <ul class="mobile-menu__submenu" data-submenu-index={index}>
+                    {item.dropdownItems.map((dropdownItem) => (
+                      dropdownItem.divider ? (
+                        <li class="mobile-menu__divider" role="separator"></li>
+                      ) : (
+                        <li class="mobile-menu__subitem">
+                          <a href={dropdownItem.href} class="mobile-menu__sublink">
+                            {dropdownItem.label}
+                          </a>
+                        </li>
+                      )
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <a href={item.href} class={`mobile-menu__link ${item.highlight ? 'mobile-menu__link--highlight' : ''}`}>
+                  {item.label}
+                </a>
+              )}
             </li>
           ))}
         </ul>
@@ -516,8 +633,67 @@ const navigationItems = [
     transition: transform var(--transition-fast);
   }
 
-  .navigation__link:hover .navigation__arrow {
+  .navigation__item:hover .navigation__arrow {
     transform: rotate(180deg);
+  }
+
+  /* Dropdown Menus */
+  .navigation__dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 220px;
+    background: var(--color-white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all var(--transition-fast);
+    z-index: 100;
+  }
+
+  .navigation__item:hover .navigation__dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .dropdown__list {
+    list-style: none;
+    margin: 0;
+    padding: var(--space-2);
+  }
+
+  .dropdown__item {
+    margin: 0;
+  }
+
+  .dropdown__link {
+    display: block;
+    padding: var(--space-2) var(--space-3);
+    color: var(--text-primary);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    text-transform: none;
+    letter-spacing: normal;
+    text-decoration: none;
+    border-radius: var(--border-radius-md);
+    transition: all var(--transition-fast);
+  }
+
+  .dropdown__link:hover {
+    background: var(--color-gray-100);
+    color: var(--color-primary);
+    padding-left: var(--space-4);
+  }
+
+  .dropdown__divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: var(--space-2) 0;
+    list-style: none;
   }
 
   /* Mobile menu button */
@@ -703,6 +879,72 @@ const navigationItems = [
     color: var(--color-secondary);
   }
 
+  /* Mobile menu toggle button */
+  .mobile-menu__toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: var(--space-3) 0;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-weight: var(--font-medium);
+    text-align: left;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+  }
+
+  .mobile-menu__toggle:hover {
+    color: var(--color-primary);
+  }
+
+  .mobile-menu__toggle svg {
+    transition: transform var(--transition-fast);
+  }
+
+  .mobile-menu__toggle[aria-expanded="true"] svg {
+    transform: rotate(180deg);
+  }
+
+  /* Mobile submenu */
+  .mobile-menu__submenu {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 var(--space-4);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition-base);
+  }
+
+  .mobile-menu__submenu--expanded {
+    max-height: 500px;
+  }
+
+  .mobile-menu__subitem {
+    border: none;
+  }
+
+  .mobile-menu__sublink {
+    display: block;
+    padding: var(--space-2) 0;
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .mobile-menu__sublink:hover {
+    color: var(--color-primary);
+  }
+
+  .mobile-menu__divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: var(--space-2) 0;
+    list-style: none;
+  }
+
   .mobile-menu__footer {
     display: flex;
     flex-direction: column;
@@ -856,6 +1098,36 @@ const navigationItems = [
       backdrop.classList.remove('active');
       mobileMenuBtn?.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
+    });
+  });
+
+  // Mobile submenu toggle functionality
+  const mobileToggles = mobileMenu?.querySelectorAll('.mobile-menu__toggle');
+
+  mobileToggles?.forEach((toggle) => {
+    toggle.addEventListener('click', () => {
+      const menuIndex = toggle.getAttribute('data-menu-index');
+      const submenu = mobileMenu?.querySelector(`[data-submenu-index="${menuIndex}"]`);
+      const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+
+      if (submenu) {
+        if (isExpanded) {
+          submenu.classList.remove('mobile-menu__submenu--expanded');
+          toggle.setAttribute('aria-expanded', 'false');
+        } else {
+          // Close other submenus
+          mobileMenu?.querySelectorAll('.mobile-menu__submenu').forEach(sub => {
+            sub.classList.remove('mobile-menu__submenu--expanded');
+          });
+          mobileToggles?.forEach(tog => {
+            tog.setAttribute('aria-expanded', 'false');
+          });
+
+          // Open this submenu
+          submenu.classList.add('mobile-menu__submenu--expanded');
+          toggle.setAttribute('aria-expanded', 'true');
+        }
+      }
     });
   });
 

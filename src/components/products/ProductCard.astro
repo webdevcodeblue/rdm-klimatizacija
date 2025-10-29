@@ -68,54 +68,62 @@ const discountPercentage = product.originalPrice
     )}
     {viewMode === 'list' && (
       <div class="product-card__quick-info product-card__quick-info--below-image">
-        <div class="quick-info-item">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="12" y1="2" x2="12" y2="6"></line>
-            <line x1="12" y1="18" x2="12" y2="22"></line>
-            <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
-            <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
-            <line x1="2" y1="12" x2="6" y2="12"></line>
-            <line x1="18" y1="12" x2="22" y2="12"></line>
-            <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
-            <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
-          </svg>
-          <span class="quick-info-label">Snaga hlađenja</span>
-          <span class="quick-info-value">{product.cooling}</span>
-        </div>
-        <div class="quick-info-item">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-          </svg>
-          <span class="quick-info-label">Snaga grijanja</span>
-          <span class="quick-info-value">{product.heating}</span>
-        </div>
-        <div class="quick-info-item">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-            <polyline points="9 22 9 12 15 12 15 22"></polyline>
-          </svg>
-          <span class="quick-info-label">Prikladno za prostor</span>
-          <span class="quick-info-value">{product.area}</span>
-        </div>
-        <div class="quick-info-item quick-info-item--highlight">
-          <img
-            src="/images/icons/energy-efficiency-class.jpg"
-            alt="Energetski razred"
-            class="energy-icon"
-            width="24"
-            height="24"
-          />
-          <span class="quick-info-label">Energetski razred</span>
-          <span class="quick-info-value">{product.energyClass}</span>
-        </div>
+        {product.cooling && (
+          <div class="quick-info-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="2" x2="12" y2="6"></line>
+              <line x1="12" y1="18" x2="12" y2="22"></line>
+              <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+              <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+              <line x1="2" y1="12" x2="6" y2="12"></line>
+              <line x1="18" y1="12" x2="22" y2="12"></line>
+              <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+              <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+            </svg>
+            <span class="quick-info-label">Snaga hlađenja</span>
+            <span class="quick-info-value">{product.cooling}</span>
+          </div>
+        )}
+        {product.heating && (
+          <div class="quick-info-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <span class="quick-info-label">Snaga grijanja</span>
+            <span class="quick-info-value">{product.heating}</span>
+          </div>
+        )}
+        {product.area && (
+          <div class="quick-info-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span class="quick-info-label">Prikladno za prostor</span>
+            <span class="quick-info-value">{product.area}</span>
+          </div>
+        )}
+        {product.energyClass && (
+          <div class="quick-info-item quick-info-item--highlight">
+            <img
+              src="/images/icons/energy-efficiency-class.jpg"
+              alt="Energetski razred"
+              class="energy-icon"
+              width="24"
+              height="24"
+            />
+            <span class="quick-info-label">Energetski razred</span>
+            <span class="quick-info-value">{product.energyClass}</span>
+          </div>
+        )}
       </div>
     )}
   </div>
@@ -197,9 +205,9 @@ const discountPercentage = product.originalPrice
 
     {viewMode === 'list' && (
       <div class="product-card__sidebar">
-        {product.inStock && (
-          <span class="product-card__stock">Proizvod je dostupan</span>
-        )}
+        <span class={`product-card__stock ${product.inStock ? 'product-card__stock--available' : 'product-card__stock--unavailable'}`}>
+          {product.inStock ? 'Proizvod je dostupan' : 'Proizvod nije dostupan'}
+        </span>
 
         <div class="product-card__footer">
           <div class="product-card__price">
@@ -847,8 +855,6 @@ const discountPercentage = product.originalPrice
     justify-content: center;
     gap: 6px;
     padding: 10px 16px;
-    background: #22c55e;
-    color: #ffffff;
     border-radius: 4px;
     font-size: 12px;
     font-weight: 700;
@@ -857,8 +863,26 @@ const discountPercentage = product.originalPrice
     margin-bottom: 16px;
   }
 
-  .product-card--list .product-card__stock::before {
+  /* Available - green */
+  .product-card--list .product-card__stock--available {
+    background: #22c55e;
+    color: #ffffff;
+  }
+
+  .product-card--list .product-card__stock--available::before {
     content: '✓';
+    font-size: 14px;
+    font-weight: 900;
+  }
+
+  /* Unavailable - red */
+  .product-card--list .product-card__stock--unavailable {
+    background: #dc2626;
+    color: #ffffff;
+  }
+
+  .product-card--list .product-card__stock--unavailable::before {
+    content: '✗';
     font-size: 14px;
     font-weight: 900;
   }
@@ -1062,7 +1086,6 @@ const discountPercentage = product.originalPrice
     /* Stock badge - plain text style na mobilnom (bez pozadine) */
     .product-card--list .product-card__stock {
       background: transparent;
-      color: #10b981;
       padding: 8px 0;
       margin-bottom: 12px;
       font-size: 13px;
@@ -1070,7 +1093,12 @@ const discountPercentage = product.originalPrice
       justify-content: flex-start;
     }
 
-    .product-card--list .product-card__stock::before {
+    /* Available - green na mobilnom */
+    .product-card--list .product-card__stock--available {
+      color: #10b981;
+    }
+
+    .product-card--list .product-card__stock--available::before {
       content: '✓';
       display: inline-flex;
       align-items: center;
@@ -1078,6 +1106,25 @@ const discountPercentage = product.originalPrice
       width: 18px;
       height: 18px;
       background: #10b981;
+      color: #ffffff;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    /* Unavailable - red na mobilnom */
+    .product-card--list .product-card__stock--unavailable {
+      color: #dc2626;
+    }
+
+    .product-card--list .product-card__stock--unavailable::before {
+      content: '✗';
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      background: #dc2626;
       color: #ffffff;
       border-radius: 50%;
       font-size: 11px;

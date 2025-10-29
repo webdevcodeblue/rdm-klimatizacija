@@ -70,10 +70,10 @@ export const klimaProducts: KlimaProduct[] = [
       power: '4.6/5.2 kW',
       cooling: '4.6 kW',
       heating: '5.2 kW',
-      area: '35-45 m²',
+      // area: '35-45 m²',  // TEMPORARILY REMOVED FOR TESTING
       seer: 8.5,
       scop: 5.1,
-      energyClass: 'A+++',
+      // energyClass: 'A+++',  // TEMPORARILY REMOVED FOR TESTING
       soundLevel: '19/22 dB',
       refrigerant: 'R32',
       dimensions: {
@@ -97,7 +97,7 @@ export const klimaProducts: KlimaProduct[] = [
       'Energetska klasa A+++'
     ],
     description: 'SHORAI EDGE NEW WHITE predstavlja vrhunsku klasu Toshiba klima uređaja. Optimiziran je za grijanje pri niskim temperaturama do -20°C, što ga čini idealnim za primarne sustave grijanja. Napredni inverter omogućava iznimnu energetsku učinkovitost A+++ klase.',
-    inStock: true,
+    inStock: false,
     isOnSale: true,
     isFeatured: true,
     badge: 'Premium'

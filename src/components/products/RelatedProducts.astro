@@ -53,31 +53,35 @@ const formattedProducts = products.map(p => ({
           </button>
         </div>
 
-        {product.inStock && (
-          <div class="product-card__stock-status">
-            <span class="stock-indicator">✓</span>
-            <span class="stock-text">Proizvod je dostupan</span>
-          </div>
-        )}
+        <div class={`product-card__stock-status ${product.inStock ? 'product-card__stock-status--available' : 'product-card__stock-status--unavailable'}`}>
+          <span class="stock-indicator">{product.inStock ? '✓' : '✗'}</span>
+          <span class="stock-text">{product.inStock ? 'Proizvod je dostupan' : 'Proizvod nije dostupan'}</span>
+        </div>
 
         <div class="product-card__content">
           <span class="product-card__category">{product.category}</span>
           <h3 class="product-card__name">{product.name}</h3>
 
           <div class="product-card__specs">
-            <span class="spec">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-              </svg>
-              {product.power}
-            </span>
-            <span class="spec">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-              </svg>
-              {product.area}
-            </span>
-            <span class="spec spec--energy">{product.energyClass}</span>
+            {product.power && (
+              <span class="spec">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                </svg>
+                {product.power}
+              </span>
+            )}
+            {product.area && (
+              <span class="spec">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                </svg>
+                {product.area}
+              </span>
+            )}
+            {product.energyClass && (
+              <span class="spec spec--energy">{product.energyClass}</span>
+            )}
           </div>
 
           <div class="product-card__features">
@@ -223,9 +227,26 @@ const formattedProducts = products.map(p => ({
     gap: 6px;
     padding: 8px 16px;
     background: transparent;
-    color: #10b981;
     font-size: 13px;
     font-weight: 600;
+  }
+
+  /* Available - green */
+  .product-card__stock-status--available {
+    color: #10b981;
+  }
+
+  .product-card__stock-status--available .stock-indicator {
+    background: #10b981;
+  }
+
+  /* Unavailable - red */
+  .product-card__stock-status--unavailable {
+    color: #dc2626;
+  }
+
+  .product-card__stock-status--unavailable .stock-indicator {
+    background: #dc2626;
   }
 
   .stock-indicator {
@@ -234,7 +255,6 @@ const formattedProducts = products.map(p => ({
     justify-content: center;
     width: 18px;
     height: 18px;
-    background: #10b981;
     color: #ffffff;
     border-radius: 50%;
     font-size: 11px;

@@ -653,7 +653,7 @@ const discountPercentage = product.originalPrice
     flex-direction: row;
     height: auto;
     padding: 0;
-    margin-bottom: 24px;
+    margin-bottom: 8px;
   }
 
   .product-card--list:hover {
@@ -1156,7 +1156,7 @@ const discountPercentage = product.originalPrice
       display: flex;
       flex-direction: column;
       grid-template-columns: none;
-      gap: 12px;
+      gap: 1px;
     }
 
     .product-card--list .product-card__main {
@@ -1385,52 +1385,60 @@ const discountPercentage = product.originalPrice
 
   @media (max-width: 768px) {
     /* Mobile optimizations - 768px is our minimum supported breakpoint */
+    /* Professional agency-level spacing optimization */
 
-    /* Quick-info cards - margins and spacing */
+    /* Quick-info cards - samo smanjenje prostora, fontovi ostaju isti */
     .product-card--list .product-card__quick-info--below-image {
       padding: 0 10px; /* Margine lijevo/desno */
-      gap: 5px; /* Manji gap između kartica */
-      margin-top: 6px; /* bilo 12px */
-      margin-bottom: 10px; /* bilo 16px */
+      gap: 4px; /* 5px → 4px - tješnji gap između kartica */
+      margin-top: 0px; /* 6px → 4px - bliže slici */
+      margin-bottom: 0px; /* 8px → 4px - minimalni razmak do sljedeće sekcije */
     }
 
     .quick-info-item {
-      min-height: 70px; /* Kompaktnija visina */
-      padding: 6px 4px;
+      min-height: 62px; /* 70px → 62px - niže */
+      padding: 4px 3px; /* Smanjenje gornjeg/donjeg paddinga - još kompaktnije */
     }
 
-    /* Sidebar - kompaktniji padding */
+    /* FONTOVI OSTAJU ORIGINALNI - ne diramo ih */
+
+    /* Sidebar - maksimalno kompaktan */
     .product-card--list .product-card__sidebar {
-      padding: 10px 12px;
-      gap: 10px;
+      padding: 8px 10px; /* 10px 12px → 8px 10px */
+      gap: 8px; /* 10px → 8px */
     }
 
-    /* Stock status - smanjenje margine */
+    /* Stock status - minimalni razmak */
     .product-card--list .product-card__stock {
-      padding: 4px 0;
-      margin-bottom: 6px;
+      padding: 3px 0; /* 4px → 3px */
+      margin-bottom: 4px; /* 6px → 4px */
     }
 
-    /* Price - smanjenje margine */
+    /* Price - tješnji razmak */
     .product-card--list .product-card__price {
-      margin-bottom: 8px;
+      margin-bottom: 6px; /* 8px → 6px */
     }
 
-    /* Actions - smanjenje gapa */
+    /* Actions - minimalni gap */
     .product-card--list .product-card__actions {
-      gap: 6px;
+      gap: 5px; /* 6px → 5px */
     }
 
-    /* Buttons - kompaktniji padding i font */
+    /* Buttons - kompaktniji */
     .product-card--list .btn--primary,
     .product-card--list .btn--secondary {
-      padding: 10px 14px;
+      padding: 9px 12px; /* 10px 14px → 9px 12px */
       font-size: 12px;
     }
 
-    /* Title mobile - smanjenje paddinga */
+    /* Title mobile - kompaktniji padding */
     .product-card--list .product-card__title-mobile {
-      padding: 10px 16px;
+      padding: 8px 14px; /* 10px 16px → 8px 14px */
+    }
+
+    /* Card itself - tješnji radius za kompaktniji izgled */
+    .product-card--list {
+      border-radius: 10px; /* Malo zaobljeniji rubovi */
     }
   }
 </style>

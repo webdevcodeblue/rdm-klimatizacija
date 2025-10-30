@@ -495,17 +495,19 @@ const discountPercentage = product.originalPrice
 
   .pricing-box__original {
     text-decoration: line-through;
-    color: var(--color-gray-500);
-    font-size: var(--text-lg);
+    color: var(--color-gray-600); /* Tamnija siva - bolja vidljivost */
+    font-size: var(--text-xl); /* Veći font */
+    font-weight: var(--font-medium); /* Dodaj težinu */
   }
 
   .pricing-box__badge {
-    background: var(--color-red-500);
-    color: var(--color-white);
-    padding: var(--space-1) var(--space-2);
+    background: #dc2626; /* Jarka crvena pozadina */
+    color: #ffffff; /* Bijeli tekst */
+    padding: var(--space-2) var(--space-3); /* Veći padding */
     border-radius: var(--border-radius-md);
-    font-size: var(--text-sm);
+    font-size: var(--text-base); /* Veći font */
     font-weight: var(--font-bold);
+    box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3); /* Sjena za bolju vidljivost */
   }
 
   .pricing-box__current {

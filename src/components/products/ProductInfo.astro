@@ -165,9 +165,15 @@ const discountPercentage = product.originalPrice
   <div class="product-info__actions">
     <button
       class="btn btn--primary btn--large"
+      id="productInquiryBtn"
       data-product-id={product.id}
-      data-action="inquiry"
-      data-product-name={`${product.manufacturer} ${product.name}`}
+      data-product-name={product.name}
+      data-product-manufacturer={product.manufacturer}
+      data-product-model={product.model}
+      data-product-image={product.images[0]}
+      data-product-power={product.specifications.cooling || product.specifications.power}
+      data-product-area={product.specifications.area}
+      data-product-energy={product.specifications.energyClass}
     >
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M22 2L11 13"></path>
@@ -722,6 +728,28 @@ const discountPercentage = product.originalPrice
         // Fallback - copy to clipboard
         navigator.clipboard.writeText(window.location.href);
         alert('Link kopiran u clipboard!');
+      }
+    });
+  }
+
+  // Inquiry button functionality - open modal with product data
+  const inquiryBtn = document.getElementById('productInquiryBtn');
+  if (inquiryBtn) {
+    inquiryBtn.addEventListener('click', () => {
+      const productData = {
+        id: inquiryBtn.dataset.productId,
+        name: inquiryBtn.dataset.productName,
+        manufacturer: inquiryBtn.dataset.productManufacturer,
+        model: inquiryBtn.dataset.productModel,
+        image: inquiryBtn.dataset.productImage,
+        power: inquiryBtn.dataset.productPower,
+        area: inquiryBtn.dataset.productArea,
+        energyClass: inquiryBtn.dataset.productEnergy
+      };
+
+      // Call the global function to open modal with product data
+      if (typeof window.openInquiryModal === 'function') {
+        window.openInquiryModal(productData);
       }
     });
   }

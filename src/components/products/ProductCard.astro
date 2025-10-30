@@ -1365,6 +1365,62 @@ const discountPercentage = product.originalPrice
       font-size: 26px;
     }
   }
+
+  /* ==========================================
+     GRID VIEW MOBILE OPTIMIZATIONS
+     Compact spacing for better mobile UX
+     ========================================== */
+
+  @media (max-width: 768px) {
+    /* Mobile optimizations - 768px is our minimum supported breakpoint */
+
+    /* Quick-info cards - margins and spacing */
+    .product-card--list .product-card__quick-info--below-image {
+      padding: 0 10px; /* Margine lijevo/desno */
+      gap: 5px; /* Manji gap između kartica */
+      margin-top: 6px; /* bilo 12px */
+      margin-bottom: 10px; /* bilo 16px */
+    }
+
+    .quick-info-item {
+      min-height: 70px; /* Kompaktnija visina */
+      padding: 6px 4px;
+    }
+
+    /* Sidebar - kompaktniji padding */
+    .product-card--list .product-card__sidebar {
+      padding: 10px 12px;
+      gap: 10px;
+    }
+
+    /* Stock status - smanjenje margine */
+    .product-card--list .product-card__stock {
+      padding: 4px 0;
+      margin-bottom: 6px;
+    }
+
+    /* Price - smanjenje margine */
+    .product-card--list .product-card__price {
+      margin-bottom: 8px;
+    }
+
+    /* Actions - smanjenje gapa */
+    .product-card--list .product-card__actions {
+      gap: 6px;
+    }
+
+    /* Buttons - kompaktniji padding i font */
+    .product-card--list .btn--primary,
+    .product-card--list .btn--secondary {
+      padding: 10px 14px;
+      font-size: 12px;
+    }
+
+    /* Title mobile - smanjenje paddinga */
+    .product-card--list .product-card__title-mobile {
+      padding: 10px 16px;
+    }
+  }
 </style>
 
 <script>

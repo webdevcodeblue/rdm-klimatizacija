@@ -20,13 +20,14 @@ This is a web catalog for RDM Klimatizacija featuring:
 - CSS Custom Properties (design tokens) in `src/styles/global.css`
 - BEM methodology for class naming
 - Mobile-first responsive design
-- Responsive breakpoints: 1024px (tablet), 768px (mobile), 480px (small mobile)
+- Responsive breakpoints: 1024px (tablet), **768px (mobile - MINIMUM SUPPORTED)**
 
 ❌ **What we DON'T use:**
 - NO Tailwind CSS
 - NO external CSS frameworks (Bootstrap, etc.)
 - NO global utility classes
 - NO inline styles
+- **NO breakpoints below 768px** (480px, 360px, etc.) - 768px is the absolute minimum
 
 ### Why Scoped Styles?
 

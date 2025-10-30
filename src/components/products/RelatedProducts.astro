@@ -11,7 +11,7 @@ const formattedProducts = products.map(p => ({
   slug: p.slug,
   name: p.name,
   manufacturer: p.manufacturer,
-  category: 'Klima uređaji',
+  category: p.category || 'Klima uređaji',
   price: p.price.toString(),
   originalPrice: p.originalPrice ? p.originalPrice.toString() : null,
   power: p.specifications.power || p.specifications.cooling,
@@ -20,7 +20,8 @@ const formattedProducts = products.map(p => ({
   features: p.features.slice(0, 3), // First 3 features
   badge: p.badge,
   image: p.images?.[0] || p.image,
-  inStock: p.inStock !== false // Default to true if not specified
+  inStock: p.inStock !== false, // Default to true if not specified
+  href: p.href || `/proizvodi/${p.slug}` // Use provided href or default
 }));
 ---
 
@@ -98,7 +99,7 @@ const formattedProducts = products.map(p => ({
               <span class="price-current">{product.price}€</span>
             </div>
 
-            <a href={`/proizvodi/${product.slug}`} class="product-card__action">
+            <a href={product.href} class="product-card__action">
               Pogledaj
             </a>
           </div>

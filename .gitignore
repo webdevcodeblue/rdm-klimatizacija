@@ -31,3 +31,7 @@ Thumbs.db
 *.swp
 *.swo
 *~
+
+# Documentation files
+*.md
+!README.md

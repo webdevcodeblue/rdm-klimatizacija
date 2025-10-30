@@ -2,180 +2,214 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
-import ProductCard from '../../components/products/ProductCard.astro';
 import ProductFilter from '../../components/products/ProductFilter.astro';
+import ProductCard from '../../components/products/ProductCard.astro';
+import InquiryModal from '../../components/InquiryModal.astro';
 import { multiKlimaProducts } from '../../data/products/multi-klima';
 
-// Get filter parameters from URL
-const url = new URL(Astro.request.url);
-const brandFilter = url.searchParams.get('brand');
-const unitsFilter = url.searchParams.get('units');
-const sortBy = url.searchParams.get('sort') || 'featured';
+// Convert new data structure to match old format for ProductCard
+const products = multiKlimaProducts.map(p => ({
+  id: p.id,
+  slug: p.slug,
+  name: p.name,
+  manufacturer: p.manufacturer,
+  category: 'Multi klima',
+  price: p.price,
+  originalPrice: p.originalPrice,
+  power: p.specifications.power,
+  cooling: p.specifications.cooling,
+  heating: p.specifications.heating,
+  area: p.specifications.area,
+  energyClass: p.specifications.energyClass,
+  seer: p.specifications.seer,
+  scop: p.specifications.scop,
+  features: p.features,
+  badge: p.badge,
+  image: p.image,
+  inStock: p.inStock,
+  description: p.description,
+  href: `/multi-klima/${p.slug}` // Dodajem eksplicitni href za multi-klima
+}));
 
-// Filter products
-let filteredProducts = [...multiKlimaProducts];
+// Get manufacturers and categories for filters
+const manufacturers = [...new Set(products.map(p => p.manufacturer))].sort();
+const categories = [...new Set(products.map(p => p.category))].sort();
 
+// Get filter params from URL
+const url = Astro.url;
+const brandFilter = url.searchParams.get('brand'); // za dropdown u navigaciji
+
+const currentFilters = {
+  manufacturer: url.searchParams.get('manufacturer') || undefined,
+  category: url.searchParams.get('category') || undefined,
+  power: url.searchParams.get('power') || undefined,
+  area: url.searchParams.get('area') || undefined,
+  energyClass: url.searchParams.get('energyClass') || undefined,
+  priceMin: url.searchParams.get('priceMin') ? Number(url.searchParams.get('priceMin')) : undefined,
+  priceMax: url.searchParams.get('priceMax') ? Number(url.searchParams.get('priceMax')) : undefined
+};
+
+// Filter products based on current filters
+let filteredProducts = products;
+
+// Filter by brand from navigation dropdown
 if (brandFilter) {
   filteredProducts = filteredProducts.filter(p =>
     p.manufacturer?.toLowerCase() === brandFilter.toLowerCase()
   );
 }
 
-if (unitsFilter) {
+// Filter by manufacturer from sidebar
+if (currentFilters.manufacturer) {
   filteredProducts = filteredProducts.filter(p =>
-    p.units === parseInt(unitsFilter)
+    p.manufacturer === currentFilters.manufacturer
   );
 }
 
-// Sort products
-switch(sortBy) {
-  case 'price-asc':
-    filteredProducts.sort((a, b) => a.price - b.price);
-    break;
-  case 'price-desc':
-    filteredProducts.sort((a, b) => b.price - a.price);
-    break;
-  case 'name':
-    filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
-    break;
-  default:
-    filteredProducts.sort((a, b) => {
-      if (a.isFeatured && !b.isFeatured) return -1;
-      if (!a.isFeatured && b.isFeatured) return 1;
-      if (a.isOnSale && !b.isOnSale) return -1;
-      if (!a.isOnSale && b.isOnSale) return 1;
-      return 0;
-    });
-}
-
-// SEO
-const pageTitle = 'Multi Split Klima Uređaji | RDM Klimatizacija';
-const pageDescription = 'Multi split klima sustavi za 2, 3 ili 4 prostorije. Toshiba, Haier i Maxon multi klima uređaji s jednom vanjskom jedinicom.';
+const viewMode = url.searchParams.get('view') || 'list';
 ---
 
-<BaseLayout title={pageTitle} description={pageDescription}>
+<BaseLayout
+  title="Multi Klima Sustavi"
+  description="Pregledajte našu ponudu multi klima sustava - Toshiba, Haier i Maxon"
+  keywords="multi klima, multi split, inverter, Toshiba, Haier, Maxon, prodaja multi klima"
+>
   <Header />
 
   <main class="products-page">
-    <!-- Hero Section -->
-    <section class="hero">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
       <div class="container">
-        <div class="hero__content">
-          <h1 class="hero__title">Multi Split Klima Sustavi</h1>
-          <p class="hero__subtitle">
-            Jedna vanjska jedinica, više unutarnjih jedinica - idealno rješenje za više prostorija
-          </p>
-        </div>
+        <nav aria-label="Breadcrumb">
+          <ol class="breadcrumb__list">
+            <li class="breadcrumb__item">
+              <a href="/">Početna</a>
+            </li>
+            <li class="breadcrumb__item active">
+              Multi Klima
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Page Header -->
+    <section class="page-header">
+      <div class="container">
+        <h1 class="page-header__title">Multi Klima Sustavi</h1>
+        <p class="page-header__description">
+          Odaberite iz naše ponude kvalitetnih multi klima sustava renomiranih proizvođača
+        </p>
       </div>
     </section>
-
-    <!-- Breadcrumb -->
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-      <div class="container">
-        <ol class="breadcrumb__list">
-          <li class="breadcrumb__item">
-            <a href="/" class="breadcrumb__link">Početna</a>
-          </li>
-          <li class="breadcrumb__item">
-            <span class="breadcrumb__current">Multi Klima Uređaji</span>
-          </li>
-        </ol>
-      </div>
-    </nav>
 
     <!-- Products Section -->
     <section class="products-section">
       <div class="container">
         <div class="products-layout">
           <!-- Sidebar Filters -->
-          <aside class="products-layout__sidebar">
+          <aside class="products-sidebar">
             <ProductFilter
-              currentPath="/multi-klima"
-              categories={[
-                { name: 'Multi Klima', href: '/multi-klima', count: multiKlimaProducts.length, active: true }
-              ]}
-              manufacturers={[
-                { name: 'Toshiba', param: 'toshiba' },
-                { name: 'Haier', param: 'haier' },
-                { name: 'Maxon', param: 'maxon' }
-              ]}
-              additionalFilters={[
-                {
-                  title: 'Broj jedinica',
-                  param: 'units',
-                  options: [
-                    { name: '2 jedinice', value: '2' },
-                    { name: '3 jedinice', value: '3' },
-                    { name: '4 jedinice', value: '4' }
-                  ]
-                }
-              ]}
+              manufacturers={manufacturers}
+              categories={categories}
+              currentFilters={currentFilters}
             />
           </aside>
 
           <!-- Main Content -->
-          <div class="products-layout__main">
+          <div class="products-main">
             <!-- Toolbar -->
-            <div class="toolbar">
-              <div class="toolbar__info">
-                <span class="toolbar__count">{filteredProducts.length} proizvoda</span>
+            <div class="products-toolbar">
+              <div class="products-toolbar__info">
+                <span class="products-count">
+                  Prikazano <strong>{filteredProducts.length}</strong> proizvoda
+                </span>
               </div>
-              <div class="toolbar__actions">
-                <select class="toolbar__sort" onchange="window.location.href=this.value">
-                  <option value="?sort=featured" selected={sortBy === 'featured'}>Preporučeno</option>
-                  <option value="?sort=price-asc" selected={sortBy === 'price-asc'}>Cijena: Manja prema većoj</option>
-                  <option value="?sort=price-desc" selected={sortBy === 'price-desc'}>Cijena: Veća prema manjoj</option>
-                  <option value="?sort=name" selected={sortBy === 'name'}>Naziv: A-Z</option>
-                </select>
+
+              <div class="products-toolbar__controls">
+                <div class="view-switcher">
+                  <button
+                    class={`view-switcher__btn ${viewMode === 'grid' ? 'active' : ''}`}
+                    data-view="grid"
+                    aria-label="Grid view"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="14" width="7" height="7"></rect>
+                      <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                  </button>
+                  <button
+                    class={`view-switcher__btn ${viewMode === 'list' ? 'active' : ''}`}
+                    data-view="list"
+                    aria-label="List view"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="8" y1="6" x2="21" y2="6"></line>
+                      <line x1="8" y1="12" x2="21" y2="12"></line>
+                      <line x1="8" y1="18" x2="21" y2="18"></line>
+                      <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                      <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                      <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
 
-            <!-- Products Grid -->
-            <div class="products-grid">
+            <!-- Products Grid/List -->
+            <div class={`products-grid products-grid--${viewMode}`}>
               {filteredProducts.map((product) => (
-                <ProductCard product={{
-                  ...product,
-                  href: `/multi-klima/${product.slug}`,
-                  description: `Multi split ${product.units} jedinice - ${product.specifications.maxCooling} hlađenje`,
-                  energyClass: product.specifications.energyClass,
-                  seer: product.specifications.seer,
-                  scop: product.specifications.scop,
-                  features: product.features.slice(0, 3)
-                }} />
+                <ProductCard product={product} viewMode={viewMode} />
               ))}
             </div>
 
-            {filteredProducts.length === 0 && (
-              <div class="no-products">
-                <p>Nema proizvoda koji odgovaraju vašem odabiru.</p>
-                <a href="/multi-klima" class="btn btn--primary">Prikaži sve proizvode</a>
+            <!-- Pagination -->
+            <div class="pagination">
+              <button class="pagination__btn pagination__btn--prev" disabled>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                Prethodna
+              </button>
+
+              <div class="pagination__pages">
+                <button class="pagination__page active">1</button>
               </div>
-            )}
+
+              <button class="pagination__btn pagination__btn--next" disabled>
+                Sljedeća
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Info Section -->
-    <section class="info-section">
+    <!-- CTA Section -->
+    <section class="cta-section">
       <div class="container">
-        <div class="info-grid">
-          <div class="info-card">
-            <h3>Što je Multi Split sustav?</h3>
-            <p>Multi split klima sustav omogućava povezivanje više unutarnjih jedinica na jednu vanjsku jedinicu, što je idealno rješenje za klimatizaciju više prostorija.</p>
+        <div class="cta">
+          <div class="cta__content">
+            <h2 class="cta__title">Ne možete pronaći što tražite?</h2>
+            <p class="cta__description">
+              Kontaktirajte nas i pomoći ćemo vam odabrati idealni multi klima sustav za vaše potrebe
+            </p>
           </div>
-          <div class="info-card">
-            <h3>Prednosti Multi Split sustava</h3>
-            <ul>
-              <li>Ušteda prostora - samo jedna vanjska jedinica</li>
-              <li>Individualna kontrola temperature u svakoj prostoriji</li>
-              <li>Energetski učinkovit</li>
-              <li>Tiši rad vanjski jedinice</li>
-            </ul>
-          </div>
-          <div class="info-card">
-            <h3>Kako odabrati pravi sustav?</h3>
-            <p>Pri odabiru multi split sustava važno je uzeti u obzir broj i veličinu prostorija koje želite klimatizirati, te ukupnu potrebnu snagu hlađenja i grijanja.</p>
+          <div class="cta__actions">
+            <a href="/kontakt" class="btn btn--primary btn--large">
+              Kontaktirajte nas
+            </a>
+            <a href="tel:+385991234567" class="btn btn--secondary btn--large">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+              099 123 4567
+            </a>
           </div>
         </div>
       </div>
@@ -183,43 +217,15 @@ const pageDescription = 'Multi split klima sustavi za 2, 3 ili 4 prostorije. Tos
   </main>
 
   <Footer />
+  <InquiryModal />
 </BaseLayout>
 
 <style>
-  .products-page {
-    min-height: 100vh;
-    background: var(--color-gray-50);
-  }
-
-  /* Hero Section */
-  .hero {
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-    color: var(--color-white);
-    padding: var(--space-12) 0 var(--space-16);
-  }
-
-  .hero__content {
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-
-  .hero__title {
-    font-size: var(--text-4xl);
-    font-weight: var(--font-bold);
-    margin-bottom: var(--space-4);
-  }
-
-  .hero__subtitle {
-    font-size: var(--text-xl);
-    opacity: 0.95;
-  }
-
   /* Breadcrumb */
   .breadcrumb {
-    background: var(--color-white);
-    border-bottom: 1px solid var(--color-gray-200);
+    background: var(--color-gray-50);
     padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--border-color);
   }
 
   .breadcrumb__list {
@@ -232,36 +238,55 @@ const pageDescription = 'Multi split klima sustavi za 2, 3 ili 4 prostorije. Tos
   }
 
   .breadcrumb__item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
+    font-size: var(--text-sm);
+  }
+
+  .breadcrumb__item a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .breadcrumb__item a:hover {
+    color: var(--color-primary);
+  }
+
+  .breadcrumb__item.active {
+    color: var(--text-primary);
+    font-weight: var(--font-medium);
   }
 
   .breadcrumb__item:not(:last-child)::after {
     content: '/';
-    color: var(--color-gray-400);
+    margin: 0 var(--space-2);
+    color: var(--text-muted);
   }
 
-  .breadcrumb__link {
-    color: var(--color-gray-600);
-    text-decoration: none;
-    font-size: var(--text-sm);
-    transition: color var(--transition-fast);
+  /* Page Header */
+  .page-header {
+    padding: var(--space-12) 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: var(--color-white);
+    text-align: center;
   }
 
-  .breadcrumb__link:hover {
-    color: var(--color-primary);
+  .page-header__title {
+    font-size: var(--text-5xl);
+    font-weight: var(--font-bold);
+    margin-bottom: var(--space-4);
   }
 
-  .breadcrumb__current {
-    color: var(--text-primary);
-    font-size: var(--text-sm);
-    font-weight: var(--font-medium);
+  .page-header__description {
+    font-size: var(--text-xl);
+    opacity: 0.95;
+    max-width: 600px;
+    margin: 0 auto;
   }
 
   /* Products Section */
   .products-section {
-    padding: var(--space-8) 0;
+    padding: var(--space-16) 0;
+    background: var(--bg-secondary);
   }
 
   .products-layout {
@@ -270,114 +295,249 @@ const pageDescription = 'Multi split klima sustavi za 2, 3 ili 4 prostorije. Tos
     gap: var(--space-8);
   }
 
+  .products-sidebar {
+    position: sticky;
+    top: 20px;
+    align-self: start;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f1f5f9;
+  }
+
+  .products-sidebar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .products-sidebar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+  }
+
+  .products-sidebar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+
+  .products-sidebar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+
   /* Toolbar */
-  .toolbar {
+  .products-toolbar {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-6);
     padding: var(--space-4);
     background: var(--color-white);
     border-radius: var(--border-radius-lg);
-    margin-bottom: var(--space-6);
+    box-shadow: var(--shadow-sm);
   }
 
-  .toolbar__count {
+  .products-count {
+    font-size: var(--text-sm);
     color: var(--text-secondary);
-    font-size: var(--text-sm);
   }
 
-  .toolbar__sort {
-    padding: var(--space-2) var(--space-3);
-    border: 1px solid var(--color-gray-300);
-    border-radius: var(--border-radius-md);
-    background: var(--color-white);
-    font-size: var(--text-sm);
+  .products-count strong {
+    color: var(--text-primary);
+    font-weight: var(--font-semibold);
+  }
+
+  .products-toolbar__controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .view-switcher {
+    display: flex;
+    gap: var(--space-1);
+    padding: var(--space-1);
+    background: var(--color-gray-100);
+    border-radius: var(--border-radius-base);
+  }
+
+  .view-switcher__btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: var(--border-radius-base);
+    color: var(--text-secondary);
     cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .view-switcher__btn:hover {
+    background: var(--color-white);
+    color: var(--text-primary);
+  }
+
+  .view-switcher__btn.active {
+    background: var(--color-white);
+    color: var(--color-primary);
+    box-shadow: var(--shadow-sm);
   }
 
   /* Products Grid */
   .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: var(--space-6);
+    margin-bottom: var(--space-12);
   }
 
-  /* No Products */
-  .no-products {
-    text-align: center;
-    padding: var(--space-16) var(--space-4);
+  .products-grid--grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  .products-grid--list {
+    grid-template-columns: 1fr;
+  }
+
+  /* Pagination */
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+  }
+
+  .pagination__btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
     background: var(--color-white);
-    border-radius: var(--border-radius-lg);
-  }
-
-  .no-products p {
-    margin-bottom: var(--space-4);
-    color: var(--text-secondary);
-  }
-
-  /* Info Section */
-  .info-section {
-    background: var(--color-white);
-    padding: var(--space-12) 0;
-    border-top: 1px solid var(--color-gray-200);
-  }
-
-  .info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--space-8);
-  }
-
-  .info-card h3 {
-    font-size: var(--text-xl);
-    font-weight: var(--font-semibold);
-    margin-bottom: var(--space-4);
     color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    font-weight: var(--font-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
   }
 
-  .info-card p,
-  .info-card ul {
-    color: var(--text-secondary);
-    line-height: 1.8;
+  .pagination__btn:hover:not(:disabled) {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-primary);
   }
 
-  .info-card ul {
-    list-style: none;
-    padding-left: 0;
+  .pagination__btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
-  .info-card ul li {
-    position: relative;
-    padding-left: var(--space-6);
+  .pagination__pages {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .pagination__page {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-white);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-base);
+    font-weight: var(--font-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .pagination__page:hover {
+    background: var(--color-gray-50);
+  }
+
+  .pagination__page.active {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-primary);
+  }
+
+  .pagination__ellipsis {
+    color: var(--text-muted);
+  }
+
+  /* CTA Section */
+  .cta-section {
+    padding: var(--space-16) 0;
+    background: var(--color-white);
+  }
+
+  .cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-12);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: var(--border-radius-2xl);
+    color: var(--color-white);
+  }
+
+  .cta__title {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
     margin-bottom: var(--space-2);
   }
 
-  .info-card ul li::before {
-    content: '✓';
-    position: absolute;
-    left: 0;
-    color: var(--color-success);
-    font-weight: var(--font-bold);
+  .cta__description {
+    font-size: var(--text-lg);
+    opacity: 0.95;
   }
 
-  /* Button */
+  .cta__actions {
+    display: flex;
+    gap: var(--space-4);
+  }
+
   .btn {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
     padding: var(--space-3) var(--space-6);
-    border-radius: var(--border-radius-md);
+    border: none;
+    border-radius: var(--border-radius-lg);
     font-weight: var(--font-semibold);
     text-decoration: none;
+    cursor: pointer;
     transition: all var(--transition-fast);
   }
 
   .btn--primary {
-    background: var(--color-primary);
-    color: var(--color-white);
+    background: var(--color-white);
+    color: var(--color-primary);
   }
 
   .btn--primary:hover {
-    background: var(--color-primary-hover);
     transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .btn--secondary {
+    background: transparent;
+    color: var(--color-white);
+    border: 2px solid var(--color-white);
+  }
+
+  .btn--secondary:hover {
+    background: var(--color-white);
+    color: var(--color-primary);
+  }
+
+  .btn--large {
+    padding: var(--space-4) var(--space-8);
+    font-size: var(--text-lg);
   }
 
   /* Responsive */
@@ -386,36 +546,181 @@ const pageDescription = 'Multi split klima sustavi za 2, 3 ili 4 prostorije. Tos
       grid-template-columns: 1fr;
     }
 
-    .products-layout__sidebar {
+    .products-sidebar {
       display: none;
+      position: static;
+      max-height: none;
+      overflow: visible;
+    }
+
+    .page-header {
+      padding: var(--space-10) 0;
+    }
+
+    .page-header__title {
+      font-size: var(--text-4xl);
+    }
+
+    .products-section {
+      padding: var(--space-12) 0;
+    }
+
+    .cta {
+      flex-direction: column;
+      text-align: center;
+      gap: var(--space-8);
+      padding: var(--space-8);
+    }
+
+    .cta__title {
+      font-size: var(--text-2xl);
     }
   }
 
   @media (max-width: 768px) {
-    .hero__title {
-      font-size: var(--text-3xl);
+    .breadcrumb {
+      padding: var(--space-2) 0;
     }
 
-    .hero__subtitle {
-      font-size: var(--text-lg);
+    .breadcrumb__item {
+      font-size: var(--text-xs);
+    }
+
+    .page-header {
+      padding: var(--space-8) 0;
+    }
+
+    .page-header__title {
+      font-size: var(--text-3xl);
+      padding: 0 var(--space-4);
+    }
+
+    .page-header__description {
+      font-size: var(--text-base);
+      padding: 0 var(--space-4);
+    }
+
+    .products-section {
+      padding: var(--space-8) 0;
+    }
+
+    .products-toolbar {
+      flex-direction: column;
+      gap: var(--space-3);
+      padding: var(--space-3);
+    }
+
+    .products-count {
+      text-align: center;
+    }
+
+    .products-toolbar__controls {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .view-switcher {
+      display: none;
     }
 
     .products-grid {
+      gap: var(--space-4);
+    }
+
+    .products-grid--grid {
       grid-template-columns: 1fr;
     }
 
-    .toolbar {
-      flex-direction: column;
-      gap: var(--space-3);
-      align-items: flex-start;
+    .pagination {
+      flex-wrap: wrap;
+      gap: var(--space-2);
     }
 
-    .toolbar__sort {
+    .pagination__btn {
+      padding: var(--space-2) var(--space-3);
+      font-size: var(--text-sm);
+    }
+
+    .pagination__pages {
+      order: 3;
+      width: 100%;
+      justify-content: center;
+      margin-top: var(--space-3);
+    }
+
+    .pagination__page {
+      width: 36px;
+      height: 36px;
+      font-size: var(--text-sm);
+    }
+
+    .cta-section {
+      padding: var(--space-8) 0;
+    }
+
+    .cta {
+      padding: var(--space-6);
+      border-radius: var(--border-radius-xl);
+    }
+
+    .cta__title {
+      font-size: var(--text-xl);
+    }
+
+    .cta__description {
+      font-size: var(--text-base);
+    }
+
+    .cta__actions {
+      flex-direction: column;
       width: 100%;
     }
 
-    .info-grid {
-      grid-template-columns: 1fr;
+    .btn {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .page-header__title {
+      font-size: var(--text-2xl);
+    }
+
+    .page-header__description {
+      font-size: var(--text-sm);
+    }
+
+    .products-toolbar {
+      padding: var(--space-2);
+    }
+
+    .cta {
+      padding: var(--space-4);
+    }
+
+    .cta__title {
+      font-size: var(--text-lg);
+    }
+
+    .cta__description {
+      font-size: var(--text-sm);
+    }
+
+    .btn--large {
+      padding: var(--space-3) var(--space-6);
+      font-size: var(--text-base);
     }
   }
 </style>
+
+<script>
+  // View switcher
+  document.querySelectorAll('.view-switcher__btn').forEach(button => {
+    button.addEventListener('click', () => {
+      const view = button.dataset.view;
+      const url = new URL(window.location.href);
+      url.searchParams.set('view', view);
+      window.location.href = url.toString();
+    });
+  });
+</script>

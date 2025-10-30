@@ -20,6 +20,7 @@ export interface Product {
   image: string;
   inStock: boolean;
   href?: string; // Optional custom href
+  description?: string; // Short subtitle for mobile cards
 }
 
 export interface Props {
@@ -68,6 +69,9 @@ const discountPercentage = product.originalPrice
         <h3 class="product-card__name-mobile">
           <a href={productHref}>{product.name}</a>
         </h3>
+        {product.description && (
+          <p class="product-card__subtitle-mobile">{product.description}</p>
+        )}
       </div>
     )}
     {viewMode === 'list' && (
@@ -1118,11 +1122,11 @@ const discountPercentage = product.originalPrice
     }
 
     .product-card--list .product-card__manufacturer-mobile {
-      font-size: 11px;
-      font-weight: 600;
-      color: #6b7280;
+      font-size: 14px; /* Povećano sa 11px */
+      font-weight: 700; /* Boldnije */
+      color: var(--color-primary); /* Plava boja kao na grid karticama */
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px; /* Povećan spacing */
     }
 
     .product-card--list .product-card__name-mobile {
@@ -1131,6 +1135,14 @@ const discountPercentage = product.originalPrice
       color: #1e293b;
       line-height: 1.3;
       margin: 0;
+    }
+
+    .product-card--list .product-card__subtitle-mobile {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      margin: 4px 0 0 0;
     }
 
     .product-card--list .product-card__name-mobile a {

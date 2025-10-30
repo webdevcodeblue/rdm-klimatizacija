@@ -27,7 +27,8 @@ const products = multiKlimaProducts.map(p => ({
   badge: p.badge,
   image: p.image,
   inStock: p.inStock,
-  description: p.description,
+  // Kreiraj kratki podnaslov - uzmi model ili prvu rečenicu opisa
+  description: p.model || (p.description ? p.description.split('.')[0] + '.' : undefined),
   href: `/multi-klima/${p.slug}` // Dodajem eksplicitni href za multi-klima
 }));
 

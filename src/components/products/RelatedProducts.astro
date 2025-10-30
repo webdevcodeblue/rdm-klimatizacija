@@ -27,7 +27,7 @@ const formattedProducts = products.map(p => ({
   badge: p.badge,
   image: p.images?.[0] || p.image,
   inStock: p.inStock !== false,
-  href: p.href || `/proizvodi/${p.slug}`
+  href: p.href
 }));
 ---
 

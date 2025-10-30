@@ -105,7 +105,8 @@ const relatedProducts = allProducts
   .slice(0, 4) // Show 4 related products
   .map(p => ({
     ...p,
-    images: p.images || [p.image]
+    images: p.images || [p.image],
+    href: `/klima-uredaji/${p.slug}`
   }));
 
 // SEO meta data
@@ -125,7 +126,7 @@ const pageDescription = `${product.manufacturer} ${product.model} - ${product.sp
             <a href="/" class="breadcrumb__link">Početna</a>
           </li>
           <li class="breadcrumb__item">
-            <a href="/proizvodi" class="breadcrumb__link">Proizvodi</a>
+            <a href="/klima-uredaji" class="breadcrumb__link">Klima uređaji</a>
           </li>
           <li class="breadcrumb__item">
             <span class="breadcrumb__current">{product.manufacturer} {product.model}</span>

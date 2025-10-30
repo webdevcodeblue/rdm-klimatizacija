@@ -37,6 +37,7 @@ const categories = [...new Set(products.map(p => p.category))].sort();
 // Get filter params from URL
 const url = Astro.url;
 const brandFilter = url.searchParams.get('brand');
+
 const viewMode = url.searchParams.get('view') || 'list';
 
 const currentFilters = {
@@ -127,28 +128,21 @@ if (currentFilters.manufacturer) {
               <div class="products-toolbar__controls">
                 <div class="view-switcher">
                   <button
-                    class={`view-switcher__btn ${viewMode === 'grid3' ? 'active' : ''}`}
-                    data-view="grid3"
-                    aria-label="Grid view - 3 proizvoda"
-                    title="3 proizvoda po redu"
+                    class={`view-switcher__btn ${viewMode === 'grid' ? 'active' : ''}`}
+                    data-view="grid"
+                    aria-label="Grid view"
                   >
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <rect x="3" y="3" width="5" height="5"></rect>
-                      <rect x="9.5" y="3" width="5" height="5"></rect>
-                      <rect x="16" y="3" width="5" height="5"></rect>
-                      <rect x="3" y="9.5" width="5" height="5"></rect>
-                      <rect x="9.5" y="9.5" width="5" height="5"></rect>
-                      <rect x="16" y="9.5" width="5" height="5"></rect>
-                      <rect x="3" y="16" width="5" height="5"></rect>
-                      <rect x="9.5" y="16" width="5" height="5"></rect>
-                      <rect x="16" y="16" width="5" height="5"></rect>
+                      <rect x="3" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="14" width="7" height="7"></rect>
+                      <rect x="3" y="14" width="7" height="7"></rect>
                     </svg>
                   </button>
                   <button
                     class={`view-switcher__btn ${viewMode === 'list' ? 'active' : ''}`}
                     data-view="list"
-                    aria-label="List view - 1 proizvod"
-                    title="1 proizvod po redu"
+                    aria-label="List view"
                   >
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <line x1="8" y1="6" x2="21" y2="6"></line>
@@ -416,12 +410,10 @@ if (currentFilters.manufacturer) {
     margin-bottom: var(--space-12);
   }
 
-  /* 3 proizvoda po redu */
-  .products-grid--grid3 {
-    grid-template-columns: repeat(3, 1fr);
+  .products-grid--grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   }
 
-  /* 1 proizvod po redu (lista) */
   .products-grid--list {
     grid-template-columns: 1fr;
   }
@@ -558,10 +550,6 @@ if (currentFilters.manufacturer) {
 
   /* Responsive */
   @media (max-width: 1280px) {
-    .products-grid--grid3 {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
     .info-grid {
       grid-template-columns: repeat(2, 1fr);
     }
@@ -589,10 +577,6 @@ if (currentFilters.manufacturer) {
 
     .products-section {
       padding: var(--space-12) 0;
-    }
-
-    .products-grid--grid3 {
-      grid-template-columns: repeat(2, 1fr);
     }
 
     .cta {
@@ -662,9 +646,7 @@ if (currentFilters.manufacturer) {
       gap: var(--space-3);
     }
 
-    /* Sve grid opcije postaju lista na mobilnim uređajima */
-    .products-grid--grid3,
-    .products-grid--list {
+    .products-grid--grid {
       grid-template-columns: 1fr;
     }
 

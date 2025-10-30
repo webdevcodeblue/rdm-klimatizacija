@@ -86,14 +86,20 @@ export interface DizalicaProduct extends BaseProduct {
 // Mikroklima interface
 export interface MikroklimaProduct extends BaseProduct {
   category: 'mikroklima';
+  subcategory: 'rekuperator' | 'zracna-zavjesa' | 'odvlazivac' | 'prociscivac';
   specifications: {
-    cooling: string;
-    area: string;
-    energyClass: string;
-    soundLevel: string;
-    dimensions: string;
-    weight: string;
-    portability: boolean;
+    airflow?: string;          // "Do 200 m3/h" - PROTOK ZRAKA (Rekuperatori, Zračne zavjese)
+    area?: string;             // "35-40 m²" - PRIKLADNO ZA PROSTOR (Odvlaživači, Pročišćivači)
+    cooling?: string;          // Optional for some products
+    heating?: string;          // Optional for some products
+    dehumidification?: string; // "12 l/dan" - for odvlaživači
+    energyClass?: string;      // Optional
+    soundLevel?: string;       // "19 - 37 dB (A)"
+    dimensions?: string;       // "Š × V × D [mm]: 352 × 482 × 240"
+    weight?: string;           // "15,5 kg"
+    power?: string;            // "0,315kW" - apsorbirana snaga
+    voltage?: string;          // "1 ph / 220 - 240 V / 50 Hz"
+    filters?: string[];        // Types of filters
   };
 }
 

@@ -30,8 +30,19 @@ export interface Props {
 
 const { product, viewMode = 'grid' } = Astro.props;
 
-// Use custom href if provided, otherwise default to /proizvodi/[slug]
-const productHref = product.href || `/proizvodi/${product.slug}`;
+// Use custom href if provided, otherwise build from category
+const getCategoryPath = (category: string) => {
+  const categoryMap: { [key: string]: string } = {
+    'Klima uređaji': '/klima-uredaji',
+    'Multi klima': '/multi-klima',
+    'Dizalice topline': '/dizalice-topline',
+    'Mikroklima': '/mikroklima',
+    'Alati i materijali': '/alati-materijali'
+  };
+  return categoryMap[category] || '/proizvodi';
+};
+
+const productHref = product.href || `${getCategoryPath(product.category)}/${product.slug}`;
 
 const discountPercentage = product.originalPrice
   ? Math.round((1 - product.price / product.originalPrice) * 100)

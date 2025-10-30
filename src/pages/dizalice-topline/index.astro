@@ -1,0 +1,764 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import ProductFilter from '../../components/products/ProductFilter.astro';
+import ProductCard from '../../components/products/ProductCard.astro';
+import InquiryModal from '../../components/InquiryModal.astro';
+import { dizaliceToplineProducts } from '../../data/products/dizalice-topline';
+
+// Convert new data structure to match old format for ProductCard
+const products = dizaliceToplineProducts.map(p => ({
+  id: p.id,
+  slug: p.slug,
+  name: p.name,
+  manufacturer: p.manufacturer,
+  category: 'Dizalice topline',
+  price: p.price,
+  originalPrice: p.originalPrice,
+  power: p.specifications.power,
+  cooling: p.specifications.coolingPower,
+  heating: p.specifications.heatingPower,
+  area: `${p.specifications.power} kapacitet`,
+  energyClass: p.specifications.energyClass,
+  seer: p.specifications.eer,
+  scop: p.specifications.cop,
+  features: p.features,
+  badge: p.badge,
+  image: p.image,
+  inStock: p.inStock,
+  description: p.model || (p.description ? p.description.split('.')[0] + '.' : undefined)
+}));
+
+// Get manufacturers and categories for filters
+const manufacturers = [...new Set(products.map(p => p.manufacturer))].sort();
+const categories = [...new Set(products.map(p => p.category))].sort();
+
+// Get filter params from URL
+const url = Astro.url;
+const brandFilter = url.searchParams.get('brand');
+const viewMode = url.searchParams.get('view') || 'list';
+
+const currentFilters = {
+  manufacturer: url.searchParams.get('manufacturer') || undefined,
+  category: url.searchParams.get('category') || undefined,
+  power: url.searchParams.get('power') || undefined,
+  area: url.searchParams.get('area') || undefined,
+  energyClass: url.searchParams.get('energyClass') || undefined,
+  priceMin: url.searchParams.get('priceMin') ? Number(url.searchParams.get('priceMin')) : undefined,
+  priceMax: url.searchParams.get('priceMax') ? Number(url.searchParams.get('priceMax')) : undefined
+};
+
+// Filter products based on current filters
+let filteredProducts = products;
+
+// Filter by brand from navigation dropdown
+if (brandFilter) {
+  filteredProducts = filteredProducts.filter(p =>
+    p.manufacturer?.toLowerCase() === brandFilter.toLowerCase()
+  );
+}
+
+// Filter by manufacturer from sidebar
+if (currentFilters.manufacturer) {
+  filteredProducts = filteredProducts.filter(p =>
+    p.manufacturer === currentFilters.manufacturer
+  );
+}
+---
+
+<BaseLayout
+  title="Dizalice topline - Monoblok sustavi"
+  description="Haier Super Aqua monoblok dizalice topline za grijanje, hlađenje i pripremu tople vode. Visoka učinkovitost, rad do -20°C."
+  keywords="dizalice topline, toplotne pumpe, monoblok, Haier Super Aqua, grijanje, hlađenje, topla voda"
+>
+  <Header />
+
+  <main class="products-page">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <div class="container">
+        <nav aria-label="Breadcrumb">
+          <ol class="breadcrumb__list">
+            <li class="breadcrumb__item">
+              <a href="/">Početna</a>
+            </li>
+            <li class="breadcrumb__item active">
+              Dizalice topline
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Page Header -->
+    <section class="page-header">
+      <div class="container">
+        <h1 class="page-header__title">Dizalice topline</h1>
+        <p class="page-header__description">
+          Najučinkovitije rješenje za grijanje, hlađenje i toplu vodu - Haier Super Aqua Monoblok serija
+        </p>
+      </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products-section">
+      <div class="container">
+        <div class="products-layout">
+          <!-- Sidebar Filters -->
+          <aside class="products-sidebar">
+            <ProductFilter
+              manufacturers={manufacturers}
+              categories={categories}
+              currentFilters={currentFilters}
+            />
+          </aside>
+
+          <!-- Main Content -->
+          <div class="products-main">
+            <!-- Toolbar -->
+            <div class="products-toolbar">
+              <div class="products-toolbar__info">
+                <span class="products-count">
+                  Prikazano <strong>{filteredProducts.length}</strong> proizvoda
+                </span>
+              </div>
+
+              <div class="products-toolbar__controls">
+                <div class="view-switcher">
+                  <button
+                    class={`view-switcher__btn ${viewMode === 'grid3' ? 'active' : ''}`}
+                    data-view="grid3"
+                    aria-label="Grid view - 3 proizvoda"
+                    title="3 proizvoda po redu"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="5" height="5"></rect>
+                      <rect x="9.5" y="3" width="5" height="5"></rect>
+                      <rect x="16" y="3" width="5" height="5"></rect>
+                      <rect x="3" y="9.5" width="5" height="5"></rect>
+                      <rect x="9.5" y="9.5" width="5" height="5"></rect>
+                      <rect x="16" y="9.5" width="5" height="5"></rect>
+                      <rect x="3" y="16" width="5" height="5"></rect>
+                      <rect x="9.5" y="16" width="5" height="5"></rect>
+                      <rect x="16" y="16" width="5" height="5"></rect>
+                    </svg>
+                  </button>
+                  <button
+                    class={`view-switcher__btn ${viewMode === 'list' ? 'active' : ''}`}
+                    data-view="list"
+                    aria-label="List view - 1 proizvod"
+                    title="1 proizvod po redu"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="8" y1="6" x2="21" y2="6"></line>
+                      <line x1="8" y1="12" x2="21" y2="12"></line>
+                      <line x1="8" y1="18" x2="21" y2="18"></line>
+                      <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                      <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                      <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Products Grid/List -->
+            <div class={`products-grid products-grid--${viewMode}`}>
+              {filteredProducts.map((product) => (
+                <ProductCard product={product} viewMode={viewMode} />
+              ))}
+            </div>
+
+            <!-- Info Section -->
+            <div class="info-section">
+              <h2>Prednosti Haier Super Aqua Monoblok dizalica topline</h2>
+              <div class="info-grid">
+                <div class="info-card">
+                  <h3>Ekološki prihvatljivo</h3>
+                  <ul>
+                    <li>Korištenje R32 rashladnog sredstva s niskim GWP</li>
+                    <li>Visoka energetska učinkovitost smanjuje emisiju CO2</li>
+                  </ul>
+                </div>
+                <div class="info-card">
+                  <h3>Svestrano rješenje</h3>
+                  <ul>
+                    <li>Grijanje prostora zimi</li>
+                    <li>Hlađenje prostora ljeti</li>
+                    <li>Priprema tople vode tijekom cijele godine</li>
+                    <li>Integracija s podnim grijanjem i ventilokonvektorima</li>
+                  </ul>
+                </div>
+                <div class="info-card">
+                  <h3>Napredna tehnologija</h3>
+                  <ul>
+                    <li>DC inverter tehnologija za preciznu regulaciju</li>
+                    <li>Pametna integracija s home automation sustavima</li>
+                    <li>Inteligentna zaštita od smrzavanja</li>
+                    <li>Rad u širokom temperaturnom rasponu (-20°C do +60°C)</li>
+                  </ul>
+                </div>
+                <div class="info-card">
+                  <h3>Ekonomičnost</h3>
+                  <ul>
+                    <li>Nizak operativni troškovi zahvaljujući visokom COP-u</li>
+                    <li>Dugotrajna pouzdanost i minimalni troškovi održavanja</li>
+                    <li>2 godine jamstva na sve komponente</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta">
+          <div class="cta__content">
+            <h2 class="cta__title">Trebate savjet za odabir dizalice topline?</h2>
+            <p class="cta__description">
+              Naši stručnjaci će vam pomoći odabrati idealnu dizalicu topline za vaše potrebe i proračun
+            </p>
+          </div>
+          <div class="cta__actions">
+            <a href="/kontakt" class="btn btn--primary btn--large">
+              Zatražite ponudu
+            </a>
+            <a href="tel:+385991234567" class="btn btn--secondary btn--large">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+              099 123 4567
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+  <InquiryModal />
+</BaseLayout>
+
+<style>
+  /* Breadcrumb */
+  .breadcrumb {
+    background: var(--color-gray-50);
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .breadcrumb__list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .breadcrumb__item {
+    font-size: var(--text-sm);
+  }
+
+  .breadcrumb__item a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .breadcrumb__item a:hover {
+    color: var(--color-primary);
+  }
+
+  .breadcrumb__item.active {
+    color: var(--text-primary);
+    font-weight: var(--font-medium);
+  }
+
+  .breadcrumb__item:not(:last-child)::after {
+    content: '/';
+    margin: 0 var(--space-2);
+    color: var(--text-muted);
+  }
+
+  /* Page Header */
+  .page-header {
+    padding: var(--space-12) 0;
+    background: linear-gradient(135deg, #00a67e 0%, #00d09c 100%);
+    color: var(--color-white);
+    text-align: center;
+  }
+
+  .page-header__title {
+    font-size: var(--text-5xl);
+    font-weight: var(--font-bold);
+    margin-bottom: var(--space-4);
+  }
+
+  .page-header__description {
+    font-size: var(--text-xl);
+    opacity: 0.95;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  /* Products Section */
+  .products-section {
+    padding: var(--space-16) 0;
+    background: var(--bg-secondary);
+  }
+
+  .products-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: var(--space-8);
+  }
+
+  .products-sidebar {
+    position: sticky;
+    top: 20px;
+    align-self: start;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f1f5f9;
+  }
+
+  .products-sidebar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .products-sidebar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+  }
+
+  .products-sidebar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+
+  .products-sidebar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+
+  /* Toolbar */
+  .products-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-6);
+    padding: var(--space-4);
+    background: var(--color-white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .products-count {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+  }
+
+  .products-count strong {
+    color: var(--text-primary);
+    font-weight: var(--font-semibold);
+  }
+
+  .products-toolbar__controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .view-switcher {
+    display: flex;
+    gap: var(--space-1);
+    padding: var(--space-1);
+    background: var(--color-gray-100);
+    border-radius: var(--border-radius-base);
+  }
+
+  .view-switcher__btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: var(--border-radius-base);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .view-switcher__btn:hover {
+    background: var(--color-white);
+    color: var(--text-primary);
+  }
+
+  .view-switcher__btn.active {
+    background: var(--color-white);
+    color: var(--color-primary);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Products Grid */
+  .products-grid {
+    display: grid;
+    gap: var(--space-6);
+    margin-bottom: var(--space-12);
+  }
+
+  /* 3 proizvoda po redu */
+  .products-grid--grid3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* 1 proizvod po redu (lista) */
+  .products-grid--list {
+    grid-template-columns: 1fr;
+  }
+
+  /* Info Section */
+  .info-section {
+    margin-top: var(--space-12);
+    padding: var(--space-8);
+    background: var(--color-white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .info-section h2 {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    margin-bottom: var(--space-6);
+    color: var(--text-primary);
+    text-align: center;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+
+  .info-card {
+    padding: var(--space-6);
+    background: var(--color-gray-50);
+    border-radius: var(--border-radius-lg);
+  }
+
+  .info-card h3 {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--color-primary);
+    margin-bottom: var(--space-4);
+  }
+
+  .info-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .info-card li {
+    position: relative;
+    padding-left: var(--space-6);
+    margin-bottom: var(--space-2);
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+  }
+
+  .info-card li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--color-success);
+    font-weight: var(--font-bold);
+  }
+
+  /* CTA Section */
+  .cta-section {
+    padding: var(--space-16) 0;
+    background: var(--color-white);
+  }
+
+  .cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-12);
+    background: linear-gradient(135deg, #00a67e 0%, #00d09c 100%);
+    border-radius: var(--border-radius-2xl);
+    color: var(--color-white);
+  }
+
+  .cta__title {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    margin-bottom: var(--space-2);
+  }
+
+  .cta__description {
+    font-size: var(--text-lg);
+    opacity: 0.95;
+  }
+
+  .cta__actions {
+    display: flex;
+    gap: var(--space-4);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    border: none;
+    border-radius: var(--border-radius-lg);
+    font-weight: var(--font-semibold);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .btn--primary {
+    background: var(--color-white);
+    color: var(--color-primary);
+  }
+
+  .btn--primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .btn--secondary {
+    background: transparent;
+    color: var(--color-white);
+    border: 2px solid var(--color-white);
+  }
+
+  .btn--secondary:hover {
+    background: var(--color-white);
+    color: var(--color-primary);
+  }
+
+  .btn--large {
+    padding: var(--space-4) var(--space-8);
+    font-size: var(--text-lg);
+  }
+
+  /* Responsive */
+  @media (max-width: 1280px) {
+    .products-grid--grid3 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .info-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .products-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .products-sidebar {
+      display: none;
+      position: static;
+      max-height: none;
+      overflow: visible;
+    }
+
+    .page-header {
+      padding: var(--space-10) 0;
+    }
+
+    .page-header__title {
+      font-size: var(--text-4xl);
+    }
+
+    .products-section {
+      padding: var(--space-12) 0;
+    }
+
+    .products-grid--grid3 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cta {
+      flex-direction: column;
+      text-align: center;
+      gap: var(--space-8);
+      padding: var(--space-8);
+    }
+
+    .cta__title {
+      font-size: var(--text-2xl);
+    }
+
+    .info-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .breadcrumb {
+      padding: var(--space-2) 0;
+    }
+
+    .breadcrumb__item {
+      font-size: var(--text-xs);
+    }
+
+    .page-header {
+      padding: var(--space-8) 0;
+    }
+
+    .page-header__title {
+      font-size: var(--text-3xl);
+      padding: 0 var(--space-4);
+    }
+
+    .page-header__description {
+      font-size: var(--text-base);
+      padding: 0 var(--space-4);
+    }
+
+    .products-section {
+      padding: var(--space-8) 0;
+    }
+
+    .products-toolbar {
+      flex-direction: column;
+      gap: var(--space-3);
+      padding: var(--space-3);
+    }
+
+    .products-count {
+      text-align: center;
+    }
+
+    .products-toolbar__controls {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* Na mobilnim uređajima prikaži samo list view */
+    .view-switcher {
+      display: none;
+    }
+
+    .products-grid {
+      gap: var(--space-3);
+    }
+
+    /* Sve grid opcije postaju lista na mobilnim uređajima */
+    .products-grid--grid3,
+    .products-grid--list {
+      grid-template-columns: 1fr;
+    }
+
+    .info-section {
+      padding: var(--space-6);
+    }
+
+    .info-section h2 {
+      font-size: var(--text-xl);
+    }
+
+    .info-card {
+      padding: var(--space-4);
+    }
+
+    .cta-section {
+      padding: var(--space-8) 0;
+    }
+
+    .cta {
+      padding: var(--space-6);
+      border-radius: var(--border-radius-xl);
+    }
+
+    .cta__title {
+      font-size: var(--text-xl);
+    }
+
+    .cta__description {
+      font-size: var(--text-base);
+    }
+
+    .cta__actions {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .btn {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .page-header__title {
+      font-size: var(--text-2xl);
+    }
+
+    .page-header__description {
+      font-size: var(--text-sm);
+    }
+
+    .products-toolbar {
+      padding: var(--space-2);
+    }
+
+    .cta {
+      padding: var(--space-4);
+    }
+
+    .cta__title {
+      font-size: var(--text-lg);
+    }
+
+    .cta__description {
+      font-size: var(--text-sm);
+    }
+
+    .btn--large {
+      padding: var(--space-3) var(--space-6);
+      font-size: var(--text-base);
+    }
+
+    .info-section {
+      padding: var(--space-4);
+    }
+
+    .info-section h2 {
+      font-size: var(--text-lg);
+    }
+
+    .info-card h3 {
+      font-size: var(--text-base);
+    }
+  }
+</style>
+
+<script>
+  // View switcher
+  document.querySelectorAll('.view-switcher__btn').forEach(button => {
+    button.addEventListener('click', () => {
+      const view = button.dataset.view;
+      const url = new URL(window.location.href);
+      url.searchParams.set('view', view);
+      window.location.href = url.toString();
+    });
+  });
+</script>

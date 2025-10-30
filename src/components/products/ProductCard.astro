@@ -158,6 +158,18 @@ const discountPercentage = product.originalPrice
   </div>
 
   <div class="product-card__content">
+    {viewMode === 'grid' && product.airflow && (
+      <div class="product-card__airflow-badge-grid">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"></path>
+        </svg>
+        <div class="airflow-badge-grid__content">
+          <span class="airflow-badge-grid__label">Protok zraka</span>
+          <span class="airflow-badge-grid__value">{product.airflow}</span>
+        </div>
+      </div>
+    )}
+
     <div class="product-card__main">
       <div class="product-card__header">
         <span class="product-card__manufacturer">{product.manufacturer}</span>
@@ -663,6 +675,54 @@ const discountPercentage = product.originalPrice
     color: var(--text-muted);
     border-radius: var(--border-radius-lg);
     font-weight: var(--font-semibold);
+  }
+
+  /* ==========================================
+     AIRFLOW BADGE - PROTOK ZRAKA (GRID VIEW)
+     Mala kartica za desktop grid view
+     ========================================== */
+
+  .product-card__airflow-badge-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px 10px;
+    background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    margin: 0 auto var(--space-4) auto;
+    text-align: center;
+    max-width: 200px;
+    width: fit-content;
+  }
+
+  .product-card__airflow-badge-grid svg {
+    width: 28px;
+    height: 28px;
+    color: #3b82f6;
+    flex-shrink: 0;
+  }
+
+  .airflow-badge-grid__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .airflow-badge-grid__label {
+    font-size: 11px;
+    color: #6b7280;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  .airflow-badge-grid__value {
+    font-size: 17px;
+    color: #dc2626;
+    font-weight: 800;
+    line-height: 1.1;
   }
 
   /* ==========================================
@@ -1460,6 +1520,47 @@ const discountPercentage = product.originalPrice
     /* Card itself - tješnji radius za kompaktniji izgled */
     .product-card--list {
       border-radius: 10px; /* Malo zaobljeniji rubovi */
+    }
+
+    /* Airflow badge grid - kompaktniji na mobilnom */
+    .product-card__airflow-badge-grid {
+      padding: 10px 8px;
+      margin-bottom: 12px;
+    }
+
+    .product-card__airflow-badge-grid svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    .airflow-badge-grid__label {
+      font-size: 10px;
+    }
+
+    .airflow-badge-grid__value {
+      font-size: 15px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    /* Extra small mobile - airflow badge još kompaktniji */
+    .product-card__airflow-badge-grid {
+      padding: 8px 6px;
+      margin-bottom: 10px;
+      gap: 4px;
+    }
+
+    .product-card__airflow-badge-grid svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .airflow-badge-grid__label {
+      font-size: 10px;
+    }
+
+    .airflow-badge-grid__value {
+      font-size: 14px;
     }
   }
 </style>

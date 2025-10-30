@@ -17,10 +17,9 @@ export const mikroklimaProducts: MikroklimaProduct[] = [
     originalPrice: undefined,
     discount: undefined,
     warranty: '3 godine',
-    image: '/images/products/rekuperator-mitsubishi-vl100.jpg',
+    image: '/images/products/rekuperator.png',
     images: [
-      '/images/products/rekuperator-mitsubishi-vl100.jpg',
-      '/images/products/rekuperator-mitsubishi-vl100-2.jpg'
+      '/images/products/rekuperator.png'
     ],
     specifications: {
       airflow: 'Do 200 m3/h',           // PROTOK ZRAKA
@@ -64,8 +63,8 @@ export const mikroklimaProducts: MikroklimaProduct[] = [
     originalPrice: undefined,
     discount: undefined,
     warranty: '3 godine',
-    image: '/images/products/gree-rekuperator-d35.jpg',
-    images: ['/images/products/gree-rekuperator-d35.jpg'],
+    image: '/images/products/rekuperator.png',
+    images: ['/images/products/rekuperator.png'],
     specifications: {
       airflow: '200-400 m3/h',          // PROTOK ZRAKA
       area: undefined,

@@ -1,7 +1,7 @@
 // Type definitions for all product categories
 
 export type Manufacturer = 'Toshiba' | 'Haier' | 'Maxon';
-export type ProductCategory = 'klima' | 'multi' | 'dizalica' | 'mikroklima' | 'alati';
+export type ProductCategory = 'klima' | 'multi' | 'dizalica' | 'mikroklima' | 'alati-materijali';
 
 // Base product interface
 export interface BaseProduct {
@@ -104,19 +104,26 @@ export interface MikroklimaProduct extends BaseProduct {
 }
 
 // Alati i materijali interface
-export interface AlatiProduct extends BaseProduct {
-  category: 'alati';
-  subcategory: 'cijevi' | 'drzaci' | 'alati' | 'oprema';
+export interface AlatProduct extends BaseProduct {
+  category: 'alati-materijali';
+  subcategory?: 'daljinski-upravljaci' | 'ventili' | 'prikljucci' | 'instalacijski-materijal';
   specifications?: {
-    material?: string;
-    size?: string;
-    compatibility?: string;
-    quantity?: string;
+    type?: string;              // "Žičani daljinski upravljač"
+    compatibility?: string;     // "Kazetne, kanalne i podstropne jedinice"
+    systems?: string;           // "Split i multi split sistemi"
+    voltage?: string;           // "220-240V"
+    cableLength?: string;       // "5m"
+    display?: string;           // "LED indikator"
+    mounting?: string;          // "Zidna montaža"
+    material?: string;          // For ventili, priključci
+    size?: string;              // For ventili, priključci
+    quantity?: string;          // For instalacijski materijal
   };
+  code?: string;                // Šifra proizvoda (1792)
 }
 
 // Union type for all products
-export type Product = KlimaProduct | MultiKlimaProduct | DizalicaProduct | MikroklimaProduct | AlatiProduct;
+export type Product = KlimaProduct | MultiKlimaProduct | DizalicaProduct | MikroklimaProduct | AlatProduct;
 
 // Service type
 export interface Service {
@@ -124,8 +131,21 @@ export interface Service {
   name: string;
   slug: string;
   category: 'montaza' | 'servis' | 'ciscenje';
-  price?: string;        // "od 150€"
+  subcategory?: string;          // "mono-split", "multi-split", "dizalica-topline"
+  price: number;                 // 300
+  priceInstallments2_12?: number; // 316.66
+  priceInstallments13_24?: number; // 333.33
+  image: string;
+  images?: string[];
+  code?: string;                 // Šifra (3586)
   description: string;
-  features: string[];
-  duration?: string;     // "2-3 sata"
+  included: string[];            // Što je uključeno u cijenu
+  additionalCosts?: {            // Dodatni troškovi
+    name: string;
+    price: number;
+  }[];
+  notes?: string[];              // Važne napomene
+  warranty?: string;             // Jamstvo
+  inStock: boolean;
+  badge?: string;
 }

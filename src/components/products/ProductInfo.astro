@@ -96,20 +96,28 @@ const discountPercentage = product.originalPrice
   </div>
 
   <!-- Additional Specs -->
-  <div class="product-info__details">
-    <div class="detail-row">
-      <span class="detail-row__label">SEER / SCOP:</span>
-      <span class="detail-row__value">{product.specifications.seer} / {product.specifications.scop}</span>
+  {(product.specifications.seer || product.specifications.scop || product.specifications.soundLevel || product.specifications.refrigerant) && (
+    <div class="product-info__details">
+      {(product.specifications.seer || product.specifications.scop) && (
+        <div class="detail-row">
+          <span class="detail-row__label">SEER / SCOP:</span>
+          <span class="detail-row__value">{product.specifications.seer || '-'} / {product.specifications.scop || '-'}</span>
+        </div>
+      )}
+      {product.specifications.soundLevel && (
+        <div class="detail-row">
+          <span class="detail-row__label">Razina buke:</span>
+          <span class="detail-row__value">{product.specifications.soundLevel}</span>
+        </div>
+      )}
+      {product.specifications.refrigerant && (
+        <div class="detail-row">
+          <span class="detail-row__label">Rashladni plin:</span>
+          <span class="detail-row__value">{product.specifications.refrigerant}</span>
+        </div>
+      )}
     </div>
-    <div class="detail-row">
-      <span class="detail-row__label">Razina buke:</span>
-      <span class="detail-row__value">{product.specifications.soundLevel || 'N/A'}</span>
-    </div>
-    <div class="detail-row">
-      <span class="detail-row__label">Rashladni plin:</span>
-      <span class="detail-row__value">{product.specifications.refrigerant}</span>
-    </div>
-  </div>
+  )}
 
   <!-- Features List -->
   <div class="product-info__features">

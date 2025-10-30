@@ -65,51 +65,68 @@ const { product } = Astro.props;
       <div class="tab-panel__content">
         <h3>Tehnički podaci</h3>
 
-        {Object.entries(product.technicalSpecs || {}).map(([section, specs]) => (
-          <div class="specs-section">
-            <h4>{
-              section === 'general' ? 'Opći podaci' :
-              section === 'performance' ? 'Performanse' :
-              section === 'technical' ? 'Tehnički podaci' :
-              section === 'dimensions' ? 'Dimenzije i težina' :
-              section
-            }</h4>
-            <table class="specs-table">
-              <tbody>
-                {Object.entries(specs).map(([key, value]) => (
-                  <tr>
-                    <td class="specs-table__label">{key}</td>
-                    <td class="specs-table__value">{value}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ))}
+        {Object.entries(product.technicalSpecs || {}).map(([section, specs]) => {
+          // Filter out empty/N/A values
+          const filteredSpecs = Object.entries(specs).filter(([key, value]) =>
+            value && value !== 'N/A' && value !== '/' && value !== '-' && value !== 'undefined'
+          );
 
-        <div class="energy-label">
-          <h4>Energetska oznaka</h4>
-          <div class="energy-label__content">
-            <img
-              src="/images/energy-label-sample.png"
-              alt="Energetska oznaka"
-              class="energy-label__image"
-            />
-            <div class="energy-label__info">
-              <p>Energetski razred: <strong>{product.specifications.energyClass}</strong></p>
-              <p>SEER: <strong>{product.specifications.seer}</strong></p>
-              <p>SCOP: <strong>{product.specifications.scop}</strong></p>
-              <a href="#" class="energy-label__link">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <polyline points="7 10 12 15 17 10"></polyline>
-                  <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
-                Preuzmite energetsku oznaku (PDF)
-              </a>
+          // Only show section if it has valid specs
+          return filteredSpecs.length > 0 ? (
+            <div class="specs-section">
+              <h4>{
+                section === 'general' ? 'Opći podaci' :
+                section === 'performance' ? 'Performanse' :
+                section === 'compatibility' ? 'Kompatibilnost' :
+                section === 'technical' ? 'Tehnički podaci' :
+                section === 'dimensions' ? 'Dimenzije i težina' :
+                section
+              }</h4>
+              <table class="specs-table">
+                <tbody>
+                  {filteredSpecs.map(([key, value]) => (
+                    <tr>
+                      <td class="specs-table__label">{key}</td>
+                      <td class="specs-table__value">{value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : null;
+        })}
+
+        {(product.specifications.energyClass || product.specifications.seer || product.specifications.scop) && (
+          <div class="energy-label">
+            <h4>Energetska oznaka</h4>
+            <div class="energy-label__content">
+              <img
+                src="/images/energy-label-sample.png"
+                alt="Energetska oznaka"
+                class="energy-label__image"
+              />
+              <div class="energy-label__info">
+                {product.specifications.energyClass && (
+                  <p>Energetski razred: <strong>{product.specifications.energyClass}</strong></p>
+                )}
+                {product.specifications.seer && (
+                  <p>SEER: <strong>{product.specifications.seer}</strong></p>
+                )}
+                {product.specifications.scop && (
+                  <p>SCOP: <strong>{product.specifications.scop}</strong></p>
+                )}
+                <a href="#" class="energy-label__link">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                  Preuzmite energetsku oznaku (PDF)
+                </a>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
 

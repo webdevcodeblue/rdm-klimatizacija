@@ -1,0 +1,771 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import ProductGallery from '../../components/products/ProductGallery.astro';
+import InquiryModal from '../../components/InquiryModal.astro';
+import { montazaServisServices } from '../../data/services/montaza-servis';
+
+// Get slug from URL params
+const { slug } = Astro.params;
+
+// Find service by slug
+const service = montazaServisServices.find(s => s.slug === slug);
+
+// If service not found, return 404
+if (!service) {
+  return Astro.redirect('/404');
+}
+
+// Get related services (exclude current one)
+const relatedServices = montazaServisServices
+  .filter(s => s.id !== service.id)
+  .slice(0, 3)
+  .map(s => ({
+    id: s.id,
+    slug: s.slug,
+    name: s.name,
+    price: s.price,
+    image: s.image,
+    images: s.images || [s.image],
+    href: `/montaza-servis/${s.slug}`,
+    inStock: s.inStock
+  }));
+
+// SEO meta data
+const pageTitle = `${service.name} - RDM Klimatizacija`;
+const pageDescription = `${service.description.substring(0, 150)}... Cijena: ${service.price}€`;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <Header />
+
+  <main class="service-detail">
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <div class="container">
+        <ol class="breadcrumb__list">
+          <li class="breadcrumb__item">
+            <a href="/" class="breadcrumb__link">Početna</a>
+          </li>
+          <li class="breadcrumb__item">
+            <a href="/montaza-servis" class="breadcrumb__link">Montaža i servis</a>
+          </li>
+          <li class="breadcrumb__item">
+            <span class="breadcrumb__current">{service.name}</span>
+          </li>
+        </ol>
+      </div>
+    </nav>
+
+    <!-- Service Section -->
+    <section class="service-section">
+      <div class="container">
+        <div class="service-layout">
+          <!-- Left: Gallery -->
+          <div class="service-layout__gallery">
+            <ProductGallery images={service.images || [service.image]} productName={service.name} />
+          </div>
+
+          <!-- Right: Service Info -->
+          <div class="service-layout__info">
+            <div class="service-info">
+              <!-- Header -->
+              {service.badge && (
+                <div class="service-info__header">
+                  <span class="badge badge--{service.badge.toLowerCase()}">{service.badge}</span>
+                </div>
+              )}
+
+              <!-- Title -->
+              <h1 class="service-info__title">{service.name}</h1>
+              <p class="service-info__category">{service.category === 'montaza' ? 'Montaža' : service.category === 'servis' ? 'Servis' : 'Čišćenje'}</p>
+
+              <!-- Description -->
+              {service.description && (
+                <div class="service-info__description">
+                  <p>{service.description}</p>
+                </div>
+              )}
+
+              <!-- Included in Price -->
+              {service.included && service.included.length > 0 && (
+                <div class="service-info__included">
+                  <h3>Što je uključeno u cijenu:</h3>
+                  <ul class="included-list">
+                    {service.included.map((item: string) => (
+                      <li class="included-list__item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <!-- Additional Costs -->
+              {service.additionalCosts && service.additionalCosts.length > 0 && (
+                <div class="service-info__additional">
+                  <h3>Dodatni troškovi:</h3>
+                  <div class="additional-costs">
+                    {service.additionalCosts.map(cost => (
+                      <div class="cost-item">
+                        <span class="cost-item__name">{cost.name}</span>
+                        <span class="cost-item__price">+{cost.price}€</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <!-- Notes -->
+              {service.notes && service.notes.length > 0 && (
+                <div class="service-info__notes">
+                  <h3>Važne napomene:</h3>
+                  <ul class="notes-list">
+                    {service.notes.map((note: string) => (
+                      <li class="notes-list__item">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <line x1="12" y1="16" x2="12" y2="12"></line>
+                          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        <span>{note}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <!-- Pricing -->
+              <div class="service-info__pricing">
+                <div class="pricing-box">
+                  <div class="pricing-box__main">
+                    <span class="pricing-box__label">Cijena jednokratnog plaćanja:</span>
+                    <span class="pricing-box__price">{service.price.toLocaleString('hr-HR')},00 €</span>
+                  </div>
+
+                  {(service.priceInstallments2_12 || service.priceInstallments13_24) && (
+                    <div class="pricing-box__installments">
+                      {service.priceInstallments2_12 && (
+                        <div class="installment-option">
+                          <span class="installment-option__label">Kartice 2-12 rata:</span>
+                          <span class="installment-option__price">{service.priceInstallments2_12.toLocaleString('hr-HR')} €</span>
+                        </div>
+                      )}
+                      {service.priceInstallments13_24 && (
+                        <div class="installment-option">
+                          <span class="installment-option__label">Kartice 13-24 rate:</span>
+                          <span class="installment-option__price">{service.priceInstallments13_24.toLocaleString('hr-HR')} €</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {service.warranty && (
+                    <div class="pricing-box__warranty">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                      </svg>
+                      <span>Jamstvo: {service.warranty}</span>
+                    </div>
+                  )}
+                </div>
+
+                {service.inStock ? (
+                  <div class="stock-status stock-status--available">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    <span>Usluga je dostupna</span>
+                  </div>
+                ) : (
+                  <div class="stock-status stock-status--unavailable">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="12" y1="8" x2="12" y2="12"></line>
+                      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    <span>Trenutno nedostupno</span>
+                  </div>
+                )}
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="service-info__actions">
+                <button
+                  class="btn btn--primary btn--large"
+                  id="serviceInquiryBtn"
+                  data-service-id={service.id}
+                  data-service-name={service.name}
+                  data-service-price={service.price}
+                  data-service-image={service.image}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 2L11 13"></path>
+                    <path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
+                  </svg>
+                  Zatražite ponudu
+                </button>
+
+                <button class="btn btn--secondary btn--desktop-only" data-action="share">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="18" cy="5" r="3"></circle>
+                    <circle cx="6" cy="12" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                  </svg>
+                  Podijeli
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Services -->
+    {relatedServices.length > 0 && (
+      <section class="related-section">
+        <div class="container">
+          <h2 class="related-section__title">Ostale usluge</h2>
+          <div class="related-grid">
+            {relatedServices.map((relService) => (
+              <a href={relService.href} class="related-card">
+                <div class="related-card__image">
+                  <img src={relService.image} alt={relService.name} />
+                </div>
+                <div class="related-card__content">
+                  <h3 class="related-card__title">{relService.name}</h3>
+                  <div class="related-card__price">{relService.price},00 €</div>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+  </main>
+
+  <Footer />
+  <InquiryModal />
+</BaseLayout>
+
+<style>
+  .service-detail {
+    min-height: 100vh;
+    background: var(--color-gray-50);
+  }
+
+  /* Breadcrumb Navigation */
+  .breadcrumb {
+    background: var(--color-white);
+    border-bottom: 1px solid var(--color-gray-200);
+    padding: var(--space-3) 0;
+  }
+
+  .breadcrumb__list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+  }
+
+  .breadcrumb__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .breadcrumb__item:not(:last-child)::after {
+    content: '/';
+    color: var(--color-gray-400);
+  }
+
+  .breadcrumb__link {
+    color: var(--color-gray-600);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    transition: color var(--transition-fast);
+  }
+
+  .breadcrumb__link:hover {
+    color: var(--color-primary);
+  }
+
+  .breadcrumb__current {
+    color: var(--text-primary);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+  }
+
+  /* Service Section */
+  .service-section {
+    padding: var(--space-8) 0;
+  }
+
+  .service-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
+  }
+
+  .service-layout__gallery {
+    position: sticky;
+    top: var(--space-6);
+    height: fit-content;
+  }
+
+  /* Service Info */
+  .service-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    background: var(--color-white);
+    padding: var(--space-8);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .service-info__header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--border-radius-full);
+    font-size: var(--text-xs);
+    font-weight: var(--font-semibold);
+    text-transform: uppercase;
+  }
+
+  .service-info__title {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    line-height: 1.3;
+    margin: 0;
+  }
+
+  .service-info__category {
+    color: var(--color-primary);
+    font-size: var(--text-base);
+    font-weight: var(--font-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .service-info__description {
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .service-info__included h3,
+  .service-info__additional h3,
+  .service-info__notes h3 {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-3);
+  }
+
+  .included-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .included-list__item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+  }
+
+  .included-list__item svg {
+    color: var(--color-green-600);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .additional-costs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .cost-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-3);
+    background: var(--color-gray-50);
+    border-radius: var(--border-radius-base);
+  }
+
+  .cost-item__name {
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+  }
+
+  .cost-item__price {
+    color: var(--color-primary);
+    font-weight: var(--font-semibold);
+    font-size: var(--text-base);
+  }
+
+  .notes-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .notes-list__item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    padding: var(--space-2);
+    background: var(--color-yellow-50);
+    border-left: 3px solid var(--color-yellow-400);
+    border-radius: var(--border-radius-base);
+  }
+
+  .notes-list__item svg {
+    color: var(--color-yellow-600);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* Pricing */
+  .service-info__pricing {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-6);
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--color-blue-200);
+  }
+
+  .pricing-box__main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .pricing-box__label {
+    color: var(--color-gray-600);
+    font-size: var(--text-sm);
+  }
+
+  .pricing-box__price {
+    font-size: 34px;
+    font-weight: 900;
+    color: #dc2626;
+    line-height: 1;
+  }
+
+  .pricing-box__installments {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-blue-200);
+  }
+
+  .installment-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .installment-option__label {
+    color: var(--color-gray-600);
+    font-size: var(--text-sm);
+  }
+
+  .installment-option__price {
+    color: var(--text-primary);
+    font-weight: var(--font-semibold);
+    font-size: var(--text-base);
+  }
+
+  .pricing-box__warranty {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background: var(--color-blue-100);
+    color: var(--color-blue-700);
+    border-radius: var(--border-radius-md);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+  }
+
+  .stock-status {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--border-radius-md);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+  }
+
+  .stock-status--available {
+    background: var(--color-green-100);
+    color: var(--color-green-700);
+  }
+
+  .stock-status--unavailable {
+    background: var(--color-red-100);
+    color: var(--color-red-700);
+  }
+
+  /* Action Buttons */
+  .service-info__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    border-radius: var(--border-radius-lg);
+    font-weight: var(--font-semibold);
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .btn--primary {
+    background: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  .btn--primary:hover {
+    background: var(--color-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+  }
+
+  .btn--large {
+    padding: var(--space-4) var(--space-6);
+    font-size: var(--text-lg);
+  }
+
+  .btn--secondary {
+    background: var(--color-gray-100);
+    color: var(--text-primary);
+    border: 2px solid var(--color-gray-300);
+  }
+
+  .btn--secondary:hover {
+    background: var(--color-gray-200);
+    border-color: var(--color-gray-400);
+  }
+
+  .btn--desktop-only {
+    display: inline-flex;
+  }
+
+  /* Related Services */
+  .related-section {
+    background: var(--color-white);
+    padding: var(--space-12) 0;
+    border-top: 1px solid var(--color-gray-200);
+  }
+
+  .related-section__title {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-6);
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-6);
+  }
+
+  .related-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    text-decoration: none;
+    transition: all var(--transition-fast);
+  }
+
+  .related-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-primary);
+  }
+
+  .related-card__image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--color-gray-100);
+  }
+
+  .related-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .related-card__content {
+    padding: var(--space-4);
+  }
+
+  .related-card__title {
+    font-size: var(--text-base);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+    line-height: 1.4;
+  }
+
+  .related-card__price {
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+    color: var(--color-primary);
+  }
+
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .service-layout {
+      gap: var(--space-8);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .service-layout {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+
+    .service-layout__gallery {
+      position: relative;
+      top: 0;
+    }
+
+    .service-info {
+      padding: var(--space-6);
+    }
+
+    .service-info__title {
+      font-size: var(--text-xl);
+    }
+
+    .pricing-box__price {
+      font-size: var(--text-3xl);
+    }
+
+    .btn--desktop-only {
+      display: none;
+    }
+
+    .service-info__actions {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 8px var(--space-4);
+      background: var(--color-white);
+      border-top: 1px solid var(--color-gray-200);
+      z-index: 100;
+    }
+
+    .btn--large {
+      padding: 10px var(--space-4);
+      font-size: var(--text-base);
+    }
+
+    .related-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .service-info {
+      padding: var(--space-4);
+    }
+
+    .service-info__title {
+      font-size: var(--text-lg);
+    }
+  }
+</style>
+
+<script>
+  // Share functionality
+  const shareBtn = document.querySelector('[data-action="share"]');
+  if (shareBtn) {
+    shareBtn.addEventListener('click', async () => {
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: document.title,
+            url: window.location.href
+          });
+        } catch (err) {
+          console.log('Share cancelled');
+        }
+      } else {
+        navigator.clipboard.writeText(window.location.href);
+        alert('Link kopiran u clipboard!');
+      }
+    });
+  }
+
+  // Inquiry button functionality
+  const inquiryBtn = document.getElementById('serviceInquiryBtn');
+  if (inquiryBtn) {
+    inquiryBtn.addEventListener('click', () => {
+      const serviceData = {
+        id: inquiryBtn.dataset.serviceId,
+        name: inquiryBtn.dataset.serviceName,
+        price: inquiryBtn.dataset.servicePrice,
+        image: inquiryBtn.dataset.serviceImage
+      };
+
+      if (typeof window.openInquiryModal === 'function') {
+        window.openInquiryModal(serviceData);
+      }
+    });
+  }
+</script>

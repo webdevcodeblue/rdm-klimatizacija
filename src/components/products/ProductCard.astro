@@ -38,7 +38,8 @@ const getCategoryPath = (category: string) => {
     'Multi klima': '/multi-klima',
     'Dizalice topline': '/dizalice-topline',
     'Mikroklima': '/mikroklima',
-    'Alati i materijali': '/alati-materijali'
+    'Alati i materijali': '/alati-materijali',
+    'Montaža i servis': '/montaza-servis'
   };
   return categoryMap[category] || '/proizvodi';
 };
@@ -193,21 +194,27 @@ const discountPercentage = product.originalPrice
       )}
 
       <div class="product-card__specs" style="display: none;">
-        <div class="spec" title="Snaga hlađenja/grijanja">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-          </svg>
-          <span>{product.power}</span>
-        </div>
-        <div class="spec" title="Preporučena površina">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-          </svg>
-          <span>{product.area}</span>
-        </div>
-        <div class="spec spec--energy" title="Energetska klasa">
-          {product.energyClass}
-        </div>
+        {product.power && (
+          <div class="spec" title="Snaga hlađenja/grijanja">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
+            <span>{product.power}</span>
+          </div>
+        )}
+        {product.area && (
+          <div class="spec" title="Preporučena površina">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            </svg>
+            <span>{product.area}</span>
+          </div>
+        )}
+        {product.energyClass && (
+          <div class="spec spec--energy" title="Energetska klasa">
+            {product.energyClass}
+          </div>
+        )}
         {product.seer && product.scop && viewMode === 'list' && (
           <div class="spec" title="Energetska učinkovitost">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

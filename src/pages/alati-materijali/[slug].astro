@@ -1,0 +1,292 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import ProductGallery from '../../components/products/ProductGallery.astro';
+import ProductInfo from '../../components/products/ProductInfo.astro';
+import ProductTabs from '../../components/products/ProductTabs.astro';
+import RelatedProducts from '../../components/products/RelatedProducts.astro';
+import InquiryModal from '../../components/InquiryModal.astro';
+import { alatProducts } from '../../data/products/alati-materijali';
+
+// Get slug from URL params
+const { slug } = Astro.params;
+
+// Find product by slug
+const rawProduct = alatProducts.find(p => p.slug === slug);
+
+// If product not found, return 404
+if (!rawProduct) {
+  return Astro.redirect('/404');
+}
+
+// Convert new data structure to format expected by components
+const product = {
+  slug: rawProduct.slug,
+  id: rawProduct.id,
+  name: rawProduct.name,
+  manufacturer: rawProduct.manufacturer,
+  model: rawProduct.model,
+  category: rawProduct.category,
+  subcategory: rawProduct.subcategory,
+  price: rawProduct.price,
+  originalPrice: rawProduct.originalPrice,
+  warranty: rawProduct.warranty,
+  images: rawProduct.images || [rawProduct.image],
+  specifications: {
+    type: rawProduct.specifications?.type,
+    compatibility: rawProduct.specifications?.compatibility,
+    systems: rawProduct.specifications?.systems,
+    voltage: rawProduct.specifications?.voltage,
+    cableLength: rawProduct.specifications?.cableLength,
+    display: rawProduct.specifications?.display,
+    mounting: rawProduct.specifications?.mounting,
+    material: rawProduct.specifications?.material,
+    size: rawProduct.specifications?.size,
+    quantity: rawProduct.specifications?.quantity
+  },
+  features: rawProduct.features,
+  description: rawProduct.description,
+  technicalSpecs: {
+    general: {
+      'Tip proizvoda': rawProduct.specifications?.type || 'N/A',
+      'Proizvođač': rawProduct.manufacturer || 'N/A',
+      'Model': rawProduct.model || 'N/A',
+      ...(rawProduct.code && { 'Šifra': rawProduct.code })
+    },
+    compatibility: {
+      ...(rawProduct.specifications?.compatibility && { 'Kompatibilnost': rawProduct.specifications.compatibility }),
+      ...(rawProduct.specifications?.systems && { 'Sistemi': rawProduct.specifications.systems })
+    },
+    technical: {
+      ...(rawProduct.specifications?.voltage && { 'Napajanje': rawProduct.specifications.voltage }),
+      ...(rawProduct.specifications?.cableLength && { 'Dužina kabla': rawProduct.specifications.cableLength }),
+      ...(rawProduct.specifications?.display && { 'Displej': rawProduct.specifications.display }),
+      ...(rawProduct.specifications?.mounting && { 'Montaža': rawProduct.specifications.mounting }),
+      ...(rawProduct.specifications?.material && { 'Materijal': rawProduct.specifications.material }),
+      ...(rawProduct.specifications?.size && { 'Veličina': rawProduct.specifications.size }),
+      ...(rawProduct.specifications?.quantity && { 'Količina': rawProduct.specifications.quantity })
+    }
+  },
+  inStock: rawProduct.inStock,
+  badge: rawProduct.badge,
+  code: rawProduct.code
+};
+
+// Get related products (same subcategory or all products, exclude current one)
+const allProducts = alatProducts.map(p => ({
+  id: p.id,
+  slug: p.slug,
+  name: p.name,
+  manufacturer: p.manufacturer,
+  model: p.model,
+  price: p.price,
+  originalPrice: p.originalPrice,
+  image: p.image,
+  images: p.images || [p.image],
+  subcategory: p.subcategory,
+  specifications: p.specifications,
+  features: p.features,
+  inStock: p.inStock,
+  badge: p.badge
+}));
+
+// Get related products - show 4 different products (exclude current one)
+const relatedProducts = allProducts
+  .filter(p => p.id !== product.id) // Exclude current product
+  .slice(0, 4) // Show 4 related products
+  .map(p => ({
+    ...p,
+    images: p.images || [p.image],
+    href: `/alati-materijali/${p.slug}`
+  }));
+
+// SEO meta data
+const pageTitle = `${product.manufacturer ? product.manufacturer + ' ' : ''}${product.name} - RDM Klimatizacija`;
+const pageDescription = `${product.manufacturer ? product.manufacturer + ' ' : ''}${product.model || ''} - ${product.description ? product.description.substring(0, 150) : 'Alati i materijali za klima uređaje'}. Cijena: ${product.price > 0 ? product.price + '€' : 'Na upit'}`;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <Header />
+
+  <main class="product-detail">
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <div class="container">
+        <ol class="breadcrumb__list">
+          <li class="breadcrumb__item">
+            <a href="/" class="breadcrumb__link">Početna</a>
+          </li>
+          <li class="breadcrumb__item">
+            <a href="/alati-materijali" class="breadcrumb__link">Alati i materijali</a>
+          </li>
+          <li class="breadcrumb__item">
+            <span class="breadcrumb__current">{product.manufacturer ? product.manufacturer + ' ' : ''}{product.model || product.name}</span>
+          </li>
+        </ol>
+      </div>
+    </nav>
+
+    <!-- Product Section -->
+    <section class="product-section">
+      <div class="container">
+        <div class="product-layout">
+          <!-- Left: Gallery -->
+          <div class="product-layout__gallery">
+            <ProductGallery images={product.images} productName={product.name} />
+          </div>
+
+          <!-- Right: Product Info -->
+          <div class="product-layout__info">
+            <ProductInfo product={product} />
+          </div>
+        </div>
+
+        <!-- Product Details Tabs -->
+        <div class="product-details">
+          <ProductTabs product={product} />
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Products -->
+    {relatedProducts.length > 0 && (
+      <section class="related-section">
+        <div class="container">
+          <RelatedProducts products={relatedProducts} />
+        </div>
+      </section>
+    )}
+  </main>
+
+  <Footer />
+  <InquiryModal />
+</BaseLayout>
+
+<style>
+  .product-detail {
+    min-height: 100vh;
+    background: var(--color-gray-50);
+  }
+
+  /* Breadcrumb Navigation */
+  .breadcrumb {
+    background: var(--color-white);
+    border-bottom: 1px solid var(--color-gray-200);
+    padding: var(--space-3) 0;
+  }
+
+  .breadcrumb__list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+  }
+
+  .breadcrumb__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .breadcrumb__item:not(:last-child)::after {
+    content: '/';
+    color: var(--color-gray-400);
+  }
+
+  .breadcrumb__link {
+    color: var(--color-gray-600);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    transition: color var(--transition-fast);
+  }
+
+  .breadcrumb__link:hover {
+    color: var(--color-primary);
+  }
+
+  .breadcrumb__current {
+    color: var(--text-primary);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+  }
+
+  /* Product Section */
+  .product-section {
+    padding: var(--space-8) 0;
+  }
+
+  .product-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
+    margin-bottom: var(--space-12);
+  }
+
+  .product-layout__gallery {
+    position: sticky;
+    top: var(--space-6);
+    height: fit-content;
+  }
+
+  /* Product Details */
+  .product-details {
+    background: var(--color-white);
+    border-radius: var(--border-radius-lg);
+    padding: var(--space-8);
+    margin-top: var(--space-8);
+  }
+
+  /* Related Section */
+  .related-section {
+    background: var(--color-white);
+    padding: var(--space-12) 0;
+    border-top: 1px solid var(--color-gray-200);
+  }
+
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .product-layout {
+      gap: var(--space-8);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .product-layout {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+
+    .product-layout__gallery {
+      position: relative;
+      top: 0;
+    }
+
+    .product-details {
+      padding: var(--space-6) var(--space-4);
+      border-radius: 0;
+      margin-top: var(--space-6);
+    }
+
+    .product-section {
+      padding: var(--space-4) 0;
+    }
+
+    .related-section {
+      padding: var(--space-8) 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .breadcrumb__list {
+      font-size: var(--text-xs);
+    }
+
+    .product-details {
+      padding: var(--space-4);
+    }
+  }
+</style>

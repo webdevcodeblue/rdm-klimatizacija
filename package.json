@@ -6,10 +6,14 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "cms:proxy": "npx decap-server"
   },
   "dependencies": {
     "@astrojs/vercel": "^9.0.0",
     "astro": "^5.15.1"
+  },
+  "devDependencies": {
+    "decap-server": "^3.3.1"
   }
 }

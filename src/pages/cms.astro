@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CMS Admin - RDM Klimatizacija</title>
+
+  <!-- Custom CMS Styles -->
+  <style>
+    /* Fix dropdown menu width and responsiveness */
+    [class*="DropdownList"] {
+      min-width: 250px !important;
+      max-width: 100% !important;
+      white-space: nowrap !important;
+    }
+
+    /* Fix button text overflow */
+    [class*="StyledDropdownButton"] {
+      min-width: 150px !important;
+    }
+
+    /* Ensure dropdown items are fully visible */
+    [class*="DropdownItem"] {
+      white-space: nowrap !important;
+      padding: 10px 20px !important;
+    }
+
+    /* Fix publish dropdown */
+    button[class*="Dropdown"] {
+      min-width: 180px !important;
+    }
+  </style>
+
+  <!-- Disable automatic init -->
+  <script>
+    window.CMS_MANUAL_INIT = true;
+  </script>
+</head>
+<body>
+  <!-- Netlify CMS -->
+  <script src="https://unpkg.com/netlify-cms@^2.10.192/dist/netlify-cms.js"></script>
+
+  <script>
+    // Wait for CMS to load, then initialize manually
+    const initCMS = () => {
+      if (typeof CMS !== 'undefined') {
+        CMS.init({
+          config: {
+            // Use proxy backend for local development (reads/writes to files)
+            backend: {
+              name: 'proxy',
+              proxy_url: 'http://localhost:8081/api/v1'
+            },
+            media_folder: 'public/images/products',
+            public_folder: '/images/products',
+            collections: [
+              {
+                name: 'klima-uredaji',
+                label: 'Klima uređaji',
+                label_singular: 'Klima uređaj',
+                folder: 'src/content/klima-uredaji',
+                create: true,
+                slug: '{{manufacturer}}-{{name}}',
+                fields: [
+                  { label: 'Naziv proizvoda', name: 'name', widget: 'string', required: true },
+                  { label: 'Proizvođač', name: 'manufacturer', widget: 'string', required: true },
+                  { label: 'Model', name: 'model', widget: 'string', required: false },
+                  { label: 'Kategorija', name: 'category', widget: 'hidden', default: 'klima-uredaji' },
+                  { label: 'Cijena (€)', name: 'price', widget: 'number', value_type: 'int', required: true },
+                  { label: 'Originalna cijena (€)', name: 'originalPrice', widget: 'number', value_type: 'int', required: false },
+                  { label: 'Garancija', name: 'warranty', widget: 'string', default: '2 godine', required: false },
+                  { label: 'Na stanju', name: 'inStock', widget: 'boolean', default: true },
+                  { label: 'Glavna slika', name: 'image', widget: 'image', required: true },
+                  {
+                    label: 'Galerija slika',
+                    name: 'images',
+                    widget: 'list',
+                    required: false,
+                    field: { label: 'Slika', name: 'image', widget: 'image' }
+                  },
+                  {
+                    label: 'Oznaka',
+                    name: 'badge',
+                    widget: 'select',
+                    options: ['Akcija', 'Novo', 'Premium', 'Bestseller', 'Wi-Fi'],
+                    required: false
+                  },
+                  { label: 'Featured (na početnoj)', name: 'featured', widget: 'boolean', default: false },
+                  { label: 'Na akciji', name: 'onSale', widget: 'boolean', default: false },
+                  { label: 'Popularno', name: 'popular', widget: 'boolean', default: false },
+                  { label: 'Novo u ponudi', name: 'isNew', widget: 'boolean', default: false },
+                  {
+                    label: 'Specifikacije',
+                    name: 'specifications',
+                    widget: 'object',
+                    required: false,
+                    fields: [
+                      { label: 'Snaga', name: 'power', widget: 'string', required: false },
+                      { label: 'Hlađenje', name: 'cooling', widget: 'string', required: false },
+                      { label: 'Grijanje', name: 'heating', widget: 'string', required: false },
+                      { label: 'Površina', name: 'area', widget: 'string', required: false },
+                      { label: 'Energetska klasa', name: 'energyClass', widget: 'select', options: ['A+++', 'A++', 'A+', 'A', 'B', 'C', 'D'], required: false },
+                      { label: 'SEER', name: 'seer', widget: 'number', value_type: 'float', required: false },
+                      { label: 'SCOP', name: 'scop', widget: 'number', value_type: 'float', required: false },
+                      { label: 'Bučnost', name: 'soundLevel', widget: 'string', required: false },
+                      { label: 'Rashladni plin', name: 'refrigerant', widget: 'string', default: 'R32', required: false }
+                    ]
+                  },
+                  {
+                    label: 'Značajke',
+                    name: 'features',
+                    widget: 'list',
+                    required: false,
+                    field: { label: 'Značajka', name: 'feature', widget: 'string' }
+                  },
+                  { label: 'Opis proizvoda', name: 'body', widget: 'markdown', required: false }
+                ]
+              },
+              {
+                name: 'multi-klima',
+                label: 'Multi klima',
+                label_singular: 'Multi klima sistem',
+                folder: 'src/content/multi-klima',
+                create: true,
+                slug: '{{manufacturer}}-{{name}}',
+                fields: [
+                  { label: 'Naziv proizvoda', name: 'name', widget: 'string', required: true },
+                  { label: 'Proizvođač', name: 'manufacturer', widget: 'string', required: true },
+                  { label: 'Model', name: 'model', widget: 'string', required: false },
+                  { label: 'Kategorija', name: 'category', widget: 'hidden', default: 'multi-klima' },
+                  { label: 'Cijena (€)', name: 'price', widget: 'number', value_type: 'int', required: true },
+                  { label: 'Originalna cijena (€)', name: 'originalPrice', widget: 'number', value_type: 'int', required: false },
+                  { label: 'Garancija', name: 'warranty', widget: 'string', default: '2 godine', required: false },
+                  { label: 'Na stanju', name: 'inStock', widget: 'boolean', default: true },
+                  { label: 'Glavna slika', name: 'image', widget: 'image', required: true },
+                  {
+                    label: 'Galerija slika',
+                    name: 'images',
+                    widget: 'list',
+                    required: false,
+                    field: { label: 'Slika', name: 'image', widget: 'image' }
+                  },
+                  {
+                    label: 'Oznaka',
+                    name: 'badge',
+                    widget: 'select',
+                    options: ['Akcija', 'Novo', 'Premium', 'Bestseller', 'Wi-Fi'],
+                    required: false
+                  },
+                  { label: 'Featured (na početnoj)', name: 'featured', widget: 'boolean', default: false },
+                  { label: 'Na akciji', name: 'onSale', widget: 'boolean', default: false },
+                  { label: 'Popularno', name: 'popular', widget: 'boolean', default: false },
+                  { label: 'Novo u ponudi', name: 'isNew', widget: 'boolean', default: false },
+                  {
+                    label: 'Specifikacije',
+                    name: 'specifications',
+                    widget: 'object',
+                    required: false,
+                    fields: [
+                      { label: 'Broj jedinica', name: 'units', widget: 'string', required: false },
+                      { label: 'Ukupna snaga', name: 'totalPower', widget: 'string', required: false },
+                      { label: 'Hlađenje', name: 'cooling', widget: 'string', required: false },
+                      { label: 'Grijanje', name: 'heating', widget: 'string', required: false },
+                      { label: 'Površina', name: 'area', widget: 'string', required: false },
+                      { label: 'Energetska klasa', name: 'energyClass', widget: 'select', options: ['A+++', 'A++', 'A+', 'A', 'B', 'C', 'D'], required: false },
+                      { label: 'Rashladni plin', name: 'refrigerant', widget: 'string', default: 'R32', required: false }
+                    ]
+                  },
+                  {
+                    label: 'Značajke',
+                    name: 'features',
+                    widget: 'list',
+                    required: false,
+                    field: { label: 'Značajka', name: 'feature', widget: 'string' }
+                  },
+                  { label: 'Opis proizvoda', name: 'body', widget: 'markdown', required: false }
+                ]
+              },
+              {
+                name: 'dizalice-topline',
+                label: 'Dizalice topline',
+                label_singular: 'Dizalica topline',
+                folder: 'src/content/dizalice-topline',
+                create: true,
+                slug: '{{manufacturer}}-{{name}}',
+                fields: [
+                  { label: 'Naziv proizvoda', name: 'name', widget: 'string', required: true },
+                  { label: 'Proizvođač', name: 'manufacturer', widget: 'string', required: true },
+                  { label: 'Model', name: 'model', widget: 'string', required: false },
+                  { label: 'Kategorija', name: 'category', widget: 'hidden', default: 'dizalice-topline' },
+                  { label: 'Cijena (€)', name: 'price', widget: 'number', value_type: 'int', required: true },
+                  { label: 'Originalna cijena (€)', name: 'originalPrice', widget: 'number', value_type: 'int', required: false },
+                  { label: 'Garancija', name: 'warranty', widget: 'string', default: '2 godine', required: false },
+                  { label: 'Na stanju', name: 'inStock', widget: 'boolean', default: true },
+                  { label: 'Glavna slika', name: 'image', widget: 'image', required: true },
+                  {
+                    label: 'Galerija slika',
+                    name: 'images',
+                    widget: 'list',
+                    required: false,
+                    field: { label: 'Slika', name: 'image', widget: 'image' }
+                  },
+                  {
+                    label: 'Oznaka',
+                    name: 'badge',
+                    widget: 'select',
+                    options: ['Akcija', 'Novo', 'Premium', 'Bestseller', 'Ekološki'],
+                    required: false
+                  },
+                  { label: 'Featured (na početnoj)', name: 'featured', widget: 'boolean', default: false },
+                  { label: 'Na akciji', name: 'onSale', widget: 'boolean', default: false },
+                  { label: 'Popularno', name: 'popular', widget: 'boolean', default: false },
+                  { label: 'Novo u ponudi', name: 'isNew', widget: 'boolean', default: false },
+                  {
+                    label: 'Specifikacije',
+                    name: 'specifications',
+                    widget: 'object',
+                    required: false,
+                    fields: [
+                      { label: 'Snaga', name: 'power', widget: 'string', required: false },
+                      { label: 'Grijanje', name: 'heating', widget: 'string', required: false },
+                      { label: 'COP', name: 'cop', widget: 'number', value_type: 'float', required: false },
+                      { label: 'Temperatura', name: 'temperature', widget: 'string', required: false },
+                      { label: 'Volumen bojlera', name: 'tankVolume', widget: 'string', required: false },
+                      { label: 'Energetska klasa', name: 'energyClass', widget: 'select', options: ['A+++', 'A++', 'A+', 'A', 'B', 'C', 'D'], required: false },
+                      { label: 'Rashladni plin', name: 'refrigerant', widget: 'string', default: 'R32', required: false }
+                    ]
+                  },
+                  {
+                    label: 'Značajke',
+                    name: 'features',
+                    widget: 'list',
+                    required: false,
+                    field: { label: 'Značajka', name: 'feature', widget: 'string' }
+                  },
+                  { label: 'Opis proizvoda', name: 'body', widget: 'markdown', required: false }
+                ]
+              },
+              {
+                name: 'mikroklima',
+                label: 'Mikroklima',
+                label_singular: 'Mikroklima uređaj',
+                folder: 'src/content/mikroklima',
+                create: true,
+                slug: '{{manufacturer}}-{{name}}',
+                fields: [
+                  { label: 'Naziv proizvoda', name: 'name', widget: 'string', required: true },
+                  { label: 'Proizvođač', name: 'manufacturer', widget: 'string', required: true },
+                  { label: 'Model', name: 'model', widget: 'string', required: false },
+                  { label: 'Kategorija', name: 'category', widget: 'hidden', default: 'mikroklima' },
+                  { label: 'Cijena (€)', name: 'price', widget: 'number', value_type: 'int', required: true },
+                  { label: 'Originalna cijena (€)', name: 'originalPrice', widget: 'number', value_type: 'int', required: false },
+                  { label: 'Garancija', name: 'warranty', widget: 'string', default: '2 godine', required: false },
+                  { label: 'Na stanju', name: 'inStock', widget: 'boolean', default: true },
+                  { label: 'Glavna slika', name: 'image', widget: 'image', required: true },
+                  {
+                    label: 'Galerija slika',
+                    name: 'images',
+                    widget: 'list',
+                    required: false,
+                    field: { label: 'Slika', name: 'image', widget: 'image' }
+                  },
+                  {
+                    label: 'Oznaka',
+                    name: 'badge',
+                    widget: 'select',
+                    options: ['Akcija', 'Novo', 'Kompaktno', 'Tiho'],
+                    required: false
+                  },
+                  { label: 'Featured (na početnoj)', name: 'featured', widget: 'boolean', default: false },
+                  { label: 'Na akciji', name: 'onSale', widget: 'boolean', default: false },
+                  { label: 'Popularno', name: 'popular', widget: 'boolean', default: false },
+                  { label: 'Novo u ponudi', name: 'isNew', widget: 'boolean', default: false },
+                  {
+                    label: 'Specifikacije',
+                    name: 'specifications',
+                    widget: 'object',
+                    required: false,
+                    fields: [
+                      { label: 'Snaga', name: 'power', widget: 'string', required: false },
+                      { label: 'Površina', name: 'area', widget: 'string', required: false },
+                      { label: 'Energetska klasa', name: 'energyClass', widget: 'select', options: ['A+++', 'A++', 'A+', 'A', 'B', 'C', 'D'], required: false },
+                      { label: 'Bučnost', name: 'soundLevel', widget: 'string', required: false },
+                      { label: 'Dimenzije', name: 'dimensions', widget: 'string', required: false }
+                    ]
+                  },
+                  {
+                    label: 'Značajke',
+                    name: 'features',
+                    widget: 'list',
+                    required: false,
+                    field: { label: 'Značajka', name: 'feature', widget: 'string' }
+                  },
+                  { label: 'Opis proizvoda', name: 'body', widget: 'markdown', required: false }
+                ]
+              },
+              {
+                name: 'alati-materijali',
+                label: 'Alati i materijali',
+                label_singular: 'Proizvod',
+                folder: 'src/content/alati-materijali',
+                create: true,
+                slug: '{{manufacturer}}-{{name}}',
+                fields: [
+                  { label: 'Naziv proizvoda', name: 'name', widget: 'string', required: true },
+                  { label: 'Proizvođač', name: 'manufacturer', widget: 'string', required: true },
+                  { label: 'Model', name: 'model', widget: 'string', required: false },
+                  { label: 'Kategorija', name: 'category', widget: 'hidden', default: 'alati-materijali' },
+                  { label: 'Cijena (€)', name: 'price', widget: 'number', value_type: 'int', required: true },
+                  { label: 'Originalna cijena (€)', name: 'originalPrice', widget: 'number', value_type: 'int', required: false },
+                  { label: 'Garancija', name: 'warranty', widget: 'string', default: '1 godina', required: false },
+                  { label: 'Na stanju', name: 'inStock', widget: 'boolean', default: true },
+                  { label: 'Glavna slika', name: 'image', widget: 'image', required: true },
+                  {
+                    label: 'Galerija slika',
+                    name: 'images',
+                    widget: 'list',
+                    required: false,
+                    field: { label: 'Slika', name: 'image', widget: 'image' }
+                  },
+                  {
+                    label: 'Oznaka',
+                    name: 'badge',
+                    widget: 'select',
+                    options: ['Akcija', 'Novo', 'Profesionalno', 'Bestseller'],
+                    required: false
+                  },
+                  { label: 'Featured (na početnoj)', name: 'featured', widget: 'boolean', default: false },
+                  { label: 'Na akciji', name: 'onSale', widget: 'boolean', default: false },
+                  { label: 'Popularno', name: 'popular', widget: 'boolean', default: false },
+                  { label: 'Novo u ponudi', name: 'isNew', widget: 'boolean', default: false },
+                  {
+                    label: 'Specifikacije',
+                    name: 'specifications',
+                    widget: 'object',
+                    required: false,
+                    fields: [
+                      { label: 'Tip proizvoda', name: 'type', widget: 'string', required: false },
+                      { label: 'Materijal', name: 'material', widget: 'string', required: false },
+                      { label: 'Dimenzije', name: 'dimensions', widget: 'string', required: false },
+                      { label: 'Težina', name: 'weight', widget: 'string', required: false }
+                    ]
+                  },
+                  {
+                    label: 'Značajke',
+                    name: 'features',
+                    widget: 'list',
+                    required: false,
+                    field: { label: 'Značajka', name: 'feature', widget: 'string' }
+                  },
+                  { label: 'Opis proizvoda', name: 'body', widget: 'markdown', required: false }
+                ]
+              },
+              {
+                name: 'montaza-servis',
+                label: 'Montaža i servis',
+                label_singular: 'Usluga',
+                folder: 'src/content/montaza-servis',
+                create: true,
+                slug: '{{name}}',
+                fields: [
+                  { label: 'Naziv usluge', name: 'name', widget: 'string', required: true },
+                  { label: 'Kategorija', name: 'category', widget: 'hidden', default: 'montaza-servis' },
+                  { label: 'Cijena (€)', name: 'price', widget: 'number', value_type: 'int', required: true },
+                  { label: 'Trajanje', name: 'duration', widget: 'string', required: false },
+                  { label: 'Dostupno', name: 'available', widget: 'boolean', default: true },
+                  { label: 'Glavna slika', name: 'image', widget: 'image', required: true },
+                  {
+                    label: 'Galerija slika',
+                    name: 'images',
+                    widget: 'list',
+                    required: false,
+                    field: { label: 'Slika', name: 'image', widget: 'image' }
+                  },
+                  {
+                    label: 'Oznaka',
+                    name: 'badge',
+                    widget: 'select',
+                    options: ['Hitno', 'Popularno', 'Premium', 'Paket'],
+                    required: false
+                  },
+                  { label: 'Featured (na početnoj)', name: 'featured', widget: 'boolean', default: false },
+                  { label: 'Popularno', name: 'popular', widget: 'boolean', default: false },
+                  {
+                    label: 'Uključeno u uslugu',
+                    name: 'includes',
+                    widget: 'list',
+                    required: false,
+                    field: { label: 'Stavka', name: 'item', widget: 'string' }
+                  },
+                  { label: 'Opis usluge', name: 'body', widget: 'markdown', required: false }
+                ]
+              }
+            ]
+          }
+        });
+      } else {
+        // Retry if CMS not loaded yet
+        setTimeout(initCMS, 100);
+      }
+    };
+
+    // Start initialization
+    initCMS();
+  </script>
+</body>
+</html>

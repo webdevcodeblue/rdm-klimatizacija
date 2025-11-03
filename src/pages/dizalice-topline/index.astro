@@ -5,29 +5,32 @@ import Footer from '../../components/layout/Footer.astro';
 import ProductFilter from '../../components/products/ProductFilter.astro';
 import ProductCard from '../../components/products/ProductCard.astro';
 import InquiryModal from '../../components/InquiryModal.astro';
-import { dizaliceToplineProducts } from '../../data/products/dizalice-topline';
+import { getCollection } from 'astro:content';
 
-// Convert new data structure to match old format for ProductCard
-const products = dizaliceToplineProducts.map(p => ({
-  id: p.id,
-  slug: p.slug,
-  name: p.name,
-  manufacturer: p.manufacturer,
+// Učitaj sve dizalice topline iz Content Collections
+const allProducts = await getCollection('dizalice-topline');
+
+// Convert Content Collection data to ProductCard format
+const products = allProducts.map((entry) => ({
+  id: entry.slug,
+  slug: entry.slug,
+  name: entry.data.name,
+  manufacturer: entry.data.manufacturer,
   category: 'Dizalice topline',
-  price: p.price,
-  originalPrice: p.originalPrice,
-  power: p.specifications.power,
-  cooling: p.specifications.coolingPower,
-  heating: p.specifications.heatingPower,
-  area: `${p.specifications.power} kapacitet`,
-  energyClass: p.specifications.energyClass,
-  seer: p.specifications.eer,
-  scop: p.specifications.cop,
-  features: p.features,
-  badge: p.badge,
-  image: p.image,
-  inStock: p.inStock,
-  description: p.model || (p.description ? p.description.split('.')[0] + '.' : undefined)
+  price: entry.data.price,
+  originalPrice: entry.data.originalPrice,
+  power: entry.data.specifications?.power,
+  cooling: entry.data.specifications?.cooling,
+  heating: entry.data.specifications?.heating,
+  area: entry.data.specifications?.area,
+  energyClass: entry.data.specifications?.energyClass,
+  seer: entry.data.specifications?.seer,
+  scop: entry.data.specifications?.scop || entry.data.specifications?.cop,
+  features: entry.data.features,
+  badge: entry.data.badge,
+  image: entry.data.image,
+  inStock: entry.data.inStock,
+  description: entry.data.model
 }));
 
 // Get manufacturers and categories for filters

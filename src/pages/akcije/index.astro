@@ -5,50 +5,63 @@ import Footer from '../../components/layout/Footer.astro';
 import ProductFilter from '../../components/products/ProductFilter.astro';
 import ProductCard from '../../components/products/ProductCard.astro';
 import InquiryModal from '../../components/InquiryModal.astro';
+import { getCollection } from 'astro:content';
 
-// Import all product categories
-import { klimaProducts } from '../../data/products/klima-uredaji';
-import { multiProducts } from '../../data/products/multi-klima';
-import { dizaliceProducts } from '../../data/products/dizalice-topline';
-import { mikroklimaProducts } from '../../data/products/mikroklima';
-import { alatProducts } from '../../data/products/alati-materijali';
+// Category mapping for display names and paths
+const categoryConfig: Record<string, { name: string; path: string }> = {
+  'klima-uredaji': { name: 'Klima uređaji', path: '/klima-uredaji' },
+  'multi-klima': { name: 'Multi klima', path: '/multi-klima' },
+  'dizalice-topline': { name: 'Dizalice topline', path: '/dizalice-topline' },
+  'mikroklima': { name: 'Mikroklima', path: '/mikroklima' },
+  'alati-materijali': { name: 'Alati i materijali', path: '/alati-materijali' },
+  'montaza-servis': { name: 'Montaža i servis', path: '/montaza-servis' }
+};
 
-// Collect all products with "Akcija" badge from all categories
-// Use optional chaining and default empty arrays to handle undefined imports
-const allProducts = [
-  ...(klimaProducts || []).map(p => ({ ...p, categoryName: 'Klima uređaji', categoryPath: '/klima-uredaji' })),
-  ...(multiProducts || []).map(p => ({ ...p, categoryName: 'Multi klima', categoryPath: '/multi-klima' })),
-  ...(dizaliceProducts || []).map(p => ({ ...p, categoryName: 'Dizalice topline', categoryPath: '/dizalice-topline' })),
-  ...(mikroklimaProducts || []).map(p => ({ ...p, categoryName: 'Mikroklima', categoryPath: '/mikroklima' })),
-  ...(alatProducts || []).map(p => ({ ...p, categoryName: 'Alati i materijali', categoryPath: '/alati-materijali' }))
-];
+// Collect all products from all categories
+const allProducts: Array<{ entry: any; categoryName: string; categoryPath: string }> = [];
 
-// Filter only products with "Akcija" badge
-const akcijeProducts = allProducts.filter(p => p.badge && p.badge.toLowerCase() === 'akcija');
+for (const [collectionName, config] of Object.entries(categoryConfig)) {
+  try {
+    const collectionItems = await getCollection(collectionName as any);
+    allProducts.push(...collectionItems.map(item => ({
+      entry: item,
+      categoryName: config.name,
+      categoryPath: config.path
+    })));
+  } catch (error) {
+    // Collection doesn't exist or is empty, skip it
+    console.log(`Skipping collection: ${collectionName}`);
+  }
+}
+
+// Filter only products with "Akcija" badge or onSale flag
+const akcijeProducts = allProducts.filter(p =>
+  p.entry.data.badge?.toLowerCase() === 'akcija' || p.entry.data.onSale === true
+);
 
 // Convert to ProductCard format
 const products = akcijeProducts.map(p => ({
-  id: p.id,
-  slug: p.slug,
-  name: p.name,
-  manufacturer: p.manufacturer,
+  id: p.entry.slug,
+  slug: p.entry.slug,
+  name: p.entry.data.name,
+  manufacturer: p.entry.data.manufacturer,
   category: p.categoryName,
-  price: p.price,
-  originalPrice: p.originalPrice,
-  power: p.specifications?.power || p.power || `${p.specifications?.cooling || ''} / ${p.specifications?.heating || ''}`,
-  cooling: p.specifications?.cooling || p.specifications?.coolingCapacity || '',
-  heating: p.specifications?.heating || p.specifications?.heatingCapacity || '',
-  area: p.specifications?.area || p.area || '',
-  airflow: p.specifications?.airflow || '',
-  energyClass: p.specifications?.energyClass || p.energyClass || '',
-  seer: p.specifications?.seer,
-  scop: p.specifications?.scop,
-  features: p.features || [],
-  badge: p.badge,
-  image: p.image,
-  inStock: p.inStock,
-  href: `${p.categoryPath}/${p.slug}`,
-  description: p.description || p.model || ''
+  price: p.entry.data.price,
+  originalPrice: p.entry.data.originalPrice,
+  power: p.entry.data.specifications?.power || '',
+  cooling: p.entry.data.specifications?.cooling || '',
+  heating: p.entry.data.specifications?.heating || '',
+  area: p.entry.data.specifications?.area || '',
+  airflow: p.entry.data.specifications?.airflow || '',
+  energyClass: p.entry.data.specifications?.energyClass || '',
+  seer: p.entry.data.specifications?.seer,
+  scop: p.entry.data.specifications?.scop,
+  features: p.entry.data.features || [],
+  badge: p.entry.data.badge,
+  image: p.entry.data.image,
+  inStock: p.entry.data.inStock,
+  href: `${p.categoryPath}/${p.entry.slug}`,
+  description: p.entry.data.model || ''
 }));
 
 // Get categories for filters

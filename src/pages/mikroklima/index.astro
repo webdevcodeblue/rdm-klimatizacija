@@ -5,31 +5,31 @@ import Footer from '../../components/layout/Footer.astro';
 import ProductFilter from '../../components/products/ProductFilter.astro';
 import ProductCard from '../../components/products/ProductCard.astro';
 import InquiryModal from '../../components/InquiryModal.astro';
-import { mikroklimaProducts } from '../../data/products/mikroklima';
+import { getCollection } from 'astro:content';
 
-// Convert new data structure to match old format for ProductCard
-const products = mikroklimaProducts.map(p => ({
-  id: p.id,
-  slug: p.slug,
-  name: p.name,
-  manufacturer: p.manufacturer,
+const allProducts = await getCollection('mikroklima');
+
+const products = allProducts.map((entry) => ({
+  id: entry.slug,
+  slug: entry.slug,
+  name: entry.data.name,
+  manufacturer: entry.data.manufacturer,
   category: 'Mikroklima',
-  price: p.price,
-  originalPrice: p.originalPrice,
+  price: entry.data.price,
+  originalPrice: entry.data.originalPrice,
   power: undefined, // Mikroklima nema power
-  cooling: p.specifications.cooling,
-  heating: p.specifications.heating,
-  area: p.specifications.area,
-  airflow: p.specifications.airflow, // NOVO - PROTOK ZRAKA
-  energyClass: p.specifications.energyClass,
+  cooling: entry.data.specifications?.cooling,
+  heating: entry.data.specifications?.heating,
+  area: entry.data.specifications?.area,
+  airflow: entry.data.specifications?.airflow, // NOVO - PROTOK ZRAKA
+  energyClass: entry.data.specifications?.energyClass,
   seer: undefined, // Mikroklima nema SEER
   scop: undefined, // Mikroklima nema SCOP
-  features: p.features,
-  badge: p.badge,
-  image: p.image,
-  inStock: p.inStock,
-  // Kreiraj kratki podnaslov - uzmi model ili prvu rečenicu opisa
-  description: p.model || (p.description ? p.description.split('.')[0] + '.' : undefined)
+  features: entry.data.features,
+  badge: entry.data.badge,
+  image: entry.data.image,
+  inStock: entry.data.inStock,
+  description: entry.data.model
 }));
 
 // Get manufacturers and categories for filters

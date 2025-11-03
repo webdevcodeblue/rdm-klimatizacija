@@ -90,7 +90,7 @@ const discountPercentage = product.originalPrice
     {viewMode === 'list' && (
       <div class="product-card__quick-info product-card__quick-info--below-image">
         {product.airflow && (
-          <div class="quick-info-item">
+          <div class="quick-info-item" data-spec-type="airflow">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"></path>
             </svg>
@@ -99,7 +99,7 @@ const discountPercentage = product.originalPrice
           </div>
         )}
         {product.cooling && (
-          <div class="quick-info-item">
+          <div class="quick-info-item" data-spec-type="cooling">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="12" y1="2" x2="12" y2="6"></line>
               <line x1="12" y1="18" x2="12" y2="22"></line>
@@ -115,7 +115,7 @@ const discountPercentage = product.originalPrice
           </div>
         )}
         {product.heating && (
-          <div class="quick-info-item">
+          <div class="quick-info-item" data-spec-type="heating">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="5"></circle>
               <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -132,7 +132,7 @@ const discountPercentage = product.originalPrice
           </div>
         )}
         {product.area && (
-          <div class="quick-info-item">
+          <div class="quick-info-item" data-spec-type="area">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
               <polyline points="9 22 9 12 15 12 15 22"></polyline>
@@ -142,7 +142,7 @@ const discountPercentage = product.originalPrice
           </div>
         )}
         {product.energyClass && (
-          <div class="quick-info-item quick-info-item--highlight">
+          <div class="quick-info-item quick-info-item--highlight" data-spec-type="energy">
             <img
               src="/images/icons/energy-efficiency-class.jpg"
               alt="Energetski razred"
@@ -896,20 +896,26 @@ const discountPercentage = product.originalPrice
     min-height: 90px;
   }
 
-  /* Hlađenje - Plava pozadina */
-  .quick-info-item:nth-child(1) {
+  /* Protok zraka (airflow) - Plava pozadina */
+  .quick-info-item[data-spec-type="airflow"] {
     background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
     border-color: #bfdbfe;
   }
 
-  /* Grijanje - Narančasto-žuta pozadina */
-  .quick-info-item:nth-child(2) {
+  /* Hlađenje (cooling) - Plava pozadina */
+  .quick-info-item[data-spec-type="cooling"] {
+    background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+    border-color: #bfdbfe;
+  }
+
+  /* Grijanje (heating) - Narančasto-žuta pozadina */
+  .quick-info-item[data-spec-type="heating"] {
     background: linear-gradient(135deg, #fef3c7 0%, #fef9e7 100%);
     border-color: #fde68a;
   }
 
-  /* Prostor - Svijetlo plava pozadina */
-  .quick-info-item:nth-child(3) {
+  /* Prostor (area) - Svijetlo plava pozadina */
+  .quick-info-item[data-spec-type="area"] {
     background: linear-gradient(135deg, #f0f9ff 0%, #f8fafc 100%);
     border-color: #e0f2fe;
   }
@@ -922,18 +928,23 @@ const discountPercentage = product.originalPrice
     margin-bottom: 2px;
   }
 
-  /* Snijeg ikona - plava */
-  .quick-info-item:nth-child(1) svg {
+  /* Airflow ikona - plava */
+  .quick-info-item[data-spec-type="airflow"] svg {
     color: #3b82f6;
   }
 
-  /* Sunce ikona - žuto-narandžasta */
-  .quick-info-item:nth-child(2) svg {
+  /* Snijeg ikona (hlađenje) - plava */
+  .quick-info-item[data-spec-type="cooling"] svg {
+    color: #3b82f6;
+  }
+
+  /* Sunce ikona (grijanje) - žuto-narandžasta */
+  .quick-info-item[data-spec-type="heating"] svg {
     color: #f59e0b;
   }
 
-  /* Kuća ikona - plava */
-  .quick-info-item:nth-child(3) svg {
+  /* Kuća ikona (prostor) - plava */
+  .quick-info-item[data-spec-type="area"] svg {
     color: #0284c7;
   }
 

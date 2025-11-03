@@ -5,16 +5,17 @@ import Footer from '../../components/layout/Footer.astro';
 import ProductFilter from '../../components/products/ProductFilter.astro';
 import ProductCard from '../../components/products/ProductCard.astro';
 import InquiryModal from '../../components/InquiryModal.astro';
-import { montazaServisServices } from '../../data/services/montaza-servis';
+import { getCollection } from 'astro:content';
 
-// Convert services to match product card format
-const products = montazaServisServices.map(s => ({
-  id: s.id,
-  slug: s.slug,
-  name: s.name,
+const allServices = await getCollection('montaza-servis');
+
+const products = allServices.map((entry) => ({
+  id: entry.slug,
+  slug: entry.slug,
+  name: entry.data.name,
   manufacturer: undefined,
   category: 'Montaža i servis',
-  price: s.price,
+  price: entry.data.price,
   originalPrice: undefined,
   power: undefined,
   cooling: undefined,
@@ -24,11 +25,11 @@ const products = montazaServisServices.map(s => ({
   energyClass: undefined,
   seer: undefined,
   scop: undefined,
-  features: s.included, // Use included items as features
-  badge: s.badge,
-  image: s.image,
-  inStock: s.inStock,
-  description: s.subcategory || s.category
+  features: entry.data.includes, // Use included items as features
+  badge: entry.data.badge,
+  image: entry.data.image,
+  inStock: entry.data.available,
+  description: entry.data.duration
 }));
 
 // Get categories for filters

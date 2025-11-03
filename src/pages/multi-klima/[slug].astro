@@ -126,7 +126,7 @@ const relatedProducts = allProducts
 
 // SEO meta data
 const pageTitle = `${product.manufacturer} ${product.name} - RDM Klimatizacija`;
-const pageDescription = `${product.manufacturer} ${product.model} - Multi klima sistem, energetski razred ${product.specifications.energyClass}. Cijena: ${product.price}€`;
+const pageDescription = `${product.manufacturer} ${product.model} - Multi klima sistem, energetski razred ${product.specifications.energyClass}.${product.price ? ` Cijena: ${product.price}€` : ''}`;
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>

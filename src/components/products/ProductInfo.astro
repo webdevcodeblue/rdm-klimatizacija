@@ -5,7 +5,7 @@ export interface Props {
 
 const { product } = Astro.props;
 
-const discountPercentage = product.originalPrice
+const discountPercentage = product.originalPrice && product.price
   ? Math.round((1 - product.price / product.originalPrice) * 100)
   : 0;
 ---
@@ -136,18 +136,20 @@ const discountPercentage = product.originalPrice
 
   <!-- Price Section -->
   <div class="product-info__pricing">
-    <div class="pricing-box">
-      {product.originalPrice && (
-        <div class="pricing-box__discount">
-          <span class="pricing-box__original">{product.originalPrice.toLocaleString('hr-HR')},00 €</span>
-          <span class="pricing-box__badge">-{discountPercentage}%</span>
+    {product.price && (
+      <div class="pricing-box">
+        {product.originalPrice && (
+          <div class="pricing-box__discount">
+            <span class="pricing-box__original">{product.originalPrice.toLocaleString('hr-HR')},00 €</span>
+            <span class="pricing-box__badge">-{discountPercentage}%</span>
+          </div>
+        )}
+        <div class="pricing-box__current">
+          <span class="pricing-box__price">{product.price.toLocaleString('hr-HR')},00 €</span>
+          <span class="pricing-box__vat">Cijena s PDV-om</span>
         </div>
-      )}
-      <div class="pricing-box__current">
-        <span class="pricing-box__price">{product.price.toLocaleString('hr-HR')},00 €</span>
-        <span class="pricing-box__vat">Cijena s PDV-om</span>
       </div>
-    </div>
+    )}
 
     {product.inStock ? (
       <div class="stock-status stock-status--available">

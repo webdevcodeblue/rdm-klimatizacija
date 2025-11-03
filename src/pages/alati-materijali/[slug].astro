@@ -114,7 +114,7 @@ const relatedProducts = allProducts
 
 // SEO meta data
 const pageTitle = `${product.manufacturer ? product.manufacturer + ' ' : ''}${product.name} - RDM Klimatizacija`;
-const pageDescription = `${product.manufacturer ? product.manufacturer + ' ' : ''}${product.model || ''} - ${product.description ? product.description.substring(0, 150) : 'Alati i materijali za klima uređaje'}. Cijena: ${product.price > 0 ? product.price + '€' : 'Na upit'}`;
+const pageDescription = `${product.manufacturer ? product.manufacturer + ' ' : ''}${product.model || ''} - ${product.description ? product.description.substring(0, 150) : 'Alati i materijali za klima uređaje'}${product.price ? `. Cijena: ${product.price}€` : ''}`;
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>

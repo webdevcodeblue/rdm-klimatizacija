@@ -1,6 +1,14 @@
 import { defineCollection, z } from 'astro:content';
 
 // ========================================
+// HELPER - Pretvara prazne stringove u undefined za number polja
+// ========================================
+// Decap CMS sprema prazan string ("") kada korisnik obriše number polje
+// Ova funkcija to automatski pretvara u undefined
+const optionalNumber = (schema: z.ZodNumber) =>
+  z.preprocess((val) => val === "" ? undefined : val, schema.optional());
+
+// ========================================
 // PRODUCT SCHEMA - Univerzalna schema za sve proizvode
 // ========================================
 
@@ -16,14 +24,14 @@ const productSchema = z.object({
     'alati-materijali',
     'montaza-servis'
   ]),
-  price: z.number().positive(),
   image: z.string(),
   inStock: z.boolean().default(true),
 
   // ==================== OPCIONA POLJA ====================
   model: z.string().optional(),
-  originalPrice: z.number().positive().optional(),
-  discount: z.number().min(0).max(100).optional(),
+  price: optionalNumber(z.number().positive()), // Cijena je opciona za sve proizvode
+  originalPrice: optionalNumber(z.number().positive()),
+  discount: optionalNumber(z.number().min(0).max(100)),
   warranty: z.string().optional(),
   description: z.string().optional(),
   badge: z.enum(['Akcija', 'Novo', 'Premium', 'Bestseller', 'Wi-Fi']).optional(),
@@ -39,15 +47,15 @@ const productSchema = z.object({
     airflow: z.string().optional(), // Za MIKROKLIMA - protok zraka
     area: z.string().optional(),
     energyClass: z.enum(['A+++', 'A++', 'A+', 'A', 'B', 'C', 'D']).optional(),
-    seer: z.number().optional(),
-    scop: z.number().optional(),
+    seer: optionalNumber(z.number()),
+    scop: optionalNumber(z.number()),
     soundLevel: z.string().optional(),
     refrigerant: z.string().optional(),
     // Multi-klima specific fields
     units: z.string().optional(), // Broj jedinica
     totalPower: z.string().optional(), // Ukupna snaga
     // Dizalice topline specific fields
-    cop: z.number().optional(), // COP za dizalice topline
+    cop: optionalNumber(z.number()), // COP za dizalice topline
     temperature: z.string().optional(),
     tankVolume: z.string().optional(), // Volumen bojlera
     // Alati i materijali specific fields
@@ -95,11 +103,11 @@ const serviceSchema = z.object({
   // ==================== OBAVEZNA POLJA ====================
   name: z.string(),
   category: z.literal('montaza-servis'),
-  price: z.number().positive(),
   image: z.string(),
   available: z.boolean().default(true),
 
   // ==================== OPCIONA POLJA ====================
+  price: optionalNumber(z.number().positive()), // Cijena je opciona
   duration: z.string().optional(), // Trajanje usluge
   badge: z.enum(['Hitno', 'Popularno', 'Premium', 'Paket']).optional(),
 

@@ -6,7 +6,7 @@ export interface Product {
   name: string;
   manufacturer: string;
   category: string;
-  price: number;
+  price?: number;
   originalPrice?: number;
   power: string;
   cooling: string;
@@ -46,7 +46,7 @@ const getCategoryPath = (category: string) => {
 
 const productHref = product.href || `${getCategoryPath(product.category)}/${product.slug}`;
 
-const discountPercentage = product.originalPrice
+const discountPercentage = product.originalPrice && product.price
   ? Math.round((1 - product.price / product.originalPrice) * 100)
   : 0;
 ---
@@ -271,13 +271,15 @@ const discountPercentage = product.originalPrice
         </span>
 
         <div class="product-card__footer">
-          <div class="product-card__price">
-            {product.originalPrice && (
-              <span class="price-original">{product.originalPrice.toLocaleString('hr-HR')},00 €</span>
-            )}
-            <span class="price-current">{product.price.toLocaleString('hr-HR')},00 €</span>
-            <span class="price-vat">Cijena s PDV-om</span>
-          </div>
+          {product.price && (
+            <div class="product-card__price">
+              {product.originalPrice && (
+                <span class="price-original">{product.originalPrice.toLocaleString('hr-HR')},00 €</span>
+              )}
+              <span class="price-current">{product.price.toLocaleString('hr-HR')},00 €</span>
+              <span class="price-vat">Cijena s PDV-om</span>
+            </div>
+          )}
 
           <div class="product-card__actions">
             <button class="btn btn--primary btn--icon" data-product-id={product.id} data-action="inquiry">
@@ -300,13 +302,15 @@ const discountPercentage = product.originalPrice
         <span class={`product-card__stock ${product.inStock ? 'product-card__stock--available' : 'product-card__stock--unavailable'}`}>
           {product.inStock ? 'Proizvod je dostupan' : 'Proizvod nije dostupan'}
         </span>
-        <div class="product-card__price">
-          {product.originalPrice && (
-            <span class="price-original">{product.originalPrice.toLocaleString('hr-HR')}€</span>
-          )}
-          <span class="price-current">{product.price.toLocaleString('hr-HR')}€</span>
-          <span class="price-vat">s PDV-om</span>
-        </div>
+        {product.price && (
+          <div class="product-card__price">
+            {product.originalPrice && (
+              <span class="price-original">{product.originalPrice.toLocaleString('hr-HR')}€</span>
+            )}
+            <span class="price-current">{product.price.toLocaleString('hr-HR')}€</span>
+            <span class="price-vat">s PDV-om</span>
+          </div>
+        )}
 
         <div class="product-card__actions">
           <button class="btn btn--primary btn--icon" data-product-id={product.id} data-action="inquiry">

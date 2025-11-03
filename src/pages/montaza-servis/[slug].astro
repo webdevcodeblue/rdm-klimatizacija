@@ -8,7 +8,7 @@ import { getCollection, getEntry } from 'astro:content';
 
 // Generate static paths for all services
 export async function getStaticPaths() {
-  const services = await getCollection('services');
+  const services = await getCollection('montaza-servis');
   return services.map((service) => ({
     params: { slug: service.slug },
     props: { service }
@@ -21,7 +21,7 @@ let entry = Astro.props.service;
 // SSR fallback - fetch service manually if not in props (dev mode)
 if (!entry) {
   const { slug } = Astro.params;
-  entry = await getEntry('services', slug);
+  entry = await getEntry('montaza-servis', slug);
 
   // If still not found, redirect to 404
   if (!entry) {
@@ -35,11 +35,11 @@ const rawService = entry.data;
 const service = {
   id: entry.slug,
   slug: entry.slug,
-  name: rawService.title,
-  description: rawService.description,
+  name: rawService.name,
+  description: entry.body || '',
   image: rawService.image,
   images: [rawService.image],
-  price: rawService.price ? parseFloat(rawService.price) : 0,
+  price: rawService.price,
   category: 'montaza',
   included: rawService.features,
   badge: 'Usluga',
@@ -47,7 +47,7 @@ const service = {
 };
 
 // Get all services for related services section
-const allServices = await getCollection('services');
+const allServices = await getCollection('montaza-servis');
 
 // Get related services (exclude current one)
 const relatedServices = allServices
@@ -56,8 +56,8 @@ const relatedServices = allServices
   .map(s => ({
     id: s.slug,
     slug: s.slug,
-    name: s.data.title,
-    price: s.data.price ? parseFloat(s.data.price) : 0,
+    name: s.data.name,
+    price: s.data.price,
     image: s.data.image,
     images: [s.data.image],
     href: `/montaza-servis/${s.slug}`,
@@ -66,7 +66,7 @@ const relatedServices = allServices
 
 // SEO meta data
 const pageTitle = `${service.name} - RDM Klimatizacija`;
-const pageDescription = `${service.description.substring(0, 150)}... Cijena: ${service.price > 0 ? service.price + '€' : 'Na upit'}`;
+const pageDescription = `${service.description ? service.description.substring(0, 150) + '...' : service.name}${service.price ? ` Cijena: ${service.price}€` : ''}`;
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>
@@ -139,12 +139,14 @@ const pageDescription = `${service.description.substring(0, 150)}... Cijena: ${s
 
               <!-- Pricing -->
               <div class="service-info__pricing">
-                <div class="pricing-box">
-                  <div class="pricing-box__main">
-                    <span class="pricing-box__label">Cijena:</span>
-                    <span class="pricing-box__price">{service.price > 0 ? service.price.toLocaleString('hr-HR') + ',00 €' : 'Na upit'}</span>
+                {service.price && (
+                  <div class="pricing-box">
+                    <div class="pricing-box__main">
+                      <span class="pricing-box__label">Cijena:</span>
+                      <span class="pricing-box__price">{service.price.toLocaleString('hr-HR')},00 €</span>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <div class="stock-status stock-status--available">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -202,7 +204,9 @@ const pageDescription = `${service.description.substring(0, 150)}... Cijena: ${s
                 </div>
                 <div class="related-card__content">
                   <h3 class="related-card__title">{relService.name}</h3>
-                  <div class="related-card__price">{relService.price > 0 ? relService.price + ',00 €' : 'Na upit'}</div>
+                  {relService.price && (
+                    <div class="related-card__price">{relService.price.toLocaleString('hr-HR')},00 €</div>
+                  )}
                 </div>
               </a>
             ))}

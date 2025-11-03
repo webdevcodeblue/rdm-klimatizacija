@@ -7,23 +7,37 @@ import ProductInfo from '../../components/products/ProductInfo.astro';
 import ProductTabs from '../../components/products/ProductTabs.astro';
 import RelatedProducts from '../../components/products/RelatedProducts.astro';
 import InquiryModal from '../../components/InquiryModal.astro';
-import { alatProducts } from '../../data/products/alati-materijali';
+import { getCollection, getEntry } from 'astro:content';
 
-// Get slug from URL params
-const { slug } = Astro.params;
-
-// Find product by slug
-const rawProduct = alatProducts.find(p => p.slug === slug);
-
-// If product not found, return 404
-if (!rawProduct) {
-  return Astro.redirect('/404');
+// Generate static paths for all products
+export async function getStaticPaths() {
+  const products = await getCollection('alati-materijali');
+  return products.map((product) => ({
+    params: { slug: product.slug },
+    props: { product }
+  }));
 }
 
-// Convert new data structure to format expected by components
+// Get product from props or fetch manually for SSR mode
+let entry = Astro.props.product;
+
+// SSR fallback - fetch product manually if not in props (dev mode)
+if (!entry) {
+  const { slug } = Astro.params;
+  entry = await getEntry('alati-materijali', slug);
+
+  // If still not found, redirect to 404
+  if (!entry) {
+    return Astro.redirect('/404');
+  }
+}
+
+const rawProduct = entry.data;
+
+// Convert Content Collection data to format expected by components
 const product = {
-  slug: rawProduct.slug,
-  id: rawProduct.id,
+  slug: entry.slug,
+  id: entry.slug,
   name: rawProduct.name,
   manufacturer: rawProduct.manufacturer,
   model: rawProduct.model,
@@ -32,7 +46,7 @@ const product = {
   price: rawProduct.price,
   originalPrice: rawProduct.originalPrice,
   warranty: rawProduct.warranty,
-  images: rawProduct.images || [rawProduct.image],
+  images: rawProduct.images.length > 0 ? rawProduct.images : [rawProduct.image],
   specifications: {
     type: rawProduct.specifications?.type,
     compatibility: rawProduct.specifications?.compatibility,
@@ -46,7 +60,7 @@ const product = {
     quantity: rawProduct.specifications?.quantity
   },
   features: rawProduct.features,
-  description: rawProduct.description,
+  description: entry.body,
   technicalSpecs: {
     general: {
       'Tip proizvoda': rawProduct.specifications?.type || 'N/A',
@@ -73,31 +87,28 @@ const product = {
   code: rawProduct.code
 };
 
-// Get related products (same subcategory or all products, exclude current one)
-const allProducts = alatProducts.map(p => ({
-  id: p.id,
-  slug: p.slug,
-  name: p.name,
-  manufacturer: p.manufacturer,
-  model: p.model,
-  price: p.price,
-  originalPrice: p.originalPrice,
-  image: p.image,
-  images: p.images || [p.image],
-  subcategory: p.subcategory,
-  specifications: p.specifications,
-  features: p.features,
-  inStock: p.inStock,
-  badge: p.badge
-}));
+// Get all products for related products section
+const allProducts = await getCollection('alati-materijali');
 
 // Get related products - show 4 different products (exclude current one)
 const relatedProducts = allProducts
-  .filter(p => p.id !== product.id) // Exclude current product
+  .filter(p => p.slug !== entry.slug) // Exclude current product
   .slice(0, 4) // Show 4 related products
   .map(p => ({
-    ...p,
-    images: p.images || [p.image],
+    id: p.slug,
+    slug: p.slug,
+    name: p.data.name,
+    manufacturer: p.data.manufacturer,
+    model: p.data.model,
+    price: p.data.price,
+    originalPrice: p.data.originalPrice,
+    image: p.data.image,
+    images: p.data.images.length > 0 ? p.data.images : [p.data.image],
+    subcategory: p.data.subcategory,
+    specifications: p.data.specifications,
+    features: p.data.features,
+    inStock: p.data.inStock,
+    badge: p.data.badge,
     href: `/alati-materijali/${p.slug}`
   }));
 

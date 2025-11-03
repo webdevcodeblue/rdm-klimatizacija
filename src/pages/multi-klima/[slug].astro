@@ -7,23 +7,37 @@ import ProductInfo from '../../components/products/ProductInfo.astro';
 import ProductTabs from '../../components/products/ProductTabs.astro';
 import RelatedProducts from '../../components/products/RelatedProducts.astro';
 import InquiryModal from '../../components/InquiryModal.astro';
-import { multiKlimaProducts } from '../../data/products/multi-klima';
+import { getCollection, getEntry } from 'astro:content';
 
-// Get slug from URL params
-const { slug } = Astro.params;
-
-// Find product by slug
-const rawProduct = multiKlimaProducts.find(p => p.slug === slug);
-
-// If product not found, return 404
-if (!rawProduct) {
-  return Astro.redirect('/404');
+// Generate static paths for all products
+export async function getStaticPaths() {
+  const products = await getCollection('multi-klima');
+  return products.map((product) => ({
+    params: { slug: product.slug },
+    props: { product }
+  }));
 }
 
-// Convert new data structure to format expected by components
+// Get product from props or fetch manually for SSR mode
+let entry = Astro.props.product;
+
+// SSR fallback - fetch product manually if not in props (dev mode)
+if (!entry) {
+  const { slug } = Astro.params;
+  entry = await getEntry('multi-klima', slug);
+
+  // If still not found, redirect to 404
+  if (!entry) {
+    return Astro.redirect('/404');
+  }
+}
+
+const rawProduct = entry.data;
+
+// Convert Content Collection data to format expected by components
 const product = {
-  slug: rawProduct.slug,
-  id: rawProduct.id,
+  slug: entry.slug,
+  id: entry.slug,
   name: rawProduct.name,
   manufacturer: rawProduct.manufacturer,
   model: rawProduct.model,
@@ -31,94 +45,88 @@ const product = {
   price: rawProduct.price,
   originalPrice: rawProduct.originalPrice,
   warranty: rawProduct.warranty,
-  images: rawProduct.images || [rawProduct.image], // Use images array or single image
+  images: rawProduct.images.length > 0 ? rawProduct.images : [rawProduct.image],
   specifications: {
-    cooling: rawProduct.specifications.cooling,
-    heating: rawProduct.specifications.heating,
-    area: rawProduct.specifications.area,
-    energyClass: rawProduct.specifications.energyClass,
-    seer: rawProduct.specifications.seer,
-    scop: rawProduct.specifications.scop,
-    soundLevel: rawProduct.specifications.soundLevel,
-    refrigerant: rawProduct.specifications.refrigerant,
+    cooling: rawProduct.specifications?.cooling,
+    heating: rawProduct.specifications?.heating,
+    area: rawProduct.specifications?.area,
+    energyClass: rawProduct.specifications?.energyClass,
+    seer: rawProduct.specifications?.seer,
+    scop: rawProduct.specifications?.scop,
+    soundLevel: rawProduct.specifications?.soundLevel,
+    refrigerant: rawProduct.specifications?.refrigerant,
+    units: rawProduct.specifications?.units,
+    totalPower: rawProduct.specifications?.totalPower,
     dimensions: {
-      indoor: rawProduct.specifications.dimensions?.indoor || 'N/A',
-      outdoor: rawProduct.specifications.dimensions?.outdoor || 'N/A'
+      indoor: rawProduct.specifications?.dimensions?.indoor || 'N/A',
+      outdoor: rawProduct.specifications?.dimensions?.outdoor || 'N/A'
     },
     weight: {
-      indoor: rawProduct.specifications.weight?.indoor || 'N/A',
-      outdoor: rawProduct.specifications.weight?.outdoor || 'N/A'
+      indoor: rawProduct.specifications?.weight?.indoor || 'N/A',
+      outdoor: rawProduct.specifications?.weight?.outdoor || 'N/A'
     }
   },
   features: rawProduct.features,
-  description: rawProduct.description,
+  description: entry.body,
   technicalSpecs: {
     general: {
-      'Tip uređaja': 'Multi split inverter sustav',
+      'Tip uređaja': 'Multi klima sistem',
       'Namjena': 'Hlađenje i grijanje',
-      'Energetska klasa hlađenja': rawProduct.specifications.energyClass,
-      'Energetska klasa grijanja': rawProduct.specifications.energyClass,
+      'Energetska klasa hlađenja': rawProduct.specifications?.energyClass || 'N/A',
+      'Energetska klasa grijanja': rawProduct.specifications?.energyClass || 'N/A',
+      'Broj unutarnjih jedinica': rawProduct.specifications?.units || 'N/A'
     },
     performance: {
-      'Kapacitet hlađenja': rawProduct.specifications.cooling,
-      'Kapacitet grijanja': rawProduct.specifications.heating,
-      'SEER': rawProduct.specifications.seer.toString(),
-      'SCOP': rawProduct.specifications.scop.toString(),
-      'Preporučena površina': rawProduct.specifications.area
+      'Kapacitet hlađenja': rawProduct.specifications?.cooling || 'N/A',
+      'Kapacitet grijanja': rawProduct.specifications?.heating || 'N/A',
+      'Ukupna snaga': rawProduct.specifications?.totalPower || rawProduct.specifications?.power || 'N/A',
+      'SEER': rawProduct.specifications?.seer?.toString() || 'N/A',
+      'SCOP': rawProduct.specifications?.scop?.toString() || 'N/A',
+      'Preporučena površina': rawProduct.specifications?.area || 'N/A'
     },
     technical: {
-      'Rashladni plin': rawProduct.specifications.refrigerant,
+      'Rashladni plin': rawProduct.specifications?.refrigerant || 'N/A',
       'Napajanje': '220-240V / 50Hz',
-      'Bučnost unutarnje': rawProduct.specifications.soundLevel
+      'Bučnost unutarnje': rawProduct.specifications?.soundLevel || 'N/A'
     },
     dimensions: {
-      'Unutarnja jedinica': rawProduct.specifications.dimensions?.indoor || 'N/A',
-      'Vanjska jedinica': rawProduct.specifications.dimensions?.outdoor || 'N/A',
-      'Težina unutarnje': rawProduct.specifications.weight?.indoor || 'N/A',
-      'Težina vanjske': rawProduct.specifications.weight?.outdoor || 'N/A'
+      'Unutarnja jedinica': rawProduct.specifications?.dimensions?.indoor || 'N/A',
+      'Vanjska jedinica': rawProduct.specifications?.dimensions?.outdoor || 'N/A',
+      'Težina unutarnje': rawProduct.specifications?.weight?.indoor || 'N/A',
+      'Težina vanjske': rawProduct.specifications?.weight?.outdoor || 'N/A'
     }
   },
   inStock: rawProduct.inStock,
   badge: rawProduct.badge
 };
 
-// Get related products (same manufacturer, different model)
-const allProducts = multiKlimaProducts.map(p => ({
-  id: p.id,
-  slug: p.slug,
-  name: p.name,
-  manufacturer: p.manufacturer,
-  model: p.model,
-  price: p.price,
-  originalPrice: p.originalPrice,
-  image: p.image,
-  images: p.images || [p.image],
-  specifications: p.specifications,
-  features: p.features,
-  inStock: p.inStock,
-  badge: p.badge
-}));
+// Get all products for related products section
+const allProducts = await getCollection('multi-klima');
 
 // Get related products - show 4 different products (exclude current one)
 const relatedProducts = allProducts
-  .filter(p => p.id !== product.id) // Exclude current product
+  .filter(p => p.slug !== entry.slug) // Exclude current product
   .slice(0, 4) // Show 4 related products
   .map(p => ({
-    ...p,
-    images: p.images || [p.image],
-    href: `/multi-klima/${p.slug}` // Add explicit href for multi-klima
+    id: p.slug,
+    slug: p.slug,
+    name: p.data.name,
+    manufacturer: p.data.manufacturer,
+    model: p.data.model,
+    price: p.data.price,
+    originalPrice: p.data.originalPrice,
+    image: p.data.image,
+    images: p.data.images.length > 0 ? p.data.images : [p.data.image],
+    specifications: p.data.specifications,
+    features: p.data.features,
+    inStock: p.data.inStock,
+    badge: p.data.badge,
+    href: `/multi-klima/${p.slug}`
   }));
 
 // SEO meta data
-const pageTitle = `${product.manufacturer} ${product.name} - Multi Klima | RDM Klimatizacija`;
-const pageDescription = `${product.manufacturer} ${product.model} - Multi split sustav - ${product.specifications.cooling} hlađenje, ${product.specifications.heating} grijanje, energetski razred ${product.specifications.energyClass}. Cijena: ${product.price}€`;
-
-// Generate static paths
-export async function getStaticPaths() {
-  return multiKlimaProducts.map(product => ({
-    params: { slug: product.slug }
-  }));
-}
+const pageTitle = `${product.manufacturer} ${product.name} - RDM Klimatizacija`;
+const pageDescription = `${product.manufacturer} ${product.model} - Multi klima sistem, energetski razred ${product.specifications.energyClass}. Cijena: ${product.price}€`;
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>
@@ -133,7 +141,7 @@ export async function getStaticPaths() {
             <a href="/" class="breadcrumb__link">Početna</a>
           </li>
           <li class="breadcrumb__item">
-            <a href="/multi-klima" class="breadcrumb__link">Multi Klima</a>
+            <a href="/multi-klima" class="breadcrumb__link">Multi klima</a>
           </li>
           <li class="breadcrumb__item">
             <span class="breadcrumb__current">{product.manufacturer} {product.model}</span>

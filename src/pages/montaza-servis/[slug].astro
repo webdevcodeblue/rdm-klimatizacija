@@ -4,37 +4,69 @@ import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import ProductGallery from '../../components/products/ProductGallery.astro';
 import InquiryModal from '../../components/InquiryModal.astro';
-import { montazaServisServices } from '../../data/services/montaza-servis';
+import { getCollection, getEntry } from 'astro:content';
 
-// Get slug from URL params
-const { slug } = Astro.params;
-
-// Find service by slug
-const service = montazaServisServices.find(s => s.slug === slug);
-
-// If service not found, return 404
-if (!service) {
-  return Astro.redirect('/404');
+// Generate static paths for all services
+export async function getStaticPaths() {
+  const services = await getCollection('services');
+  return services.map((service) => ({
+    params: { slug: service.slug },
+    props: { service }
+  }));
 }
 
+// Get service from props or fetch manually for SSR mode
+let entry = Astro.props.service;
+
+// SSR fallback - fetch service manually if not in props (dev mode)
+if (!entry) {
+  const { slug } = Astro.params;
+  entry = await getEntry('services', slug);
+
+  // If still not found, redirect to 404
+  if (!entry) {
+    return Astro.redirect('/404');
+  }
+}
+
+const rawService = entry.data;
+
+// Convert Content Collection data to format expected by components
+const service = {
+  id: entry.slug,
+  slug: entry.slug,
+  name: rawService.title,
+  description: rawService.description,
+  image: rawService.image,
+  images: [rawService.image],
+  price: rawService.price ? parseFloat(rawService.price) : 0,
+  category: 'montaza',
+  included: rawService.features,
+  badge: 'Usluga',
+  inStock: true
+};
+
+// Get all services for related services section
+const allServices = await getCollection('services');
+
 // Get related services (exclude current one)
-const relatedServices = montazaServisServices
-  .filter(s => s.id !== service.id)
+const relatedServices = allServices
+  .filter(s => s.slug !== entry.slug)
   .slice(0, 3)
   .map(s => ({
-    id: s.id,
+    id: s.slug,
     slug: s.slug,
-    name: s.name,
-    price: s.price,
-    image: s.image,
-    images: s.images || [s.image],
+    name: s.data.title,
+    price: s.data.price ? parseFloat(s.data.price) : 0,
+    image: s.data.image,
+    images: [s.data.image],
     href: `/montaza-servis/${s.slug}`,
-    inStock: s.inStock
+    inStock: true
   }));
 
 // SEO meta data
 const pageTitle = `${service.name} - RDM Klimatizacija`;
-const pageDescription = `${service.description.substring(0, 150)}... Cijena: ${service.price}€`;
+const pageDescription = `${service.description.substring(0, 150)}... Cijena: ${service.price > 0 ? service.price + '€' : 'Na upit'}`;
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>
@@ -64,7 +96,7 @@ const pageDescription = `${service.description.substring(0, 150)}... Cijena: ${s
         <div class="service-layout">
           <!-- Left: Gallery -->
           <div class="service-layout__gallery">
-            <ProductGallery images={service.images || [service.image]} productName={service.name} />
+            <ProductGallery images={service.images} productName={service.name} />
           </div>
 
           <!-- Right: Service Info -->
@@ -93,7 +125,7 @@ const pageDescription = `${service.description.substring(0, 150)}... Cijena: ${s
                 <div class="service-info__included">
                   <h3>Što je uključeno u cijenu:</h3>
                   <ul class="included-list">
-                    {service.included.map((item: string) => (
+                    {service.included.map((item) => (
                       <li class="included-list__item">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                           <polyline points="20 6 9 17 4 12"></polyline>
@@ -105,93 +137,22 @@ const pageDescription = `${service.description.substring(0, 150)}... Cijena: ${s
                 </div>
               )}
 
-              <!-- Additional Costs -->
-              {service.additionalCosts && service.additionalCosts.length > 0 && (
-                <div class="service-info__additional">
-                  <h3>Dodatni troškovi:</h3>
-                  <div class="additional-costs">
-                    {service.additionalCosts.map(cost => (
-                      <div class="cost-item">
-                        <span class="cost-item__name">{cost.name}</span>
-                        <span class="cost-item__price">+{cost.price}€</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <!-- Notes -->
-              {service.notes && service.notes.length > 0 && (
-                <div class="service-info__notes">
-                  <h3>Važne napomene:</h3>
-                  <ul class="notes-list">
-                    {service.notes.map((note: string) => (
-                      <li class="notes-list__item">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <circle cx="12" cy="12" r="10"></circle>
-                          <line x1="12" y1="16" x2="12" y2="12"></line>
-                          <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                        </svg>
-                        <span>{note}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
               <!-- Pricing -->
               <div class="service-info__pricing">
                 <div class="pricing-box">
                   <div class="pricing-box__main">
-                    <span class="pricing-box__label">Cijena jednokratnog plaćanja:</span>
-                    <span class="pricing-box__price">{service.price.toLocaleString('hr-HR')},00 €</span>
+                    <span class="pricing-box__label">Cijena:</span>
+                    <span class="pricing-box__price">{service.price > 0 ? service.price.toLocaleString('hr-HR') + ',00 €' : 'Na upit'}</span>
                   </div>
-
-                  {(service.priceInstallments2_12 || service.priceInstallments13_24) && (
-                    <div class="pricing-box__installments">
-                      {service.priceInstallments2_12 && (
-                        <div class="installment-option">
-                          <span class="installment-option__label">Kartice 2-12 rata:</span>
-                          <span class="installment-option__price">{service.priceInstallments2_12.toLocaleString('hr-HR')} €</span>
-                        </div>
-                      )}
-                      {service.priceInstallments13_24 && (
-                        <div class="installment-option">
-                          <span class="installment-option__label">Kartice 13-24 rate:</span>
-                          <span class="installment-option__price">{service.priceInstallments13_24.toLocaleString('hr-HR')} €</span>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {service.warranty && (
-                    <div class="pricing-box__warranty">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                      </svg>
-                      <span>Jamstvo: {service.warranty}</span>
-                    </div>
-                  )}
                 </div>
 
-                {service.inStock ? (
-                  <div class="stock-status stock-status--available">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                      <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                    </svg>
-                    <span>Usluga je dostupna</span>
-                  </div>
-                ) : (
-                  <div class="stock-status stock-status--unavailable">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <line x1="12" y1="8" x2="12" y2="12"></line>
-                      <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                    </svg>
-                    <span>Trenutno nedostupno</span>
-                  </div>
-                )}
+                <div class="stock-status stock-status--available">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                  </svg>
+                  <span>Usluga je dostupna</span>
+                </div>
               </div>
 
               <!-- Action Buttons -->
@@ -241,7 +202,7 @@ const pageDescription = `${service.description.substring(0, 150)}... Cijena: ${s
                 </div>
                 <div class="related-card__content">
                   <h3 class="related-card__title">{relService.name}</h3>
-                  <div class="related-card__price">{relService.price},00 €</div>
+                  <div class="related-card__price">{relService.price > 0 ? relService.price + ',00 €' : 'Na upit'}</div>
                 </div>
               </a>
             ))}
@@ -374,9 +335,7 @@ const pageDescription = `${service.description.substring(0, 150)}... Cijena: ${s
     line-height: 1.7;
   }
 
-  .service-info__included h3,
-  .service-info__additional h3,
-  .service-info__notes h3 {
+  .service-info__included h3 {
     font-size: var(--text-lg);
     font-weight: var(--font-semibold);
     color: var(--text-primary);
@@ -402,59 +361,6 @@ const pageDescription = `${service.description.substring(0, 150)}... Cijena: ${s
 
   .included-list__item svg {
     color: var(--color-green-600);
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-
-  .additional-costs {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-  }
-
-  .cost-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--space-3);
-    background: var(--color-gray-50);
-    border-radius: var(--border-radius-base);
-  }
-
-  .cost-item__name {
-    color: var(--text-secondary);
-    font-size: var(--text-sm);
-  }
-
-  .cost-item__price {
-    color: var(--color-primary);
-    font-weight: var(--font-semibold);
-    font-size: var(--text-base);
-  }
-
-  .notes-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .notes-list__item {
-    display: flex;
-    align-items: flex-start;
-    gap: var(--space-2);
-    color: var(--text-secondary);
-    font-size: var(--text-sm);
-    padding: var(--space-2);
-    background: var(--color-yellow-50);
-    border-left: 3px solid var(--color-yellow-400);
-    border-radius: var(--border-radius-base);
-  }
-
-  .notes-list__item svg {
-    color: var(--color-yellow-600);
     flex-shrink: 0;
     margin-top: 2px;
   }
@@ -488,43 +394,6 @@ const pageDescription = `${service.description.substring(0, 150)}... Cijena: ${s
     line-height: 1;
   }
 
-  .pricing-box__installments {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-    padding-top: var(--space-3);
-    border-top: 1px solid var(--color-blue-200);
-  }
-
-  .installment-option {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .installment-option__label {
-    color: var(--color-gray-600);
-    font-size: var(--text-sm);
-  }
-
-  .installment-option__price {
-    color: var(--text-primary);
-    font-weight: var(--font-semibold);
-    font-size: var(--text-base);
-  }
-
-  .pricing-box__warranty {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-2) var(--space-3);
-    background: var(--color-blue-100);
-    color: var(--color-blue-700);
-    border-radius: var(--border-radius-md);
-    font-size: var(--text-sm);
-    font-weight: var(--font-medium);
-  }
-
   .stock-status {
     display: flex;
     align-items: center;
@@ -538,11 +407,6 @@ const pageDescription = `${service.description.substring(0, 150)}... Cijena: ${s
   .stock-status--available {
     background: var(--color-green-100);
     color: var(--color-green-700);
-  }
-
-  .stock-status--unavailable {
-    background: var(--color-red-100);
-    color: var(--color-red-700);
   }
 
   /* Action Buttons */

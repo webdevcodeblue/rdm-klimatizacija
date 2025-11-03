@@ -18,8 +18,20 @@ export async function getStaticPaths() {
   }));
 }
 
-// Get product from props
-const { product: entry } = Astro.props;
+// Get product from props or fetch manually for SSR mode
+let entry = Astro.props.product;
+
+// SSR fallback - fetch product manually if not in props (dev mode)
+if (!entry) {
+  const { slug } = Astro.params;
+  entry = await getEntry('klima-uredaji', slug);
+
+  // If still not found, redirect to 404
+  if (!entry) {
+    return Astro.redirect('/404');
+  }
+}
+
 const rawProduct = entry.data;
 
 // Convert Content Collection data to format expected by components

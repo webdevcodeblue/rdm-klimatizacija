@@ -2,21 +2,20 @@
 // ProductFilter komponenta za filtriranje proizvoda
 export interface Props {
   manufacturers?: string[];
-  categories?: string[];
+  categoryType?: 'climate' | 'microclimate'; // Tip kategorije za prilagodbu filtera
   currentFilters?: {
     manufacturer?: string;
-    category?: string;
     power?: string;
     area?: string;
+    airflow?: string; // Za mikroklima
     priceMin?: number;
     priceMax?: number;
-    energyClass?: string;
   };
 }
 
-const { manufacturers = [], categories = [], currentFilters = {} } = Astro.props;
+const { manufacturers = [], categoryType = 'climate', currentFilters = {} } = Astro.props;
 
-// Opcije za filtriranje
+// Opcije za filtriranje - SNAGA (za Climate kategorije)
 const powerOptions = [
   { value: '2-2.5', label: '2.0 - 2.5 kW' },
   { value: '2.5-3.5', label: '2.5 - 3.5 kW' },
@@ -26,6 +25,7 @@ const powerOptions = [
   { value: '10+', label: '10.0+ kW' }
 ];
 
+// Opcije za filtriranje - PROSTOR
 const areaOptions = [
   { value: '0-20', label: 'do 20 m²' },
   { value: '20-30', label: '20 - 30 m²' },
@@ -35,28 +35,22 @@ const areaOptions = [
   { value: '80+', label: '80+ m²' }
 ];
 
-const energyClassOptions = [
-  { value: 'A+++', label: 'A+++' },
-  { value: 'A++', label: 'A++' },
-  { value: 'A+', label: 'A+' },
-  { value: 'A', label: 'A' }
-];
-
-const sortOptions = [
-  { value: 'newest', label: 'Najnovije' },
-  { value: 'price-asc', label: 'Cijena: Najniža' },
-  { value: 'price-desc', label: 'Cijena: Najviša' },
-  { value: 'name-asc', label: 'Naziv: A-Z' },
-  { value: 'name-desc', label: 'Naziv: Z-A' },
-  { value: 'power-asc', label: 'Snaga: Rastuća' },
-  { value: 'power-desc', label: 'Snaga: Opadajuća' }
+// Opcije za filtriranje - PROTOK ZRAKA (za Mikroklima)
+const airflowOptions = [
+  { value: '0-200', label: 'do 200 m³/h' },
+  { value: '200-400', label: '200 - 400 m³/h' },
+  { value: '400-600', label: '400 - 600 m³/h' },
+  { value: '600-800', label: '600 - 800 m³/h' },
+  { value: '800-1000', label: '800 - 1000 m³/h' },
+  { value: '1000-2000', label: '1000 - 2000 m³/h' },
+  { value: '2000+', label: '2000+ m³/h' }
 ];
 ---
 
 <aside class="product-filter" id="productFilter">
   <div class="filter__header">
     <h3 class="filter__title">Filtriraj proizvode</h3>
-    <button class="filter__clear" id="clearFilters">
+    <button class="filter__clear" id="clearFilters" type="button">
       Očisti filtere
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -66,58 +60,44 @@ const sortOptions = [
   </div>
 
   <form class="filter__form" id="filterForm">
-    <!-- Kategorija -->
-    <div class="filter__group">
-      <h4 class="filter__group-title">Kategorija</h4>
-      <div class="filter__options">
-        {categories.map((category) => (
-          <label class="filter__checkbox">
-            <input
-              type="checkbox"
-              name="category"
-              value={category}
-              checked={currentFilters.category === category}
-            />
-            <span class="filter__checkbox-label">{category}</span>
-          </label>
-        ))}
+    <!-- FILTER 1: Proizvođač (za sve kategorije) -->
+    {manufacturers.length > 0 && (
+      <div class="filter__group">
+        <h4 class="filter__group-title">Proizvođač</h4>
+        <div class="filter__options filter__options--scroll">
+          {manufacturers.map((manufacturer) => (
+            <label class="filter__checkbox">
+              <input
+                type="checkbox"
+                name="manufacturer"
+                value={manufacturer}
+                checked={currentFilters.manufacturer === manufacturer}
+              />
+              <span class="filter__checkbox-label">{manufacturer}</span>
+            </label>
+          ))}
+        </div>
       </div>
-    </div>
+    )}
 
-    <!-- Proizvođač -->
-    <div class="filter__group">
-      <h4 class="filter__group-title">Proizvođač</h4>
-      <div class="filter__options filter__options--scroll">
-        {manufacturers.map((manufacturer) => (
-          <label class="filter__checkbox">
-            <input
-              type="checkbox"
-              name="manufacturer"
-              value={manufacturer}
-              checked={currentFilters.manufacturer === manufacturer}
-            />
-            <span class="filter__checkbox-label">{manufacturer}</span>
-          </label>
-        ))}
+    <!-- FILTER 2: Snaga (samo za Climate kategorije: klima uređaji, multi klima, dizalice topline) -->
+    {categoryType === 'climate' && (
+      <div class="filter__group">
+        <h4 class="filter__group-title">Snaga hlađenja/grijanja</h4>
+        <select class="filter__select" name="power">
+          <option value="">Sve snage</option>
+          {powerOptions.map((option) => (
+            <option value={option.value} selected={currentFilters.power === option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
       </div>
-    </div>
+    )}
 
-    <!-- Snaga -->
+    <!-- FILTER 3: Površina (za sve kategorije) -->
     <div class="filter__group">
-      <h4 class="filter__group-title">Snaga hlađenja/grijanja</h4>
-      <select class="filter__select" name="power">
-        <option value="">Sve snage</option>
-        {powerOptions.map((option) => (
-          <option value={option.value} selected={currentFilters.power === option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </div>
-
-    <!-- Površina -->
-    <div class="filter__group">
-      <h4 class="filter__group-title">Preporučena površina</h4>
+      <h4 class="filter__group-title">Prikladno za prostor</h4>
       <select class="filter__select" name="area">
         <option value="">Sve površine</option>
         {areaOptions.map((option) => (
@@ -128,27 +108,27 @@ const sortOptions = [
       </select>
     </div>
 
-    <!-- Energetska klasa -->
-    <div class="filter__group">
-      <h4 class="filter__group-title">Energetska klasa</h4>
-      <div class="filter__options">
-        {energyClassOptions.map((option) => (
-          <label class="filter__checkbox">
-            <input
-              type="checkbox"
-              name="energyClass"
-              value={option.value}
-              checked={currentFilters.energyClass === option.value}
-            />
-            <span class="filter__checkbox-label filter__checkbox-label--energy">
-              {option.label}
-            </span>
-          </label>
-        ))}
+    <!-- FILTER 4: Protok zraka (samo za Mikroklima) -->
+    {categoryType === 'microclimate' && (
+      <div class="filter__group">
+        <h4 class="filter__group-title">Protok zraka</h4>
+        <div class="filter__options">
+          {airflowOptions.map((option) => (
+            <label class="filter__checkbox">
+              <input
+                type="checkbox"
+                name="airflow"
+                value={option.value}
+                checked={currentFilters.airflow === option.value}
+              />
+              <span class="filter__checkbox-label">{option.label}</span>
+            </label>
+          ))}
+        </div>
       </div>
-    </div>
+    )}
 
-    <!-- Raspon cijene -->
+    <!-- Raspon cijene (opcionalno) -->
     <div class="filter__group">
       <h4 class="filter__group-title">Raspon cijene (€)</h4>
       <div class="filter__range">
@@ -172,39 +152,6 @@ const sortOptions = [
       </div>
     </div>
 
-    <!-- Dodatne opcije -->
-    <div class="filter__group">
-      <h4 class="filter__group-title">Dodatne opcije</h4>
-      <div class="filter__options">
-        <label class="filter__checkbox">
-          <input type="checkbox" name="inverter" value="true" />
-          <span class="filter__checkbox-label">Inverter</span>
-        </label>
-        <label class="filter__checkbox">
-          <input type="checkbox" name="wifi" value="true" />
-          <span class="filter__checkbox-label">Wi-Fi upravljanje</span>
-        </label>
-        <label class="filter__checkbox">
-          <input type="checkbox" name="heating" value="true" />
-          <span class="filter__checkbox-label">Funkcija grijanja</span>
-        </label>
-        <label class="filter__checkbox">
-          <input type="checkbox" name="silent" value="true" />
-          <span class="filter__checkbox-label">Tihi rad</span>
-        </label>
-      </div>
-    </div>
-
-    <!-- Sortiranje -->
-    <div class="filter__group">
-      <h4 class="filter__group-title">Sortiraj po</h4>
-      <select class="filter__select" name="sort">
-        {sortOptions.map((option) => (
-          <option value={option.value}>{option.label}</option>
-        ))}
-      </select>
-    </div>
-
     <!-- Primjeni filtere -->
     <button type="submit" class="filter__submit">
       Primjeni filtere
@@ -216,7 +163,7 @@ const sortOptions = [
 </aside>
 
 <!-- Mobile filter toggle -->
-<button class="filter-toggle" id="filterToggle" aria-label="Toggle filters">
+<button class="filter-toggle" id="filterToggle" aria-label="Toggle filters" type="button">
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
     <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
   </svg>
@@ -347,14 +294,6 @@ const sortOptions = [
     color: var(--text-secondary);
   }
 
-  .filter__checkbox-label--energy {
-    padding: var(--space-1) var(--space-2);
-    background: var(--color-success);
-    color: var(--color-white);
-    border-radius: var(--border-radius-base);
-    font-weight: var(--font-semibold);
-  }
-
   .filter__select {
     padding: var(--space-3);
     border: 1px solid var(--border-color);
@@ -478,7 +417,7 @@ const sortOptions = [
 </style>
 
 <script>
-  const filterForm = document.getElementById('filterForm');
+  const filterForm = document.getElementById('filterForm') as HTMLFormElement;
   const clearFilters = document.getElementById('clearFilters');
   const filterToggle = document.getElementById('filterToggle');
   const productFilter = document.getElementById('productFilter');
@@ -491,7 +430,7 @@ const sortOptions = [
 
     formData.forEach((value, key) => {
       if (value) {
-        params.append(key, value);
+        params.append(key, value.toString());
       }
     });
 
@@ -512,10 +451,11 @@ const sortOptions = [
 
   // Close mobile filter when clicking outside
   document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
     if (
       productFilter?.classList.contains('active') &&
-      !productFilter.contains(e.target) &&
-      !filterToggle?.contains(e.target)
+      !productFilter.contains(target) &&
+      !filterToggle?.contains(target)
     ) {
       productFilter.classList.remove('active');
       document.body.classList.remove('filter-open');

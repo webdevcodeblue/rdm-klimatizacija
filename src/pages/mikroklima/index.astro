@@ -32,9 +32,8 @@ const products = allProducts.map((entry) => ({
   description: entry.data.model
 }));
 
-// Get manufacturers and categories for filters
+// Get manufacturers for filters
 const manufacturers = [...new Set(products.map(p => p.manufacturer))].sort();
-const categories = [...new Set(products.map(p => p.category))].sort();
 
 // Get filter params from URL
 const url = Astro.url;
@@ -42,29 +41,84 @@ const brandFilter = url.searchParams.get('brand');
 
 const currentFilters = {
   manufacturer: url.searchParams.get('manufacturer') || undefined,
-  category: url.searchParams.get('category') || undefined,
-  power: url.searchParams.get('power') || undefined,
   area: url.searchParams.get('area') || undefined,
-  energyClass: url.searchParams.get('energyClass') || undefined,
+  airflow: url.searchParams.get('airflow') || undefined,
   priceMin: url.searchParams.get('priceMin') ? Number(url.searchParams.get('priceMin')) : undefined,
   priceMax: url.searchParams.get('priceMax') ? Number(url.searchParams.get('priceMax')) : undefined
 };
+
+// Helper function to extract numeric value from string
+function extractNumber(str: string | undefined): number | null {
+  if (!str) return null;
+  const match = str.match(/[\d.]+/);
+  return match ? parseFloat(match[0]) : null;
+}
+
+// Helper function to check if value is in range
+function isInRange(value: string | undefined, range: string): boolean {
+  if (!value) return false;
+
+  const numValue = extractNumber(value);
+  if (numValue === null) return false;
+
+  // Handle "X+" ranges (e.g., "2000+")
+  if (range.endsWith('+')) {
+    const minValue = parseFloat(range.replace('+', ''));
+    return numValue >= minValue;
+  }
+
+  // Handle "0-X" ranges (e.g., "0-200")
+  if (range.startsWith('0-')) {
+    const maxValue = parseFloat(range.split('-')[1]);
+    return numValue <= maxValue;
+  }
+
+  // Handle "X-Y" ranges (e.g., "200-400")
+  const [min, max] = range.split('-').map(v => parseFloat(v));
+  return numValue >= min && numValue <= max;
+}
 
 // Filter products based on current filters
 let filteredProducts = products;
 
 // Filter by brand from navigation dropdown
 if (brandFilter) {
-  filteredProducts = filteredProducts.filter(p => {
-    const matches = p.manufacturer?.toLowerCase() === brandFilter.toLowerCase();
-    return matches;
-  });
+  filteredProducts = filteredProducts.filter(p =>
+    p.manufacturer?.toLowerCase() === brandFilter.toLowerCase()
+  );
 }
 
 // Filter by manufacturer from sidebar
 if (currentFilters.manufacturer) {
   filteredProducts = filteredProducts.filter(p =>
     p.manufacturer === currentFilters.manufacturer
+  );
+}
+
+// Filter by area range
+if (currentFilters.area) {
+  filteredProducts = filteredProducts.filter(p =>
+    isInRange(p.area, currentFilters.area!)
+  );
+}
+
+// Filter by airflow range (specific to microclimate)
+if (currentFilters.airflow) {
+  filteredProducts = filteredProducts.filter(p =>
+    isInRange(p.airflow, currentFilters.airflow!)
+  );
+}
+
+// Filter by price range
+if (currentFilters.priceMin !== undefined) {
+  filteredProducts = filteredProducts.filter(p =>
+    p.price && p.price >= currentFilters.priceMin!
+  );
+}
+
+if (currentFilters.priceMax !== undefined) {
+  filteredProducts = filteredProducts.filter(p =>
+    p.price && p.price <= currentFilters.priceMax!
   );
 }
 
@@ -113,7 +167,7 @@ const viewMode = url.searchParams.get('view') || 'list';
           <aside class="products-sidebar">
             <ProductFilter
               manufacturers={manufacturers}
-              categories={categories}
+              categoryType="microclimate"
               currentFilters={currentFilters}
             />
           </aside>

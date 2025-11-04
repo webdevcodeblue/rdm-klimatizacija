@@ -33,50 +33,89 @@ const products = allKlimaProducts.map((entry) => ({
   description: entry.data.model
 }));
 
-// Get manufacturers and categories for filters
+// Get manufacturers for filters
 const manufacturers = [...new Set(products.map(p => p.manufacturer))].sort();
-const categories = [...new Set(products.map(p => p.category))].sort();
 
 // Get filter params from URL
-const url = Astro.url; // Koristim Astro.url direktno umjesto new URL()
+const url = Astro.url;
 const brandFilter = url.searchParams.get('brand'); // za dropdown u navigaciji
-
-console.log('Full URL:', url.href);
-console.log('Search params:', url.search);
-console.log('All params:', Array.from(url.searchParams.entries()));
 
 const currentFilters = {
   manufacturer: url.searchParams.get('manufacturer') || undefined,
-  category: url.searchParams.get('category') || undefined,
   power: url.searchParams.get('power') || undefined,
   area: url.searchParams.get('area') || undefined,
-  energyClass: url.searchParams.get('energyClass') || undefined,
   priceMin: url.searchParams.get('priceMin') ? Number(url.searchParams.get('priceMin')) : undefined,
   priceMax: url.searchParams.get('priceMax') ? Number(url.searchParams.get('priceMax')) : undefined
 };
 
+// Helper function to extract numeric value from string
+function extractNumber(str: string | undefined): number | null {
+  if (!str) return null;
+  const match = str.match(/[\d.]+/);
+  return match ? parseFloat(match[0]) : null;
+}
+
+// Helper function to check if value is in range
+function isInRange(value: string | undefined, range: string): boolean {
+  if (!value) return false;
+
+  const numValue = extractNumber(value);
+  if (numValue === null) return false;
+
+  // Handle "X+" ranges
+  if (range.endsWith('+')) {
+    const minValue = parseFloat(range.replace('+', ''));
+    return numValue >= minValue;
+  }
+
+  // Handle "X-Y" ranges
+  const [min, max] = range.split('-').map(v => parseFloat(v));
+  return numValue >= min && numValue <= max;
+}
+
 // Filter products based on current filters
 let filteredProducts = products;
 
-// Debug: log all manufacturers
-console.log('All manufacturers:', products.map(p => p.manufacturer));
-console.log('Brand filter from URL:', brandFilter);
-
 // Filter by brand from navigation dropdown
 if (brandFilter) {
-  console.log('Filtering by brand:', brandFilter);
-  filteredProducts = filteredProducts.filter(p => {
-    const matches = p.manufacturer?.toLowerCase() === brandFilter.toLowerCase();
-    console.log(`${p.manufacturer} vs ${brandFilter}: ${matches}`);
-    return matches;
-  });
-  console.log('Filtered count:', filteredProducts.length);
+  filteredProducts = filteredProducts.filter(p =>
+    p.manufacturer?.toLowerCase() === brandFilter.toLowerCase()
+  );
 }
 
 // Filter by manufacturer from sidebar
 if (currentFilters.manufacturer) {
   filteredProducts = filteredProducts.filter(p =>
     p.manufacturer === currentFilters.manufacturer
+  );
+}
+
+// Filter by power range
+if (currentFilters.power) {
+  filteredProducts = filteredProducts.filter(p => {
+    // Check both power and cooling fields
+    const powerValue = p.power || p.cooling;
+    return isInRange(powerValue, currentFilters.power!);
+  });
+}
+
+// Filter by area range
+if (currentFilters.area) {
+  filteredProducts = filteredProducts.filter(p =>
+    isInRange(p.area, currentFilters.area!)
+  );
+}
+
+// Filter by price range
+if (currentFilters.priceMin !== undefined) {
+  filteredProducts = filteredProducts.filter(p =>
+    p.price && p.price >= currentFilters.priceMin!
+  );
+}
+
+if (currentFilters.priceMax !== undefined) {
+  filteredProducts = filteredProducts.filter(p =>
+    p.price && p.price <= currentFilters.priceMax!
   );
 }
 
@@ -125,7 +164,7 @@ const viewMode = url.searchParams.get('view') || 'list';
           <aside class="products-sidebar">
             <ProductFilter
               manufacturers={manufacturers}
-              categories={categories}
+              categoryType="climate"
               currentFilters={currentFilters}
             />
           </aside>

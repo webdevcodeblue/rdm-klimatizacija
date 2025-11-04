@@ -33,6 +33,6 @@ Thumbs.db
 *.swo
 *~
 
-# Documentation files
-*.md
+# Documentation files - ignore only in root, allow content markdown files
+/*.md
 !README.md

@@ -100,6 +100,26 @@ collections:
         required: false
         field: { label: "Značajka", name: "feature", widget: "string" }
 
+      # DOKUMENTI
+      - label: "Informacijski list (PDF)"
+        name: "infoSheet"
+        widget: "file"
+        required: false
+        media_folder: "public/documents"
+        public_folder: "/documents"
+        hint: "Glavni informacijski list - prikazuje se kao poseban gumb i u tab-u Dokumenti"
+      - label: "Dodatni dokumenti"
+        name: "documents"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Naziv dokumenta", name: "name", widget: "string", hint: "Npr. 'Upute za montažu', 'Tehnički list'" }
+          - label: "PDF datoteka"
+            name: "url"
+            widget: "file"
+            media_folder: "public/documents"
+            public_folder: "/documents"
+
       # OPIS
       - { label: "Opis proizvoda", name: "body", widget: "markdown", required: false }
 
@@ -148,6 +168,27 @@ collections:
         widget: "list"
         required: false
         field: { label: "Značajka", name: "feature", widget: "string" }
+
+      # DOKUMENTI
+      - label: "Informacijski list (PDF)"
+        name: "infoSheet"
+        widget: "file"
+        required: false
+        media_folder: "public/documents"
+        public_folder: "/documents"
+        hint: "Glavni informacijski list - prikazuje se kao poseban gumb i u tab-u Dokumenti"
+      - label: "Dodatni dokumenti"
+        name: "documents"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Naziv dokumenta", name: "name", widget: "string", hint: "Npr. 'Upute za montažu', 'Tehnički list'" }
+          - label: "PDF datoteka"
+            name: "url"
+            widget: "file"
+            media_folder: "public/documents"
+            public_folder: "/documents"
+
       - { label: "Opis proizvoda", name: "body", widget: "markdown", required: false }
 
   # ==================== DIZALICE TOPLINE ====================
@@ -189,6 +230,27 @@ collections:
         widget: "list"
         required: false
         field: { label: "Značajka", name: "feature", widget: "string" }
+
+      # DOKUMENTI
+      - label: "Informacijski list (PDF)"
+        name: "infoSheet"
+        widget: "file"
+        required: false
+        media_folder: "public/documents"
+        public_folder: "/documents"
+        hint: "Glavni informacijski list - prikazuje se kao poseban gumb i u tab-u Dokumenti"
+      - label: "Dodatni dokumenti"
+        name: "documents"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Naziv dokumenta", name: "name", widget: "string", hint: "Npr. 'Upute za montažu', 'Tehnički list'" }
+          - label: "PDF datoteka"
+            name: "url"
+            widget: "file"
+            media_folder: "public/documents"
+            public_folder: "/documents"
+
       - { label: "Opis proizvoda", name: "body", widget: "markdown", required: false }
 
   # ==================== MIKROKLIMA ====================
@@ -227,6 +289,27 @@ collections:
         widget: "list"
         required: false
         field: { label: "Značajka", name: "feature", widget: "string" }
+
+      # DOKUMENTI
+      - label: "Informacijski list (PDF)"
+        name: "infoSheet"
+        widget: "file"
+        required: false
+        media_folder: "public/documents"
+        public_folder: "/documents"
+        hint: "Glavni informacijski list - prikazuje se kao poseban gumb i u tab-u Dokumenti"
+      - label: "Dodatni dokumenti"
+        name: "documents"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Naziv dokumenta", name: "name", widget: "string", hint: "Npr. 'Upute za montažu', 'Tehnički list'" }
+          - label: "PDF datoteka"
+            name: "url"
+            widget: "file"
+            media_folder: "public/documents"
+            public_folder: "/documents"
+
       - { label: "Opis proizvoda", name: "body", widget: "markdown", required: false }
 
   # ==================== ALATI I MATERIJALI ====================
@@ -256,6 +339,27 @@ collections:
         widget: "list"
         required: false
         field: { label: "Značajka", name: "feature", widget: "string" }
+
+      # DOKUMENTI
+      - label: "Informacijski list (PDF)"
+        name: "infoSheet"
+        widget: "file"
+        required: false
+        media_folder: "public/documents"
+        public_folder: "/documents"
+        hint: "Glavni informacijski list - prikazuje se kao poseban gumb i u tab-u Dokumenti"
+      - label: "Dodatni dokumenti"
+        name: "documents"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Naziv dokumenta", name: "name", widget: "string", hint: "Npr. 'Upute za montažu', 'Tehnički list'" }
+          - label: "PDF datoteka"
+            name: "url"
+            widget: "file"
+            media_folder: "public/documents"
+            public_folder: "/documents"
+
       - { label: "Opis proizvoda", name: "body", widget: "markdown", required: false }
 
   # ==================== MONTAŽA I SERVIS ====================
@@ -279,4 +383,25 @@ collections:
         widget: "list"
         required: false
         field: { label: "Stavka", name: "feature", widget: "string" }
+
+      # DOKUMENTI
+      - label: "Informacijski list (PDF)"
+        name: "infoSheet"
+        widget: "file"
+        required: false
+        media_folder: "public/documents"
+        public_folder: "/documents"
+        hint: "Glavni informacijski list - prikazuje se kao poseban gumb i u tab-u Dokumenti"
+      - label: "Dodatni dokumenti"
+        name: "documents"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Naziv dokumenta", name: "name", widget: "string", hint: "Npr. 'Upute za montažu', 'Cjenik'" }
+          - label: "PDF datoteka"
+            name: "url"
+            widget: "file"
+            media_folder: "public/documents"
+            public_folder: "/documents"
+
       - { label: "Opis usluge", name: "body", widget: "markdown", required: false }

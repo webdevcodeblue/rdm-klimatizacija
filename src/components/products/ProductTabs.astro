@@ -96,7 +96,7 @@ const { product } = Astro.props;
           ) : null;
         })}
 
-        {(product.specifications.energyClass || product.specifications.seer || product.specifications.scop) && (
+        {product.specifications && (product.specifications.energyClass || product.specifications.seer || product.specifications.scop) && (
           <div class="energy-label">
             <h4>Energetska oznaka</h4>
             <div class="energy-label__content">
@@ -135,88 +135,73 @@ const { product } = Astro.props;
       <div class="tab-panel__content">
         <h3>Dokumentacija</h3>
 
-        <div class="documents-grid">
-          <a href="#" class="document-card">
-            <div class="document-card__icon">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
-              </svg>
-            </div>
-            <div class="document-card__content">
-              <h5>Informacijski list proizvoda</h5>
-              <span class="document-card__meta">PDF • 2.3 MB</span>
-            </div>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="document-card__download">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-          </a>
+        {(product.infoSheet || (product.documents && product.documents.length > 0)) ? (
+          <>
+            <div class="documents-grid">
+              {/* Informacijski list - prikazuje se posebno */}
+              {product.infoSheet && (
+                <a href={product.infoSheet} target="_blank" rel="noopener noreferrer" class="document-card document-card--featured">
+                  <div class="document-card__icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                      <line x1="16" y1="13" x2="8" y2="13"></line>
+                      <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                  </div>
+                  <div class="document-card__content">
+                    <h5>Informacijski list proizvoda</h5>
+                    <span class="document-card__meta">PDF</span>
+                  </div>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="document-card__download">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                </a>
+              )}
 
-          <a href="#" class="document-card">
-            <div class="document-card__icon">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
-              </svg>
+              {/* Dodatni dokumenti */}
+              {product.documents && product.documents.map((doc) => (
+                <a href={doc.url} target="_blank" rel="noopener noreferrer" class="document-card">
+                  <div class="document-card__icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                    </svg>
+                  </div>
+                  <div class="document-card__content">
+                    <h5>{doc.name}</h5>
+                    <span class="document-card__meta">PDF</span>
+                  </div>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="document-card__download">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                </a>
+              ))}
             </div>
-            <div class="document-card__content">
-              <h5>Uputstvo za korištenje</h5>
-              <span class="document-card__meta">PDF • 5.1 MB</span>
-            </div>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="document-card__download">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-          </a>
 
-          <a href="#" class="document-card">
-            <div class="document-card__icon">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
+            <div class="documents-info">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
               </svg>
+              <p>Svi dokumenti se otvaraju u novom prozoru. Kliknite na dokument da ga pregledate ili preuzmete.</p>
             </div>
-            <div class="document-card__content">
-              <h5>Uputstvo za montažu</h5>
-              <span class="document-card__meta">PDF • 3.7 MB</span>
-            </div>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="document-card__download">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
+          </>
+        ) : (
+          <div class="no-documents">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
             </svg>
-          </a>
-
-          <a href="#" class="document-card">
-            <div class="document-card__icon">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
-              </svg>
-            </div>
-            <div class="document-card__content">
-              <h5>Garancijski list</h5>
-              <span class="document-card__meta">PDF • 1.2 MB</span>
-            </div>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="document-card__download">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-          </a>
-        </div>
-
-        <div class="documents-info">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"></circle>
-            <line x1="12" y1="16" x2="12" y2="12"></line>
-            <line x1="12" y1="8" x2="12.01" y2="8"></line>
-          </svg>
-          <p>Svi dokumenti su u PDF formatu. Za pregled trebate Adobe Acrobat Reader ili sličan program.</p>
-        </div>
+            <p>Trenutno nema dostupnih dokumenata za ovaj proizvod.</p>
+            <p class="no-documents__help">Za više informacija kontaktirajte nas.</p>
+          </div>
+        )}
       </div>
     </div>
   </div>
@@ -502,6 +487,42 @@ const { product } = Astro.props;
   .document-card__download {
     color: var(--color-primary);
     flex-shrink: 0;
+  }
+
+  .document-card--featured {
+    border-color: var(--color-primary);
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  }
+
+  .document-card--featured .document-card__icon {
+    background: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  .document-card--featured:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.2);
+  }
+
+  .no-documents {
+    text-align: center;
+    padding: var(--space-12) var(--space-6);
+    color: var(--text-secondary);
+  }
+
+  .no-documents svg {
+    color: var(--color-gray-400);
+    margin: 0 auto var(--space-4);
+  }
+
+  .no-documents p {
+    margin: 0 0 var(--space-2) 0;
+    font-size: var(--text-base);
+  }
+
+  .no-documents__help {
+    color: var(--color-gray-500);
+    font-size: var(--text-sm);
   }
 
   .documents-info {

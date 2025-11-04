@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import ProductGallery from '../../components/products/ProductGallery.astro';
+import ProductTabs from '../../components/products/ProductTabs.astro';
 import InquiryModal from '../../components/InquiryModal.astro';
 import { getCollection, getEntry } from 'astro:content';
 
@@ -38,12 +39,22 @@ const service = {
   name: rawService.name,
   description: entry.body || '',
   image: rawService.image,
-  images: [rawService.image],
+  images: rawService.images || [rawService.image],
   price: rawService.price,
   category: 'montaza',
   included: rawService.features,
-  badge: 'Usluga',
-  inStock: true
+  features: rawService.features || [],
+  badge: rawService.badge || 'Usluga',
+  inStock: rawService.inStock !== undefined ? rawService.inStock : true,
+  specifications: {}, // Empty specifications object for services
+  infoSheet: rawService.infoSheet,
+  documents: rawService.documents || [],
+  technicalSpecs: {
+    general: {
+      'Tip usluge': rawService.category === 'montaza-servis' ? 'Montaža i servis' : 'Usluga',
+      'Pružatelj usluge': 'RM Frigo Team'
+    }
+  }
 };
 
 // Get all services for related services section
@@ -188,6 +199,11 @@ const pageDescription = `${service.description ? service.description.substring(0
             </div>
           </div>
         </div>
+
+        <!-- Service Details Tabs -->
+        <div class="service-details">
+          <ProductTabs product={service} />
+        </div>
       </div>
     </section>
 
@@ -280,12 +296,21 @@ const pageDescription = `${service.description ? service.description.substring(0
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--space-12);
+    margin-bottom: var(--space-12);
   }
 
   .service-layout__gallery {
     position: sticky;
     top: var(--space-6);
     height: fit-content;
+  }
+
+  /* Service Details */
+  .service-details {
+    background: var(--color-white);
+    border-radius: var(--border-radius-lg);
+    padding: var(--space-8);
+    margin-top: var(--space-8);
   }
 
   /* Service Info */
@@ -555,6 +580,12 @@ const pageDescription = `${service.description ? service.description.substring(0
       padding: var(--space-6);
     }
 
+    .service-details {
+      padding: var(--space-6) var(--space-4);
+      border-radius: 0;
+      margin-top: var(--space-6);
+    }
+
     .service-info__title {
       font-size: var(--text-xl);
     }
@@ -595,6 +626,10 @@ const pageDescription = `${service.description ? service.description.substring(0
 
     .service-info__title {
       font-size: var(--text-lg);
+    }
+
+    .service-details {
+      padding: var(--space-4);
     }
   }
 </style>

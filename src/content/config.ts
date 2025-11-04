@@ -81,6 +81,13 @@ const productSchema = z.object({
   // ==================== FEATURES ====================
   features: z.array(z.string()).default([]),
 
+  // ==================== DOKUMENTI ====================
+  infoSheet: z.string().optional(), // Informacijski list (PDF) - prikazuje se kao poseban gumb
+  documents: z.array(z.object({
+    name: z.string(),   // Naziv dokumenta (npr. "Upute za montažu")
+    url: z.string()     // Putanja do PDF-a
+  })).default([]),
+
   // ==================== SPECIAL FLAGS ====================
   featured: z.boolean().default(false),      // Prikaži na početnoj
   onSale: z.boolean().default(false),        // Prikaži u Akcijama
@@ -102,20 +109,28 @@ const products = defineCollection({
 const serviceSchema = z.object({
   // ==================== OBAVEZNA POLJA ====================
   name: z.string(),
+  manufacturer: z.string().default('RDM Klimatizacija'),
   category: z.literal('montaza-servis'),
   image: z.string(),
-  available: z.boolean().default(true),
+  inStock: z.boolean().default(true),
 
   // ==================== OPCIONA POLJA ====================
   price: optionalNumber(z.number().positive()), // Cijena je opciona
   duration: z.string().optional(), // Trajanje usluge
-  badge: z.enum(['Hitno', 'Popularno', 'Premium', 'Paket']).optional(),
+  badge: z.enum(['Hitno', 'Popularno', 'Premium', 'Paket', 'Usluga']).optional(),
 
   // ==================== GALERIJA SLIKA ====================
   images: z.array(z.string()).default([]),
 
   // ==================== ŠTO JE UKLJUČENO ====================
-  includes: z.array(z.string()).default([]), // Uključeno u uslugu
+  features: z.array(z.string()).default([]), // Što je uključeno u uslugu (renamed from includes)
+
+  // ==================== DOKUMENTI ====================
+  infoSheet: z.string().optional(), // Informacijski list (PDF) - prikazuje se kao poseban gumb
+  documents: z.array(z.object({
+    name: z.string(),   // Naziv dokumenta (npr. "Upute za montažu")
+    url: z.string()     // Putanja do PDF-a
+  })).default([]),
 
   // ==================== SPECIAL FLAGS ====================
   featured: z.boolean().default(false), // Prikaži na početnoj

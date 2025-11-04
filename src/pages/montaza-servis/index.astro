@@ -13,7 +13,7 @@ const products = allServices.map((entry) => ({
   id: entry.slug,
   slug: entry.slug,
   name: entry.data.name,
-  manufacturer: undefined,
+  manufacturer: entry.data.manufacturer || 'RDM Klimatizacija',
   category: 'Montaža i servis',
   price: entry.data.price,
   originalPrice: undefined,
@@ -25,10 +25,10 @@ const products = allServices.map((entry) => ({
   energyClass: undefined,
   seer: undefined,
   scop: undefined,
-  features: entry.data.includes, // Use included items as features
+  features: entry.data.features || [], // Use features from schema
   badge: entry.data.badge,
   image: entry.data.image,
-  inStock: entry.data.available,
+  inStock: entry.data.inStock,
   description: entry.data.duration
 }));
 

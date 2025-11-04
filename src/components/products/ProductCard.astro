@@ -185,7 +185,7 @@ const discountPercentage = product.originalPrice && product.price
         <p class="product-card__description">{product.description}</p>
       )}
 
-      {viewMode === 'list' && (
+      {viewMode === 'list' && product.features && product.features.length > 0 && (
         <div class="product-card__features">
           {product.features.map((feature) => (
             <span class="feature-tag">{feature}</span>
@@ -252,7 +252,7 @@ const discountPercentage = product.originalPrice && product.price
         </div>
       )}
 
-      {viewMode === 'grid' && (
+      {viewMode === 'grid' && product.features && product.features.length > 0 && (
         <div class="product-card__features">
           {product.features.slice(0, 3).map((feature) => (
             <span class="feature-tag">{feature}</span>

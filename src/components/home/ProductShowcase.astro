@@ -1,36 +1,56 @@
 ---
-import { klimaProducts } from '../../data/products/klima-uredaji';
+import { getCollection } from 'astro:content';
 import ProductCard from '../products/ProductCard.astro';
 
-// Featured products - prikazujemo 4 proizvoda (2 manja, 2 veća)
-const featuredProducts = [
-  klimaProducts[0], // Toshiba SEIYA 2.5kW
-  klimaProducts[2], // Haier TIDE 2.5kW
-  klimaProducts[1], // Toshiba SHORAI 4.6kW
-  klimaProducts[3]  // Haier PEARL 5kW
-];
+// Category configuration for paths
+const categoryPaths: Record<string, string> = {
+  'klima-uredaji': '/klima-uredaji',
+  'multi-klima': '/multi-klima',
+  'dizalice-topline': '/dizalice-topline',
+  'mikroklima': '/mikroklima',
+  'alati-materijali': '/alati-materijali'
+};
+
+// Collect all featured products from all categories
+const allFeaturedProducts: Array<{ entry: any; categoryPath: string }> = [];
+
+for (const [collectionName, path] of Object.entries(categoryPaths)) {
+  try {
+    const collection = await getCollection(collectionName as any);
+    const featuredItems = collection.filter(item => item.data.featured === true);
+    allFeaturedProducts.push(...featuredItems.map(item => ({
+      entry: item,
+      categoryPath: path
+    })));
+  } catch (error) {
+    console.log(`Skipping collection: ${collectionName}`);
+  }
+}
+
+// Limit to 8 products
+const featuredProducts = allFeaturedProducts.slice(0, 8);
 
 // Format products for ProductCard component
 const products = featuredProducts.map(p => ({
-  id: p.id,
-  slug: p.slug,
-  name: p.name,
-  manufacturer: p.manufacturer,
-  category: 'Klima uređaji',
-  price: p.price,
-  originalPrice: p.originalPrice,
-  power: p.specifications.power,
-  cooling: p.specifications.cooling,
-  heating: p.specifications.heating,
-  area: p.specifications.area,
-  energyClass: p.specifications.energyClass,
-  seer: p.specifications.seer,
-  scop: p.specifications.scop,
-  features: p.features,
-  badge: p.badge,
-  image: p.image,
-  inStock: p.inStock !== false,
-  href: `/klima-uredaji/${p.slug}`
+  id: p.entry.slug,
+  slug: p.entry.slug,
+  name: p.entry.data.name,
+  manufacturer: p.entry.data.manufacturer,
+  category: p.entry.data.category,
+  price: p.entry.data.price,
+  originalPrice: p.entry.data.originalPrice,
+  power: p.entry.data.specifications?.power || '',
+  cooling: p.entry.data.specifications?.cooling || '',
+  heating: p.entry.data.specifications?.heating || '',
+  area: p.entry.data.specifications?.area || '',
+  energyClass: p.entry.data.specifications?.energyClass || '',
+  seer: p.entry.data.specifications?.seer,
+  scop: p.entry.data.specifications?.scop,
+  features: p.entry.data.features || [],
+  badge: p.entry.data.badge,
+  image: p.entry.data.image,
+  inStock: p.entry.data.inStock !== false,
+  href: `${p.categoryPath}/${p.entry.slug}`
 }));
 ---
 
@@ -41,11 +61,30 @@ const products = featuredProducts.map(p => ({
       <p class="showcase__subtitle">Najpopularniji proizvodi iz naše ponude</p>
     </div>
 
-    <div class="showcase__grid">
-      {products.map((product) => (
-        <ProductCard product={product} viewMode="grid" />
-      ))}
-    </div>
+    {products.length > 0 ? (
+      <div class="swiper-container">
+        <div class="swiper showcase-swiper">
+          <div class="swiper-wrapper">
+            {products.map((product) => (
+              <div class="swiper-slide">
+                <ProductCard product={product} viewMode="grid" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Navigation buttons -->
+        <div class="swiper-button-prev showcase-prev"></div>
+        <div class="swiper-button-next showcase-next"></div>
+
+        <!-- Pagination -->
+        <div class="swiper-pagination showcase-pagination"></div>
+      </div>
+    ) : (
+      <div class="no-featured">
+        <p>Nema izdvojenih proizvoda. Označite proizvode kao "Featured" u CMS-u.</p>
+      </div>
+    )}
 
     <div class="showcase__footer">
       <a href="/klima-uredaji" class="showcase__link">
@@ -82,11 +121,110 @@ const products = featuredProducts.map(p => ({
     color: var(--text-secondary);
   }
 
-  .showcase__grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--space-6);
+  .swiper-container {
+    position: relative;
     margin-bottom: var(--space-12);
+  }
+
+  .showcase-swiper {
+    padding: var(--space-2) 0 var(--space-8) 0;
+  }
+
+  .swiper-slide {
+    height: auto;
+    display: flex;
+  }
+
+  .swiper-slide > * {
+    width: 100%;
+  }
+
+  /* Osiguraj istu visinu za sve kartice */
+  :global(.showcase-swiper .swiper-wrapper) {
+    align-items: stretch !important;
+  }
+
+  :global(.showcase-swiper .swiper-slide) {
+    height: auto !important;
+    display: flex !important;
+  }
+
+  /* Navigation Buttons */
+  .showcase-prev,
+  .showcase-next {
+    width: 48px !important;
+    height: 48px !important;
+    background: var(--color-white) !important;
+    border-radius: 50% !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    color: var(--color-primary) !important;
+    transition: all var(--transition-fast) !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    margin-top: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .showcase-prev {
+    left: -24px !important;
+  }
+
+  .showcase-next {
+    right: -24px !important;
+  }
+
+  .showcase-prev:after,
+  .showcase-next:after {
+    content: '' !important;
+    display: none !important;
+  }
+
+  /* SVG ikone unutar buttona - MORA biti :global() za dinamički injektirane elemente */
+  :global(.showcase-prev svg),
+  :global(.showcase-next svg) {
+    width: 10px !important;
+    height: 16px !important;
+  }
+
+  :global(.showcase-prev .swiper-navigation-icon),
+  :global(.showcase-next .swiper-navigation-icon) {
+    width: 10px !important;
+    height: 16px !important;
+  }
+
+  .showcase-prev:hover,
+  .showcase-next:hover {
+    background: var(--color-primary) !important;
+    color: var(--color-white) !important;
+    transform: translateY(-50%) scale(1.1) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2) !important;
+  }
+
+  .swiper-button-disabled {
+    opacity: 0.3 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+  }
+
+  /* Pagination */
+  .swiper-pagination {
+    bottom: 0 !important;
+  }
+
+  :global(.showcase-pagination .swiper-pagination-bullet) {
+    width: 12px;
+    height: 12px;
+    background: var(--color-gray-300);
+    opacity: 1;
+    transition: all var(--transition-fast);
+  }
+
+  :global(.showcase-pagination .swiper-pagination-bullet-active) {
+    background: var(--color-primary);
+    width: 32px;
+    border-radius: 6px;
   }
 
   .showcase__footer {
@@ -113,10 +251,26 @@ const products = featuredProducts.map(p => ({
     transform: scale(1.05);
   }
 
+  .no-featured {
+    text-align: center;
+    padding: var(--space-12);
+    color: var(--text-secondary);
+    background: var(--color-white);
+    border-radius: var(--border-radius-lg);
+    margin-bottom: var(--space-12);
+  }
+
   /* Responsive */
   @media (max-width: 1024px) {
-    .showcase__grid {
-      grid-template-columns: repeat(2, 1fr);
+    .showcase-prev,
+    .showcase-next {
+      width: 40px !important;
+      height: 40px !important;
+    }
+
+    .showcase-prev:after,
+    .showcase-next:after {
+      font-size: 12px !important;
     }
   }
 
@@ -133,9 +287,109 @@ const products = featuredProducts.map(p => ({
       font-size: var(--text-lg);
     }
 
-    .showcase__grid {
-      grid-template-columns: 1fr;
-      gap: var(--space-4);
+    .showcase-prev,
+    .showcase-next {
+      display: none !important;
+    }
+
+    .showcase-swiper {
+      padding: var(--space-2) 0 var(--space-6) 0;
     }
   }
 </style>
+
+<script>
+  import Swiper from 'swiper';
+  import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+  import 'swiper/css';
+  import 'swiper/css/navigation';
+  import 'swiper/css/pagination';
+
+  // Function to equalize card heights
+  function equalizeCardHeights(swiperInstance) {
+    const slides = swiperInstance.slides;
+    if (!slides || slides.length === 0) return;
+
+    // Reset heights
+    slides.forEach(slide => {
+      const card = slide.querySelector('.product-card');
+      if (card) {
+        card.style.height = 'auto';
+      }
+    });
+
+    // Find max height
+    let maxHeight = 0;
+    slides.forEach(slide => {
+      const card = slide.querySelector('.product-card');
+      if (card) {
+        const height = card.offsetHeight;
+        if (height > maxHeight) {
+          maxHeight = height;
+        }
+      }
+    });
+
+    // Set all to max height
+    if (maxHeight > 0) {
+      slides.forEach(slide => {
+        const card = slide.querySelector('.product-card');
+        if (card) {
+          card.style.height = `${maxHeight}px`;
+        }
+      });
+    }
+  }
+
+  // Initialize Swiper
+  const swiper = new Swiper('.showcase-swiper', {
+    modules: [Navigation, Pagination, Autoplay],
+    slidesPerView: 1,
+    spaceBetween: 24,
+    loop: false,
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true
+    },
+    pagination: {
+      el: '.showcase-pagination',
+      clickable: true,
+      dynamicBullets: true
+    },
+    navigation: {
+      nextEl: '.showcase-next',
+      prevEl: '.showcase-prev',
+    },
+    breakpoints: {
+      // Mobile (≥480px)
+      480: {
+        slidesPerView: 1,
+        spaceBetween: 16
+      },
+      // Tablet (≥768px)
+      768: {
+        slidesPerView: 2,
+        spaceBetween: 20
+      },
+      // Desktop (≥1024px)
+      1024: {
+        slidesPerView: 3,
+        spaceBetween: 24
+      },
+      // Large Desktop (≥1280px)
+      1280: {
+        slidesPerView: 4,
+        spaceBetween: 24
+      }
+    },
+    on: {
+      init: function() {
+        equalizeCardHeights(this);
+      },
+      resize: function() {
+        equalizeCardHeights(this);
+      }
+    }
+  });
+</script>

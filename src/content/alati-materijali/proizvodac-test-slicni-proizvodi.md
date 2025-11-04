@@ -1,0 +1,15 @@
+---
+name: TEST Slični proizvodi
+manufacturer: Proizvodac
+model: d
+category: alati-materijali
+price: 500
+warranty: 5 godina
+inStock: true
+image: /images/products/logo.png
+images: []
+featured: true
+onSale: true
+popular: false
+---
+testiranje slicni proizvodi

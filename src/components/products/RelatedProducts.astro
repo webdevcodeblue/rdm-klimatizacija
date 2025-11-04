@@ -37,11 +37,30 @@ const formattedProducts = products.map(p => ({
     <p class="related-section__subtitle">Možda vas zanima i ovo</p>
   </div>
 
-  <div class="related-section__grid">
-    {formattedProducts.map((product) => (
-      <ProductCard product={product} viewMode="grid" />
-    ))}
-  </div>
+  {formattedProducts.length > 0 ? (
+    <div class="swiper-container">
+      <div class="swiper related-swiper">
+        <div class="swiper-wrapper">
+          {formattedProducts.map((product) => (
+            <div class="swiper-slide">
+              <ProductCard product={product} viewMode="grid" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Navigation buttons -->
+      <div class="swiper-button-prev related-prev"></div>
+      <div class="swiper-button-next related-next"></div>
+
+      <!-- Pagination -->
+      <div class="swiper-pagination related-pagination"></div>
+    </div>
+  ) : (
+    <div class="no-related">
+      <p>Nema sličnih proizvoda.</p>
+    </div>
+  )}
 
   <div class="related-section__footer">
     <a href="/proizvodi" class="related-section__link">
@@ -77,11 +96,110 @@ const formattedProducts = products.map(p => ({
     color: var(--text-secondary);
   }
 
-  .related-section__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: var(--space-6);
+  .swiper-container {
+    position: relative;
     margin-bottom: var(--space-8);
+  }
+
+  .related-swiper {
+    padding: var(--space-2) 0 var(--space-8) 0;
+  }
+
+  .swiper-slide {
+    height: auto;
+    display: flex;
+  }
+
+  .swiper-slide > * {
+    width: 100%;
+  }
+
+  /* Osiguraj istu visinu za sve kartice */
+  :global(.related-swiper .swiper-wrapper) {
+    align-items: stretch !important;
+  }
+
+  :global(.related-swiper .swiper-slide) {
+    height: auto !important;
+    display: flex !important;
+  }
+
+  /* Navigation Buttons */
+  .related-prev,
+  .related-next {
+    width: 48px !important;
+    height: 48px !important;
+    background: var(--color-white) !important;
+    border-radius: 50% !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    color: var(--color-primary) !important;
+    transition: all var(--transition-fast) !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    margin-top: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .related-prev {
+    left: -24px !important;
+  }
+
+  .related-next {
+    right: -24px !important;
+  }
+
+  .related-prev:after,
+  .related-next:after {
+    content: '' !important;
+    display: none !important;
+  }
+
+  /* SVG ikone unutar buttona */
+  :global(.related-prev svg),
+  :global(.related-next svg) {
+    width: 10px !important;
+    height: 16px !important;
+  }
+
+  :global(.related-prev .swiper-navigation-icon),
+  :global(.related-next .swiper-navigation-icon) {
+    width: 10px !important;
+    height: 16px !important;
+  }
+
+  .related-prev:hover,
+  .related-next:hover {
+    background: var(--color-primary) !important;
+    color: var(--color-white) !important;
+    transform: translateY(-50%) scale(1.1) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2) !important;
+  }
+
+  .swiper-button-disabled {
+    opacity: 0.3 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+  }
+
+  /* Pagination */
+  .swiper-pagination {
+    bottom: 0 !important;
+  }
+
+  :global(.related-pagination .swiper-pagination-bullet) {
+    width: 12px;
+    height: 12px;
+    background: var(--color-gray-300);
+    opacity: 1;
+    transition: all var(--transition-fast);
+  }
+
+  :global(.related-pagination .swiper-pagination-bullet-active) {
+    background: var(--color-primary);
+    width: 32px;
+    border-radius: 6px;
   }
 
   .related-section__footer {
@@ -108,10 +226,21 @@ const formattedProducts = products.map(p => ({
     transform: scale(1.05);
   }
 
+  .no-related {
+    text-align: center;
+    padding: var(--space-8);
+    color: var(--text-secondary);
+    background: var(--color-white);
+    border-radius: var(--border-radius-lg);
+    margin-bottom: var(--space-8);
+  }
+
   /* Responsive */
   @media (max-width: 1024px) {
-    .related-section__grid {
-      grid-template-columns: repeat(2, 1fr);
+    .related-prev,
+    .related-next {
+      width: 40px !important;
+      height: 40px !important;
     }
   }
 
@@ -128,9 +257,109 @@ const formattedProducts = products.map(p => ({
       font-size: var(--text-base);
     }
 
-    .related-section__grid {
-      grid-template-columns: 1fr;
-      gap: var(--space-4);
+    .related-prev,
+    .related-next {
+      display: none !important;
+    }
+
+    .related-swiper {
+      padding: var(--space-2) 0 var(--space-6) 0;
     }
   }
 </style>
+
+<script>
+  import Swiper from 'swiper';
+  import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+  import 'swiper/css';
+  import 'swiper/css/navigation';
+  import 'swiper/css/pagination';
+
+  // Function to equalize card heights
+  function equalizeCardHeights(swiperInstance) {
+    const slides = swiperInstance.slides;
+    if (!slides || slides.length === 0) return;
+
+    // Reset heights
+    slides.forEach(slide => {
+      const card = slide.querySelector('.product-card');
+      if (card) {
+        card.style.height = 'auto';
+      }
+    });
+
+    // Find max height
+    let maxHeight = 0;
+    slides.forEach(slide => {
+      const card = slide.querySelector('.product-card');
+      if (card) {
+        const height = card.offsetHeight;
+        if (height > maxHeight) {
+          maxHeight = height;
+        }
+      }
+    });
+
+    // Set all to max height
+    if (maxHeight > 0) {
+      slides.forEach(slide => {
+        const card = slide.querySelector('.product-card');
+        if (card) {
+          card.style.height = `${maxHeight}px`;
+        }
+      });
+    }
+  }
+
+  // Initialize Swiper for Related Products
+  const relatedSwiper = new Swiper('.related-swiper', {
+    modules: [Navigation, Pagination, Autoplay],
+    slidesPerView: 1,
+    spaceBetween: 24,
+    loop: false,
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true
+    },
+    pagination: {
+      el: '.related-pagination',
+      clickable: true,
+      dynamicBullets: true
+    },
+    navigation: {
+      nextEl: '.related-next',
+      prevEl: '.related-prev',
+    },
+    breakpoints: {
+      // Mobile (≥480px)
+      480: {
+        slidesPerView: 1,
+        spaceBetween: 16
+      },
+      // Tablet (≥768px)
+      768: {
+        slidesPerView: 2,
+        spaceBetween: 20
+      },
+      // Desktop (≥1024px)
+      1024: {
+        slidesPerView: 3,
+        spaceBetween: 24
+      },
+      // Large Desktop (≥1280px)
+      1280: {
+        slidesPerView: 4,
+        spaceBetween: 24
+      }
+    },
+    on: {
+      init: function() {
+        equalizeCardHeights(this);
+      },
+      resize: function() {
+        equalizeCardHeights(this);
+      }
+    }
+  });
+</script>

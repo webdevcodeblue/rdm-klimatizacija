@@ -10,10 +10,10 @@ warranty: 2 godine
 inStock: true
 image: /images/products/montaza-klime.png
 badge: Novo
-featured: false
+featured: true
 onSale: false
-popular: false
-isNew: false
+popular: true
+isNew: true
 specifications:
   power: ""
   area: "43"

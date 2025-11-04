@@ -61,7 +61,6 @@ collections:
       - { label: "Featured (na početnoj)", name: "featured", widget: "boolean", default: false }
       - { label: "Na akciji", name: "onSale", widget: "boolean", default: false }
       - { label: "Popularno", name: "popular", widget: "boolean", default: false }
-      - { label: "Novo u ponudi", name: "isNew", widget: "boolean", default: false }
 
       # SPECIFIKACIJE
       - label: "Specifikacije"
@@ -148,7 +147,6 @@ collections:
       - { label: "Featured (na početnoj)", name: "featured", widget: "boolean", default: false }
       - { label: "Na akciji", name: "onSale", widget: "boolean", default: false }
       - { label: "Popularno", name: "popular", widget: "boolean", default: false }
-      - { label: "Novo u ponudi", name: "isNew", widget: "boolean", default: false }
       - label: "Specifikacije"
         name: "specifications"
         widget: "object"
@@ -214,6 +212,7 @@ collections:
       - { label: "Oznaka", name: "badge", widget: "select", options: ["Akcija", "Novo", "Premium", "Bestseller"], required: false }
       - { label: "Featured (na početnoj)", name: "featured", widget: "boolean", default: false }
       - { label: "Na akciji", name: "onSale", widget: "boolean", default: false }
+      - { label: "Popularno", name: "popular", widget: "boolean", default: false }
       - label: "Specifikacije"
         name: "specifications"
         widget: "object"
@@ -276,6 +275,7 @@ collections:
       - { label: "Oznaka", name: "badge", widget: "select", options: ["Akcija", "Novo", "Premium", "Bestseller"], required: false }
       - { label: "Featured (na početnoj)", name: "featured", widget: "boolean", default: false }
       - { label: "Na akciji", name: "onSale", widget: "boolean", default: false }
+      - { label: "Popularno", name: "popular", widget: "boolean", default: false }
       - label: "Specifikacije"
         name: "specifications"
         widget: "object"
@@ -333,7 +333,9 @@ collections:
       - { label: "Glavna slika", name: "image", widget: "image", required: true }
       - { label: "Galerija slika", name: "images", widget: "list", field: { label: "Slika", name: "image", widget: "image" }, required: false }
       - { label: "Oznaka", name: "badge", widget: "select", options: ["Akcija", "Novo", "Bestseller"], required: false }
+      - { label: "Featured (na početnoj)", name: "featured", widget: "boolean", default: false }
       - { label: "Na akciji", name: "onSale", widget: "boolean", default: false }
+      - { label: "Popularno", name: "popular", widget: "boolean", default: false }
       - label: "Značajke"
         name: "features"
         widget: "list"

@@ -105,10 +105,16 @@ const product = {
 // Get all products for related products section
 const allProducts = await getCollection('dizalice-topline');
 
-// Get related products - show 4 different products (exclude current one)
+// Smart related products - prioritize "Popular" products
 const relatedProducts = allProducts
   .filter(p => p.slug !== entry.slug) // Exclude current product
-  .slice(0, 4) // Show 4 related products
+  .sort((a, b) => {
+    // Popular products first
+    if (a.data.popular && !b.data.popular) return -1;
+    if (!a.data.popular && b.data.popular) return 1;
+    return 0; // Keep original order for rest
+  })
+  .slice(0, 8) // Show 8 related products
   .map(p => ({
     id: p.slug,
     slug: p.slug,

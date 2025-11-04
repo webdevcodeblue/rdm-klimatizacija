@@ -1,14 +1,9 @@
 ---
 // Brendovi koje zastupamo
 const brands = [
-  { name: 'Mitsubishi Electric', logo: 'mitsubishi' },
-  { name: 'Daikin', logo: 'daikin' },
-  { name: 'Gree', logo: 'gree' },
-  { name: 'Samsung', logo: 'samsung' },
-  { name: 'LG', logo: 'lg' },
-  { name: 'Panasonic', logo: 'panasonic' },
-  { name: 'Toshiba', logo: 'toshiba' },
-  { name: 'Bosch', logo: 'bosch' }
+  { name: 'Haier', logo: 'haier' },
+  { name: 'Maxon', logo: 'maxon' },
+  { name: 'Toshiba', logo: 'toshiba' }
 ];
 ---
 
@@ -160,13 +155,30 @@ const brands = [
       font-size: var(--text-base);
     }
 
-    .brand-item {
+    .brands__carousel::before,
+    .brands__carousel::after {
+      display: none;
+    }
+
+    .brands__track {
+      animation: none;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-4);
       padding: 0 var(--space-4);
     }
 
+    .brand-item {
+      padding: 0;
+    }
+
+    .brand-item:nth-child(n+4) {
+      display: none;
+    }
+
     .brand-item__logo {
-      width: 120px;
-      height: 60px;
+      width: 100%;
+      height: 70px;
       font-size: var(--text-sm);
     }
   }

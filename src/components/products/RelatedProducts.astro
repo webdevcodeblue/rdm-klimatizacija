@@ -265,6 +265,17 @@ const formattedProducts = products.map(p => ({
     .related-swiper {
       padding: var(--space-2) 0 var(--space-6) 0;
     }
+
+    /* IMPORTANT: Force 100% width on mobile for all slides and cards */
+    :global(.related-swiper .swiper-slide) {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+
+    :global(.related-swiper .product-card) {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
   }
 </style>
 

@@ -295,6 +295,17 @@ const products = featuredProducts.map(p => ({
     .showcase-swiper {
       padding: var(--space-2) 0 var(--space-6) 0;
     }
+
+    /* IMPORTANT: Force 100% width on mobile for all slides and cards */
+    :global(.showcase-swiper .swiper-slide) {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+
+    :global(.showcase-swiper .product-card) {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
   }
 </style>
 

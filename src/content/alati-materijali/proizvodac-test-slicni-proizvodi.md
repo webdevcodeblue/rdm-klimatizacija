@@ -9,7 +9,8 @@ inStock: true
 image: /images/products/logo.png
 images: []
 featured: true
-onSale: true
+onSale: false
 popular: false
+isNew: false
 ---
 testiranje slicni proizvodi

@@ -4,7 +4,7 @@ const categories = [
   {
     title: 'KLIMA UREĐAJI',
     description: 'Mono split sustavi za hlađenje i grijanje',
-    image: '/images/categories/klima-uredaji.jpg',
+    image: '/images/categories/klima-uredaji.jpeg',
     href: '/klima-uredaji',
     count: '250+ proizvoda',
     color: 'blue'
@@ -12,7 +12,7 @@ const categories = [
   {
     title: 'MULTI KLIMA UREĐAJI',
     description: 'Jedna vanjska, više unutarnjih jedinica',
-    image: '/images/categories/multi-klima.jpg',
+    image: '/images/categories/multi-klima.jpeg',
     href: '/multi-klima',
     count: '100+ proizvoda',
     color: 'green'
@@ -20,7 +20,7 @@ const categories = [
   {
     title: 'DIZALICE TOPLINE',
     description: 'Haier Super Aqua monoblok sustavi za grijanje, hlađenje i toplu vodu',
-    image: '/images/categories/dizalice-topline.jpg',
+    image: '/images/categories/dizalice-topline.jpeg',
     href: '/dizalice-topline',
     count: '4 modela',
     color: 'orange'
@@ -28,7 +28,7 @@ const categories = [
   {
     title: 'MIKROKLIMA',
     description: 'Prijenosni i pokretni klima uređaji',
-    image: '/images/categories/mikroklima.jpg',
+    image: '/images/categories/mikro-klima.jpeg',
     href: '/mikroklima',
     count: '30+ proizvoda',
     color: 'purple'
@@ -36,7 +36,7 @@ const categories = [
   {
     title: 'ALATI I MATERIJAL',
     description: 'Sve za instalaciju i održavanje',
-    image: '/images/categories/alati.jpg',
+    image: '/images/categories/alati-materijali-za-klimu.jpg',
     href: '/alati-materijal',
     count: '200+ proizvoda',
     color: 'red'
@@ -44,7 +44,7 @@ const categories = [
   {
     title: 'MONTAŽA I SERVIS',
     description: 'Profesionalna ugradnja i održavanje',
-    image: '/images/categories/servis.jpg',
+    image: '/images/categories/montaza-servis-klima-uredaja.jpeg',
     href: '/montaza-servis',
     count: 'Naručite uslugu',
     color: 'teal'
@@ -69,7 +69,7 @@ const categories = [
           data-color={category.color}
           style={`animation-delay: ${index * 0.1}s`}
         >
-          <div class="category-card__image">
+          <div class="category-card__image" style={`background-image: url('${category.image}'); background-size: cover; background-position: center; background-repeat: no-repeat;`}>
             <div class="category-card__overlay"></div>
             <span class="category-card__count">{category.count}</span>
           </div>
@@ -142,6 +142,9 @@ const categories = [
     position: relative;
     height: 200px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
     overflow: hidden;
   }
 

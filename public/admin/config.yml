@@ -105,7 +105,7 @@ collections:
         name: "infoSheet"
         widget: "file"
         required: false
-        media_folder: "public/documents"
+        media_folder: "../../../public/documents"
         public_folder: "/documents"
         hint: "Glavni informacijski list - prikazuje se kao poseban gumb i u tab-u Dokumenti"
       - label: "Dodatni dokumenti"
@@ -117,7 +117,7 @@ collections:
           - label: "PDF datoteka"
             name: "url"
             widget: "file"
-            media_folder: "public/documents"
+            media_folder: "../../../public/documents"
             public_folder: "/documents"
 
       # OPIS
@@ -174,7 +174,7 @@ collections:
         name: "infoSheet"
         widget: "file"
         required: false
-        media_folder: "public/documents"
+        media_folder: "../../../public/documents"
         public_folder: "/documents"
         hint: "Glavni informacijski list - prikazuje se kao poseban gumb i u tab-u Dokumenti"
       - label: "Dodatni dokumenti"
@@ -186,7 +186,7 @@ collections:
           - label: "PDF datoteka"
             name: "url"
             widget: "file"
-            media_folder: "public/documents"
+            media_folder: "../../../public/documents"
             public_folder: "/documents"
 
       - { label: "Opis proizvoda", name: "body", widget: "markdown", required: false }
@@ -236,7 +236,7 @@ collections:
         name: "infoSheet"
         widget: "file"
         required: false
-        media_folder: "public/documents"
+        media_folder: "../../../public/documents"
         public_folder: "/documents"
         hint: "Glavni informacijski list - prikazuje se kao poseban gumb i u tab-u Dokumenti"
       - label: "Dodatni dokumenti"
@@ -248,7 +248,7 @@ collections:
           - label: "PDF datoteka"
             name: "url"
             widget: "file"
-            media_folder: "public/documents"
+            media_folder: "../../../public/documents"
             public_folder: "/documents"
 
       - { label: "Opis proizvoda", name: "body", widget: "markdown", required: false }
@@ -295,7 +295,7 @@ collections:
         name: "infoSheet"
         widget: "file"
         required: false
-        media_folder: "public/documents"
+        media_folder: "../../../public/documents"
         public_folder: "/documents"
         hint: "Glavni informacijski list - prikazuje se kao poseban gumb i u tab-u Dokumenti"
       - label: "Dodatni dokumenti"
@@ -307,7 +307,7 @@ collections:
           - label: "PDF datoteka"
             name: "url"
             widget: "file"
-            media_folder: "public/documents"
+            media_folder: "../../../public/documents"
             public_folder: "/documents"
 
       - { label: "Opis proizvoda", name: "body", widget: "markdown", required: false }
@@ -345,7 +345,7 @@ collections:
         name: "infoSheet"
         widget: "file"
         required: false
-        media_folder: "public/documents"
+        media_folder: "../../../public/documents"
         public_folder: "/documents"
         hint: "Glavni informacijski list - prikazuje se kao poseban gumb i u tab-u Dokumenti"
       - label: "Dodatni dokumenti"
@@ -357,7 +357,7 @@ collections:
           - label: "PDF datoteka"
             name: "url"
             widget: "file"
-            media_folder: "public/documents"
+            media_folder: "../../../public/documents"
             public_folder: "/documents"
 
       - { label: "Opis proizvoda", name: "body", widget: "markdown", required: false }

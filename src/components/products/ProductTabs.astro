@@ -4,6 +4,13 @@ export interface Props {
 }
 
 const { product } = Astro.props;
+
+// Function to extract file extension from URL
+function getFileType(url: string): string {
+  if (!url) return 'FILE';
+  const extension = url.split('.').pop()?.toUpperCase();
+  return extension || 'FILE';
+}
 ---
 
 <div class="product-tabs">
@@ -121,7 +128,7 @@ const { product } = Astro.props;
                     <polyline points="7 10 12 15 17 10"></polyline>
                     <line x1="12" y1="15" x2="12" y2="3"></line>
                   </svg>
-                  Preuzmite energetsku oznaku (PDF)
+                  Preuzmite energetsku oznaku
                 </a>
               </div>
             </div>
@@ -151,7 +158,7 @@ const { product } = Astro.props;
                   </div>
                   <div class="document-card__content">
                     <h5>Informacijski list proizvoda</h5>
-                    <span class="document-card__meta">PDF</span>
+                    <span class="document-card__meta">{getFileType(product.infoSheet)}</span>
                   </div>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="document-card__download">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -172,7 +179,7 @@ const { product } = Astro.props;
                   </div>
                   <div class="document-card__content">
                     <h5>{doc.name}</h5>
-                    <span class="document-card__meta">PDF</span>
+                    <span class="document-card__meta">{getFileType(doc.url)}</span>
                   </div>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="document-card__download">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>

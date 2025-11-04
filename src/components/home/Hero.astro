@@ -31,9 +31,9 @@ import heroImage from '../../assets/images/hero/klima_uredaji_za_dom.jpg';
       </p>
 
       <div class="hero__search">
-        <form class="search-box" action="/pretraga" method="GET">
+        <form class="search-box" id="heroSearchForm">
           <div class="search-box__filters">
-            <select class="search-box__select" name="category">
+            <select class="search-box__select" name="category" id="heroCategory">
               <option value="">Sve kategorije</option>
               <option value="klima-uredaji">Klima uređaji</option>
               <option value="multi-klima">Multi klima</option>
@@ -41,22 +41,24 @@ import heroImage from '../../assets/images/hero/klima_uredaji_za_dom.jpg';
               <option value="mikroklima">Mikroklima</option>
             </select>
 
-            <select class="search-box__select" name="power">
+            <select class="search-box__select" name="power" id="heroPower">
               <option value="">Snaga</option>
-              <option value="2-3">2-3 kW</option>
-              <option value="3-4">3-4 kW</option>
-              <option value="4-5">4-5 kW</option>
-              <option value="5-6">5-6 kW</option>
-              <option value="6+">6+ kW</option>
+              <option value="2-2.5">2.0 - 2.5 kW</option>
+              <option value="2.5-3.5">2.5 - 3.5 kW</option>
+              <option value="3.5-5">3.5 - 5.0 kW</option>
+              <option value="5-7">5.0 - 7.0 kW</option>
+              <option value="7-10">7.0 - 10.0 kW</option>
+              <option value="10+">10.0+ kW</option>
             </select>
 
-            <select class="search-box__select" name="area">
+            <select class="search-box__select" name="area" id="heroArea">
               <option value="">Površina</option>
-              <option value="20">do 20 m²</option>
-              <option value="30">20-30 m²</option>
-              <option value="40">30-40 m²</option>
-              <option value="50">40-50 m²</option>
-              <option value="50+">50+ m²</option>
+              <option value="0-20">do 20 m²</option>
+              <option value="20-30">20 - 30 m²</option>
+              <option value="30-40">30 - 40 m²</option>
+              <option value="40-60">40 - 60 m²</option>
+              <option value="60-80">60 - 80 m²</option>
+              <option value="80+">80+ m²</option>
             </select>
           </div>
 
@@ -375,3 +377,41 @@ import heroImage from '../../assets/images/hero/klima_uredaji_za_dom.jpg';
     }
   }
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('heroSearchForm') as HTMLFormElement;
+
+    if (!form) return;
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      // Get selected values
+      const categorySelect = document.getElementById('heroCategory') as HTMLSelectElement;
+      const powerSelect = document.getElementById('heroPower') as HTMLSelectElement;
+      const areaSelect = document.getElementById('heroArea') as HTMLSelectElement;
+
+      const category = categorySelect?.value || '';
+      const power = powerSelect?.value || '';
+      const area = areaSelect?.value || '';
+
+      // Determine target category (default to klima-uredaji if none selected)
+      let targetCategory = category || 'klima-uredaji';
+
+      // Build query string
+      const params = new URLSearchParams();
+      if (power) params.append('power', power);
+      if (area) params.append('area', area);
+
+      // Build final URL
+      const queryString = params.toString();
+      const targetUrl = queryString
+        ? `/${targetCategory}?${queryString}`
+        : `/${targetCategory}`;
+
+      // Redirect to target page with filters
+      window.location.href = targetUrl;
+    });
+  });
+</script>

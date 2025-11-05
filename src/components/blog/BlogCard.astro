@@ -31,8 +31,6 @@ const readingTime = 5; // Default 5 minutes, will be dynamic later
 ---
 
 <article class="blog-card">
-  {post.featured && <span class="blog-card__badge">Istaknuto</span>}
-
   <a href={`/blog/${post.slug}`} class="blog-card__image-link">
     <div class="blog-card__image">
       <img
@@ -112,21 +110,6 @@ const readingTime = 5; // Default 5 minutes, will be dynamic later
   .blog-card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-lg);
-  }
-
-  .blog-card__badge {
-    position: absolute;
-    top: var(--space-4);
-    left: var(--space-4);
-    z-index: 10;
-    padding: var(--space-2) var(--space-4);
-    background: var(--color-accent);
-    color: var(--color-white);
-    font-size: var(--text-xs);
-    font-weight: var(--font-bold);
-    text-transform: uppercase;
-    border-radius: var(--border-radius-full);
-    letter-spacing: 0.05em;
   }
 
   .blog-card__image-link {

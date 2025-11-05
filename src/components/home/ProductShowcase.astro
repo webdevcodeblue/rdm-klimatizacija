@@ -177,21 +177,8 @@ const products = featuredProducts.map(p => ({
 
   .showcase-prev:after,
   .showcase-next:after {
-    content: '' !important;
-    display: none !important;
-  }
-
-  /* SVG ikone unutar buttona - MORA biti :global() za dinamički injektirane elemente */
-  :global(.showcase-prev svg),
-  :global(.showcase-next svg) {
-    width: 10px !important;
-    height: 16px !important;
-  }
-
-  :global(.showcase-prev .swiper-navigation-icon),
-  :global(.showcase-next .swiper-navigation-icon) {
-    width: 10px !important;
-    height: 16px !important;
+    font-size: 20px !important;
+    font-weight: bold !important;
   }
 
   .showcase-prev:hover,

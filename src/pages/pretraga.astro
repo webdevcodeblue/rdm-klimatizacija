@@ -37,7 +37,7 @@ if (query && query.length >= 2) {
   // Pretraži proizvode
   results = allProducts.filter(product => {
     const searchableText = [
-      product.data.title,
+      product.data.name,
       product.data.manufacturer,
       product.data.model,
       product.data.description,
@@ -113,41 +113,41 @@ const pageDescription = query
 
               <div class="product-card__image">
                 <img
-                  src={product.data.images?.[0] || '/images/placeholder.jpg'}
-                  alt={product.data.title}
+                  src={product.data.images?.[0] || product.data.image || '/images/placeholder.jpg'}
+                  alt={product.data.name}
                   loading="lazy"
                 />
               </div>
 
               <div class="product-card__content">
-                <h3 class="product-card__title">{product.data.title}</h3>
+                <h3 class="product-card__title">{product.data.name}</h3>
 
-                {product.data.specs && (
+                {product.data.specifications && (
                   <ul class="product-card__specs">
-                    {product.data.specs.cooling && (
+                    {product.data.specifications.cooling && (
                       <li>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                           <path d="M12 2v20M2 12h20M6 6l12 12M18 6L6 18"/>
                         </svg>
-                        Hlađenje: {product.data.specs.cooling}
+                        Hlađenje: {product.data.specifications.cooling}
                       </li>
                     )}
-                    {product.data.specs.heating && (
+                    {product.data.specifications.heating && (
                       <li>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                           <circle cx="12" cy="12" r="5"/>
                           <line x1="12" y1="1" x2="12" y2="3"/>
                           <line x1="12" y1="21" x2="12" y2="23"/>
                         </svg>
-                        Grijanje: {product.data.specs.heating}
+                        Grijanje: {product.data.specifications.heating}
                       </li>
                     )}
-                    {product.data.specs.energyClass && (
+                    {product.data.specifications.energyClass && (
                       <li>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                           <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
                         </svg>
-                        Klasa: {product.data.specs.energyClass}
+                        Klasa: {product.data.specifications.energyClass}
                       </li>
                     )}
                   </ul>
@@ -155,13 +155,17 @@ const pageDescription = query
 
                 <div class="product-card__footer">
                   <div class="product-card__price">
-                    {product.data.salePrice && product.data.salePrice < product.data.price ? (
-                      <>
-                        <span class="product-card__price--old">{product.data.price.toFixed(2)}€</span>
-                        <span class="product-card__price--sale">{product.data.salePrice.toFixed(2)}€</span>
-                      </>
+                    {product.data.price ? (
+                      product.data.salePrice && product.data.salePrice < product.data.price ? (
+                        <>
+                          <span class="product-card__price--old">{product.data.price.toFixed(2)}€</span>
+                          <span class="product-card__price--sale">{product.data.salePrice.toFixed(2)}€</span>
+                        </>
+                      ) : (
+                        <span class="product-card__price--regular">{product.data.price.toFixed(2)}€</span>
+                      )
                     ) : (
-                      <span class="product-card__price--regular">{product.data.price.toFixed(2)}€</span>
+                      <span class="product-card__price--regular">Na upit</span>
                     )}
                   </div>
 
@@ -264,6 +268,7 @@ const pageDescription = query
   .product-card {
     display: flex;
     flex-direction: column;
+    position: relative;
     background: var(--color-white);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-xl);
@@ -287,7 +292,8 @@ const pageDescription = query
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    z-index: 2;
+    z-index: 10;
+    gap: var(--space-2);
   }
 
   .product-card__category {

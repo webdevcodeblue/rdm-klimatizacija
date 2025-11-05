@@ -228,12 +228,15 @@ const navigationItems = [
       </div>
 
       <div class="mobile-menu__search">
-        <form class="search-form" action="/pretraga" method="GET">
+        <form class="search-form" action="/pretraga" method="GET" id="mobileSearchForm">
           <input
             type="search"
             name="q"
             placeholder="Pretražite proizvode..."
             class="search-form__input"
+            id="mobileSearchInput"
+            aria-label="Pretraži proizvode"
+            autocomplete="off"
           />
           <button type="submit" class="search-form__button">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -242,6 +245,11 @@ const navigationItems = [
             </svg>
           </button>
         </form>
+
+        <!-- Mobile Search Results Dropdown -->
+        <div class="mobile-search-dropdown" id="mobileSearchDropdown" role="listbox" aria-hidden="true">
+          <div class="search-dropdown__results" id="mobileSearchResults"></div>
+        </div>
       </div>
 
       <nav class="mobile-menu__nav">
@@ -963,6 +971,32 @@ const navigationItems = [
     transform: translateY(-50%);
   }
 
+  /* Mobile Search Dropdown */
+  .mobile-search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: var(--space-2);
+    background: var(--color-white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-xl);
+    max-height: 400px;
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all var(--transition-fast);
+    z-index: 1000;
+  }
+
+  .mobile-search-dropdown.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
   .mobile-menu__nav {
     display: flex;
     flex-direction: column;
@@ -1458,5 +1492,107 @@ const navigationItems = [
   // Close dropdown on form submit
   searchForm?.addEventListener('submit', () => {
     searchDropdown?.classList.remove('active');
+  });
+
+  // Mobile search functionality
+  const mobileSearchInput = document.getElementById('mobileSearchInput') as HTMLInputElement;
+  const mobileSearchDropdown = document.getElementById('mobileSearchDropdown');
+  const mobileSearchResults = document.getElementById('mobileSearchResults');
+  const mobileSearchForm = document.getElementById('mobileSearchForm') as HTMLFormElement;
+
+  let mobileSearchTimeout: number | null = null;
+  let currentMobileQuery = '';
+
+  // Perform mobile search (reuse same logic)
+  async function performMobileSearch(query: string) {
+    if (query.length < 2) {
+      mobileSearchDropdown?.classList.remove('active');
+      return;
+    }
+
+    currentMobileQuery = query;
+
+    // Show loading
+    if (mobileSearchResults) {
+      mobileSearchResults.innerHTML = '<div class="search-dropdown__loading">Pretraga...</div>';
+      mobileSearchDropdown?.classList.add('active');
+    }
+
+    try {
+      const response = await fetch(`/api/search.json?q=${encodeURIComponent(query)}`);
+      const data = await response.json();
+
+      // Check if query is still current
+      if (query !== currentMobileQuery) return;
+
+      if (data.results && data.results.length > 0) {
+        const resultsHTML = data.results.slice(0, 8).map((result: any) => `
+          <a href="${result.url}" class="search-result-item">
+            <img
+              src="${result.image || '/images/placeholder.jpg'}"
+              alt="${result.title}"
+              class="search-result-item__image"
+              loading="lazy"
+            >
+            <div class="search-result-item__content">
+              <div class="search-result-item__title">${result.title}</div>
+              <div class="search-result-item__category">${result.categoryName}</div>
+            </div>
+            <div class="search-result-item__price">
+              ${formatPrice(result.price, result.salePrice)}
+            </div>
+          </a>
+        `).join('');
+
+        const footerHTML = data.total > 8
+          ? `<div class="search-dropdown__footer">
+               <a href="/pretraga?q=${encodeURIComponent(query)}" class="search-dropdown__view-all">
+                 Vidi sve rezultate (${data.total})
+               </a>
+             </div>`
+          : '';
+
+        if (mobileSearchResults) {
+          mobileSearchResults.innerHTML = resultsHTML + footerHTML;
+          mobileSearchDropdown?.classList.add('active');
+        }
+      } else {
+        if (mobileSearchResults) {
+          mobileSearchResults.innerHTML = '<div class="search-dropdown__empty">Nema pronađenih proizvoda</div>';
+          mobileSearchDropdown?.classList.add('active');
+        }
+      }
+    } catch (error) {
+      console.error('Mobile search error:', error);
+      if (mobileSearchResults) {
+        mobileSearchResults.innerHTML = '<div class="search-dropdown__empty">Greška pri pretraživanju</div>';
+      }
+    }
+  }
+
+  // Mobile search input event listener
+  mobileSearchInput?.addEventListener('input', debounce((e: Event) => {
+    const query = (e.target as HTMLInputElement).value.trim();
+    performMobileSearch(query);
+  }, 300));
+
+  // Mobile search focus
+  mobileSearchInput?.addEventListener('focus', () => {
+    if (currentMobileQuery.length >= 2) {
+      mobileSearchDropdown?.classList.add('active');
+    }
+  });
+
+  // Close mobile dropdown on form submit
+  mobileSearchForm?.addEventListener('submit', () => {
+    mobileSearchDropdown?.classList.remove('active');
+  });
+
+  // Close mobile dropdown when clicking outside
+  document.addEventListener('click', (e: Event) => {
+    const target = e.target as HTMLElement;
+    if (!target.closest('.mobile-menu__search')) {
+      mobileSearchDropdown?.classList.remove('active');
+    }
   });
 </script>

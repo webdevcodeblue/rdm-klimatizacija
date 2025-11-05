@@ -34,6 +34,9 @@ if (!entry) {
 
 const rawProduct = entry.data;
 
+// Render markdown content to HTML
+const renderedContent = await entry.render();
+
 // Convert Content Collection data to format expected by components
 const product = {
   slug: entry.slug,
@@ -68,7 +71,7 @@ const product = {
     }
   },
   features: rawProduct.features,
-  description: entry.body,
+  descriptionContent: renderedContent.Content,
   technicalSpecs: {
     general: {
       'Tip uređaja': 'Dizalica topline',

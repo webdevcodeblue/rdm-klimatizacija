@@ -47,7 +47,9 @@ function getFileType(url: string): string {
     <div class="tab-panel tab-panel--active" data-panel="description">
       <div class="tab-panel__content">
         <h3>Opis proizvoda</h3>
-        <div class="description" set:html={product.description} />
+        <div class="description">
+          {product.descriptionContent && <product.descriptionContent />}
+        </div>
 
         {product.features && product.features.length > 0 && (
           <>
@@ -301,6 +303,16 @@ function getFileType(url: string): string {
 
   .description p {
     margin-bottom: var(--space-4);
+  }
+
+  .description a {
+    color: var(--color-primary);
+    text-decoration: underline;
+    transition: color var(--transition-fast);
+  }
+
+  .description a:hover {
+    color: var(--color-primary-hover);
   }
 
   .features-grid {

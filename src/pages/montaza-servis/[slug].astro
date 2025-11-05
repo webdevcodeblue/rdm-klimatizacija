@@ -32,12 +32,15 @@ if (!entry) {
 
 const rawService = entry.data;
 
+// Render markdown content to HTML
+const renderedContent = await entry.render();
+
 // Convert Content Collection data to format expected by components
 const service = {
   id: entry.slug,
   slug: entry.slug,
   name: rawService.name,
-  description: entry.body || '',
+  descriptionContent: renderedContent.Content,
   image: rawService.image,
   images: rawService.images || [rawService.image],
   price: rawService.price,

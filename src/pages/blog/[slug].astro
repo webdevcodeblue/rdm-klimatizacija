@@ -7,17 +7,18 @@ import { getCollection, getEntry } from 'astro:content';
 
 export async function getStaticPaths() {
   const blogPosts = await getCollection('blog');
-  return blogPosts.map(post => ({
-    params: { slug: post.slug },
-    props: { post }
+  return blogPosts.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry }
   }));
 }
 
-const { post } = Astro.props;
+const { entry } = Astro.props;
 const { slug } = Astro.params;
 
 // Render markdown content
-const { Content } = await post.render();
+const { Content } = await entry.render();
+const post = entry.data;
 
 // Format date
 const formatDate = (date: Date) => {
@@ -35,8 +36,8 @@ const allPosts = await getCollection('blog', ({ data }) => {
 
 const relatedPosts = allPosts
   .filter(p => p.slug !== slug && (
-    p.data.category === post.data.category ||
-    p.data.tags?.some(tag => post.data.tags?.includes(tag))
+    p.data.category === post.category ||
+    p.data.tags?.some(tag => post.tags?.includes(tag))
   ))
   .slice(0, 3)
   .map(p => ({
@@ -55,15 +56,15 @@ const relatedPosts = allPosts
 const currentUrl = `https://rdm-klimatizacija.com/blog/${slug}`;
 const shareUrls = {
   facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`,
-  twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(post.data.title)}`,
-  linkedin: `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(currentUrl)}&title=${encodeURIComponent(post.data.title)}`
+  twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(post.title)}`,
+  linkedin: `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(currentUrl)}&title=${encodeURIComponent(post.title)}`
 };
 ---
 
 <BaseLayout
-  title={`${post.data.title} | RDM Klimatizacija Blog`}
-  description={post.data.description}
-  keywords={post.data.tags?.join(', ') || 'klimatizacija, klima uređaji, savjeti'}
+  title={`${post.title} | RDM Klimatizacija Blog`}
+  description={post.description}
+  keywords={post.tags?.join(', ') || 'klimatizacija, klima uređaji, savjeti'}
 >
   <Header />
 
@@ -80,7 +81,7 @@ const shareUrls = {
               <a href="/blog">Blog</a>
             </li>
             <li class="breadcrumb__item active">
-              {post.data.title}
+              {post.title}
             </li>
           </ol>
         </nav>
@@ -91,11 +92,11 @@ const shareUrls = {
     <article class="post">
       <div class="container">
         <div class="post__header">
-          {post.data.category && (
-            <span class="post__category">{post.data.category}</span>
+          {post.category && (
+            <span class="post__category">{post.category}</span>
           )}
 
-          <h1 class="post__title">{post.data.title}</h1>
+          <h1 class="post__title">{post.title}</h1>
 
           <div class="post__meta">
             <div class="post__meta-item">
@@ -103,7 +104,7 @@ const shareUrls = {
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                 <circle cx="12" cy="7" r="4"></circle>
               </svg>
-              <span>{post.data.author}</span>
+              <span>{post.author}</span>
             </div>
 
             <div class="post__meta-item">
@@ -113,8 +114,8 @@ const shareUrls = {
                 <line x1="8" y1="2" x2="8" y2="6"></line>
                 <line x1="3" y1="10" x2="21" y2="10"></line>
               </svg>
-              <time datetime={post.data.publishDate.toISOString()}>
-                {formatDate(post.data.publishDate)}
+              <time datetime={post.publishDate.toISOString()}>
+                {formatDate(post.publishDate)}
               </time>
             </div>
 
@@ -129,8 +130,8 @@ const shareUrls = {
 
           <div class="post__image">
             <img
-              src={post.data.image}
-              alt={post.data.title}
+              src={post.image}
+              alt={post.title}
             />
           </div>
         </div>
@@ -143,11 +144,11 @@ const shareUrls = {
             </div>
 
             <!-- Tags -->
-            {post.data.tags && post.data.tags.length > 0 && (
+            {post.tags && post.tags.length > 0 && (
               <div class="post__tags">
                 <h3>Oznake:</h3>
                 <div class="tags-list">
-                  {post.data.tags.map(tag => (
+                  {post.tags.map(tag => (
                     <span class="tag">{tag}</span>
                   ))}
                 </div>
@@ -209,7 +210,7 @@ const shareUrls = {
                 </svg>
               </div>
               <div class="author-card__info">
-                <h3>{post.data.author}</h3>
+                <h3>{post.author}</h3>
                 <p>Stručnjak za klimatizaciju</p>
               </div>
             </div>

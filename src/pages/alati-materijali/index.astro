@@ -109,13 +109,20 @@ const viewMode = url.searchParams.get('view') || 'list';
     <section class="products-section">
       <div class="container">
         <div class="products-layout">
-          <!-- Sidebar Filters -->
+          <!-- Sidebar - Product List -->
           <aside class="products-sidebar">
-            <ProductFilter
-              manufacturers={manufacturers}
-              categories={categories}
-              currentFilters={currentFilters}
-            />
+            <div class="product-list-sidebar">
+              <h3 class="product-list-sidebar__title">Svi proizvodi</h3>
+              <ul class="product-list-sidebar__list">
+                {products.map((product) => (
+                  <li class="product-list-sidebar__item">
+                    <a href={`#product-${product.id}`} class="product-list-sidebar__link">
+                      {product.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </aside>
 
           <!-- Main Content -->
@@ -163,7 +170,9 @@ const viewMode = url.searchParams.get('view') || 'list';
             <!-- Products Grid/List -->
             <div class={`products-grid products-grid--${viewMode}`}>
               {filteredProducts.map((product) => (
-                <ProductCard product={product} viewMode={viewMode} />
+                <div id={`product-${product.id}`}>
+                  <ProductCard product={product} viewMode={viewMode} />
+                </div>
               ))}
             </div>
 
@@ -328,6 +337,53 @@ const viewMode = url.searchParams.get('view') || 'list';
 
   .products-sidebar::-webkit-scrollbar-thumb:hover {
     background: #94a3b8;
+  }
+
+  /* Product List Sidebar */
+  .product-list-sidebar {
+    background: var(--color-white);
+    border-radius: var(--border-radius-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-card);
+  }
+
+  .product-list-sidebar__title {
+    font-size: var(--text-lg);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: 2px solid var(--color-primary);
+  }
+
+  .product-list-sidebar__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .product-list-sidebar__item {
+    margin: 0;
+  }
+
+  .product-list-sidebar__link {
+    display: block;
+    padding: var(--space-3) var(--space-4);
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: var(--border-radius-base);
+    transition: all var(--transition-fast);
+    font-size: var(--text-sm);
+    line-height: 1.4;
+  }
+
+  .product-list-sidebar__link:hover {
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+    transform: translateX(4px);
   }
 
   /* Toolbar */

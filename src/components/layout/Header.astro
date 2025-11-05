@@ -31,10 +31,9 @@ const navigationItems = [
     hasDropdown: true,
     dropdownItems: [
       { label: 'Svi proizvodi', href: '/dizalice-topline' },
-      { label: 'Haier Super Aqua 5kW', href: '/dizalice-topline/haier-super-aqua-au052fycra-hw' },
-      { label: 'Haier Super Aqua 7.8kW', href: '/dizalice-topline/haier-super-aqua-au082fycra-hw' },
-      { label: 'Haier Super Aqua 13.5kW', href: '/dizalice-topline/haier-super-aqua-au112fycra-hw' },
-      { label: 'Haier Super Aqua 16kW', href: '/dizalice-topline/haier-super-aqua-au162fycra-hw' }
+      { label: 'Toshiba', href: '/dizalice-topline?brand=toshiba' },
+      { label: 'Haier', href: '/dizalice-topline?brand=haier' },
+      { label: 'Maxon', href: '/dizalice-topline?brand=maxon' }
     ]
   },
   {
@@ -51,24 +50,12 @@ const navigationItems = [
   {
     label: 'ALATI I MATERIJALI',
     href: '/alati-materijali',
-    hasDropdown: true,
-    dropdownItems: [
-      { label: 'Svi proizvodi', href: '/alati-materijali' },
-      { label: 'Cijevi', href: '/alati-materijali?category=cijevi' },
-      { label: 'Držači', href: '/alati-materijali?category=drzaci' },
-      { label: 'Alati', href: '/alati-materijali?category=alati' },
-      { label: 'Dodatna oprema', href: '/alati-materijali?category=oprema' }
-    ]
+    hasDropdown: false
   },
   {
     label: 'MONTAŽA I SERVIS',
     href: '/montaza-servis',
-    hasDropdown: true,
-    dropdownItems: [
-      { label: 'Montaža klima uređaja', href: '/montaza' },
-      { label: 'Servis i održavanje', href: '/servis' },
-      { label: 'Čišćenje klima uređaja', href: '/ciscenje' }
-    ]
+    hasDropdown: false
   },
   {
     label: 'AKCIJE',

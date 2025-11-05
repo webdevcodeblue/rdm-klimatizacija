@@ -39,7 +39,7 @@ const categories = [...new Set(products.map(p => p.category))].sort();
 const url = Astro.url;
 
 const currentFilters = {
-  manufacturer: url.searchParams.get('manufacturer') || undefined,
+  manufacturers: url.searchParams.getAll('manufacturer'), // Multiple manufacturers
   category: url.searchParams.get('category') || undefined,
   power: url.searchParams.get('power') || undefined,
   area: url.searchParams.get('area') || undefined,

@@ -41,7 +41,7 @@ const url = Astro.url;
 const brandFilter = url.searchParams.get('brand');
 
 const currentFilters = {
-  manufacturer: url.searchParams.get('manufacturer') || undefined,
+  manufacturers: url.searchParams.getAll('manufacturer'), // Multiple manufacturers
   category: url.searchParams.get('category') || undefined,
   power: url.searchParams.get('power') || undefined,
   area: url.searchParams.get('area') || undefined,
@@ -61,10 +61,10 @@ if (brandFilter) {
   });
 }
 
-// Filter by manufacturer from sidebar
-if (currentFilters.manufacturer) {
+// Filter by manufacturers from sidebar (multiple selection)
+if (currentFilters.manufacturers && currentFilters.manufacturers.length > 0) {
   filteredProducts = filteredProducts.filter(p =>
-    p.manufacturer === currentFilters.manufacturer
+    currentFilters.manufacturers.includes(p.manufacturer)
   );
 }
 

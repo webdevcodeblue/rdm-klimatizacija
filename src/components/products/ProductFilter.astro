@@ -4,7 +4,7 @@ export interface Props {
   manufacturers?: string[];
   categoryType?: 'climate' | 'microclimate'; // Tip kategorije za prilagodbu filtera
   currentFilters?: {
-    manufacturer?: string;
+    manufacturers?: string[]; // Changed to array for multiple selection
     power?: string;
     area?: string;
     airflow?: string; // Za mikroklima
@@ -71,7 +71,7 @@ const airflowOptions = [
                 type="checkbox"
                 name="manufacturer"
                 value={manufacturer}
-                checked={currentFilters.manufacturer === manufacturer}
+                checked={currentFilters.manufacturers?.includes(manufacturer)}
               />
               <span class="filter__checkbox-label">{manufacturer}</span>
             </label>
@@ -428,9 +428,20 @@ const airflowOptions = [
     const formData = new FormData(filterForm);
     const params = new URLSearchParams();
 
-    formData.forEach((value, key) => {
+    // Handle manufacturer checkboxes (multiple values allowed)
+    const manufacturers = formData.getAll('manufacturer');
+    manufacturers.forEach(manufacturer => {
+      if (manufacturer) {
+        params.append('manufacturer', manufacturer.toString());
+      }
+    });
+
+    // Handle other single-value fields
+    const singleFields = ['power', 'area', 'airflow', 'priceMin', 'priceMax'];
+    singleFields.forEach(field => {
+      const value = formData.get(field);
       if (value) {
-        params.append(key, value.toString());
+        params.append(field, value.toString());
       }
     });
 

@@ -2,7 +2,7 @@
 title: "Kako odabrati idealan klima uređaj za svoj dom - Stručni vodič RDM Klimatizacija"
 description: "Detaljan vodič za odabir savršenog klima uređaja za vaš dom. Saznajte sve o snazi, energetskoj učinkovitosti, vrstama klima uređaja i važnim karakteristikama prije kupnje."
 author: "RDM Klimatizacija"
-publishDate: 2025-01-05
+publishDate: 2024-12-15T10:00:00.000Z
 image: "/images/blog/kako-odabrati-klimu.jpg"
 category: "Vodič za kupovinu"
 tags: ["savjeti", "kupovina", "klima uređaji", "energetska učinkovitost", "SEER"]

@@ -1394,7 +1394,10 @@ const navigationItems = [
   }
 
   // Format price
-  function formatPrice(price: number, salePrice?: number) {
+  function formatPrice(price: number | undefined, salePrice?: number) {
+    if (!price) {
+      return 'Na upit';
+    }
     if (salePrice && salePrice < price) {
       return `<span class="search-result-item__price--old">${price.toFixed(2)}€</span>${salePrice.toFixed(2)}€`;
     }

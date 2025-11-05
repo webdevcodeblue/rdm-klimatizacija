@@ -17,13 +17,15 @@ export const GET: APIRoute = async ({ url }) => {
     multiKlima,
     dizaliceTopline,
     mikroklima,
-    alatiMaterijal
+    alatiMaterijal,
+    montazaServis
   ] = await Promise.all([
     getCollection('klima-uredaji'),
     getCollection('multi-klima'),
     getCollection('dizalice-topline'),
     getCollection('mikroklima'),
-    getCollection('alati-materijali')
+    getCollection('alati-materijali'),
+    getCollection('montaza-servis')
   ]);
 
   // Kombiniraj sve proizvode sa info o kategoriji
@@ -32,27 +34,47 @@ export const GET: APIRoute = async ({ url }) => {
     ...multiKlima.map(p => ({ ...p, category: 'multi-klima', categoryName: 'Multi klima' })),
     ...dizaliceTopline.map(p => ({ ...p, category: 'dizalice-topline', categoryName: 'Dizalice topline' })),
     ...mikroklima.map(p => ({ ...p, category: 'mikroklima', categoryName: 'Mikroklima' })),
-    ...alatiMaterijal.map(p => ({ ...p, category: 'alati-materijali', categoryName: 'Alati i materijal' }))
+    ...alatiMaterijal.map(p => ({ ...p, category: 'alati-materijali', categoryName: 'Alati i materijal' })),
+    ...montazaServis.map(p => ({ ...p, category: 'montaza-servis', categoryName: 'Montaža i servis' }))
   ];
+
+  // Funkcija za normalizaciju teksta
+  const normalize = (text: string) => {
+    return text
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // Ukloni dijakritike
+      .replace(/[č]/g, 'c')
+      .replace(/[ć]/g, 'c')
+      .replace(/[đ]/g, 'd')
+      .replace(/[š]/g, 's')
+      .replace(/[ž]/g, 'z')
+      .replace(/[-_]/g, ' '); // Zamijeni crtice i underscore sa razmakom
+  };
 
   // Pretraži proizvode
   const results = allProducts
     .filter(product => {
-      const searchableText = [
-        product.data.title,
+      const searchableText = normalize([
+        product.data.name,
         product.data.manufacturer,
         product.data.model,
         product.data.description,
-        product.categoryName
+        product.categoryName,
+        product.category,
+        product.data.features?.join(' '),
+        product.data.specifications?.type
       ]
         .filter(Boolean)
-        .join(' ')
-        .toLowerCase();
+        .join(' '));
 
-      return searchableText.includes(query);
+      const normalizedQuery = normalize(query);
+      const queryWords = normalizedQuery.split(/\s+/).filter(w => w.length > 0);
+
+      return queryWords.every(word => searchableText.includes(word));
     })
     .map(product => ({
-      title: product.data.title || `${product.data.manufacturer} ${product.data.model}`,
+      title: product.data.name || `${product.data.manufacturer} ${product.data.model}`,
       manufacturer: product.data.manufacturer,
       model: product.data.model,
       price: product.data.price,

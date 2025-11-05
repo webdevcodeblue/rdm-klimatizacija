@@ -407,3 +407,88 @@ collections:
             public_folder: "/documents"
 
       - { label: "Opis usluge", name: "body", widget: "markdown", required: false }
+
+  # ==================== BLOG ====================
+  - name: "blog"
+    label: "Blog"
+    label_singular: "Blog članak"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}"
+    format: "frontmatter"
+    extension: "md"
+    media_folder: "public/images/blog"
+    public_folder: "/images/blog"
+    fields:
+      # OSNOVNI PODACI
+      - { label: "Naslov", name: "title", widget: "string", required: true, hint: "Naslov blog članka - bit će automatski korišten za URL" }
+      - { label: "Kratak opis", name: "description", widget: "text", required: true, hint: "Kratak opis članka (1-2 rečenice) za prikaz u listi i SEO" }
+      - { label: "Autor", name: "author", widget: "string", default: "RDM Klimatizacija", required: true }
+
+      # DATUM OBJAVE - VAŽNO: Format mora biti ISO 8601
+      - label: "Datum objave"
+        name: "publishDate"
+        widget: "datetime"
+        required: true
+        date_format: "DD.MM.YYYY"
+        time_format: "HH:mm"
+        format: "YYYY-MM-DDTHH:mm:ss.000Z"
+        picker_utc: false
+        hint: "Datum i vrijeme objave članka"
+
+      # SLIKA
+      - label: "Glavna slika"
+        name: "image"
+        widget: "image"
+        required: true
+        hint: "Preporučena dimenzija: 1200x630px"
+        media_folder: "/public/images/blog"
+        public_folder: "/images/blog"
+
+      # KATEGORIJA
+      - label: "Kategorija"
+        name: "category"
+        widget: "select"
+        required: false
+        options:
+          - "Vodič za kupovinu"
+          - "Savjeti za održavanje"
+          - "Energetska učinkovitost"
+          - "Novosti"
+          - "Tehnologija"
+          - "Preporuke stručnjaka"
+        hint: "Odaberite kategoriju članka"
+
+      # TAGOVI
+      - label: "Tagovi (ključne riječi)"
+        name: "tags"
+        widget: "list"
+        required: false
+        max: 5
+        min: 0
+        field: { label: "Tag", name: "tag", widget: "string" }
+        hint: "Dodajte do 5 ključnih riječi vezanih uz članak"
+
+      # SPECIJALNE OZNAKE
+      - label: "Istaknuti članak"
+        name: "featured"
+        widget: "boolean"
+        default: false
+        required: false
+        hint: "Istaknuti članci se prikazuju s posebnom oznakom"
+
+      - label: "Objavljeno"
+        name: "published"
+        widget: "boolean"
+        default: true
+        required: true
+        hint: "Ako nije označeno, članak neće biti vidljiv na web stranici"
+
+      # SADRŽAJ
+      - label: "Sadržaj članka"
+        name: "body"
+        widget: "markdown"
+        required: true
+        hint: "Glavni sadržaj blog članka - koristite Markdown formatiranje"
+        modes: ["rich_text", "raw"]
+        buttons: ["bold", "italic", "code", "link", "heading-two", "heading-three", "quote", "bulleted-list", "numbered-list"]

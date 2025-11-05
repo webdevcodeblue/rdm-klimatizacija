@@ -155,6 +155,32 @@ const montazaServis = defineCollection({
   schema: serviceSchema
 });
 
+// ========================================
+// BLOG SCHEMA - Za blog postove
+// ========================================
+
+const blogSchema = z.object({
+  // ==================== OBAVEZNA POLJA ====================
+  title: z.string(),
+  description: z.string(),
+  author: z.string().default('RDM Klimatizacija'),
+  publishDate: z.date(),
+  image: z.string(),
+
+  // ==================== OPCIONA POLJA ====================
+  category: z.string().optional(), // Kategorija blog posta
+  tags: z.array(z.string()).default([]), // Tagovi za lakše pretraživanje
+
+  // ==================== SPECIAL FLAGS ====================
+  featured: z.boolean().default(false), // Istakni post na vrhu liste
+  published: z.boolean().default(true)  // Da li je post objavljen
+});
+
+const blog = defineCollection({
+  type: 'content',
+  schema: blogSchema
+});
+
 // ==================== EXPORT ====================
 
 export const collections = {
@@ -164,5 +190,6 @@ export const collections = {
   'mikroklima': products,
   'alati-materijali': products,
   'montaza-servis': montazaServis,
-  'services': services
+  'services': services,
+  'blog': blog
 };

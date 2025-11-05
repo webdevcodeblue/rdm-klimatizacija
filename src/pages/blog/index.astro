@@ -1,0 +1,493 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import BlogCard from '../../components/blog/BlogCard.astro';
+import { getCollection } from 'astro:content';
+
+// Dohvati sve blog postove
+const allBlogPosts = await getCollection('blog', ({ data }) => {
+  return data.published !== false; // Prikaži samo objavljene postove
+});
+
+// Sortiraj postove po datumu (najnoviji prvi)
+const sortedPosts = allBlogPosts.sort((a, b) =>
+  b.data.publishDate.valueOf() - a.data.publishDate.valueOf()
+);
+
+// Izdvoji istaknute postove
+const featuredPosts = sortedPosts.filter(post => post.data.featured);
+const regularPosts = sortedPosts.filter(post => !post.data.featured);
+
+// Pripremi postove za prikaz
+const posts = sortedPosts.map(post => ({
+  slug: post.slug,
+  title: post.data.title,
+  description: post.data.description,
+  author: post.data.author,
+  publishDate: post.data.publishDate,
+  image: post.data.image,
+  category: post.data.category,
+  tags: post.data.tags,
+  featured: post.data.featured
+}));
+
+const featuredPostsData = featuredPosts.map(post => ({
+  slug: post.slug,
+  title: post.data.title,
+  description: post.data.description,
+  author: post.data.author,
+  publishDate: post.data.publishDate,
+  image: post.data.image,
+  category: post.data.category,
+  tags: post.data.tags,
+  featured: post.data.featured
+}));
+
+const regularPostsData = regularPosts.map(post => ({
+  slug: post.slug,
+  title: post.data.title,
+  description: post.data.description,
+  author: post.data.author,
+  publishDate: post.data.publishDate,
+  image: post.data.image,
+  category: post.data.category,
+  tags: post.data.tags,
+  featured: post.data.featured
+}));
+
+// Paginacija (opcionalno)
+const postsPerPage = 9;
+const currentPage = 1;
+---
+
+<BaseLayout
+  title="Blog - Savjeti i vijesti o klima uređajima | RDM Klimatizacija"
+  description="Pročitajte stručne savjete, vodič za kupovinu i novosti iz svijeta klimatizacije i dizalica topline"
+  keywords="blog klimatizacija, savjeti klima uređaji, kako odabrati klimu, servis klima, RDM blog"
+>
+  <Header />
+
+  <main class="blog-page">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <div class="container">
+        <nav aria-label="Breadcrumb">
+          <ol class="breadcrumb__list">
+            <li class="breadcrumb__item">
+              <a href="/">Početna</a>
+            </li>
+            <li class="breadcrumb__item active">
+              Blog
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Page Header -->
+    <section class="page-header">
+      <div class="container">
+        <h1 class="page-header__title">Blog RDM Klimatizacija</h1>
+        <p class="page-header__description">
+          Stručni savjeti, vodič za kupovinu i novosti iz svijeta klimatizacije
+        </p>
+      </div>
+    </section>
+
+    <!-- Featured Posts Section -->
+    {featuredPostsData.length > 0 && (
+      <section class="featured-section">
+        <div class="container">
+          <h2 class="section-title">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            Istaknuti članci
+          </h2>
+          <div class="featured-grid">
+            {featuredPostsData.slice(0, 2).map(post => (
+              <BlogCard post={post} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- All Posts Section -->
+    <section class="posts-section">
+      <div class="container">
+        <h2 class="section-title">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+            <polyline points="13 2 13 9 20 9"></polyline>
+          </svg>
+          {featuredPostsData.length > 0 ? 'Svi članci' : 'Najnoviji članci'}
+        </h2>
+
+        {posts.length > 0 ? (
+          <div class="posts-grid">
+            {regularPostsData.map(post => (
+              <BlogCard post={post} />
+            ))}
+          </div>
+        ) : (
+          <div class="empty-state">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+              <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+              <polyline points="13 2 13 9 20 9"></polyline>
+            </svg>
+            <h3>Trenutno nema objavljenih članaka</h3>
+            <p>Uskoro ćemo objaviti nove stručne savjete i vijesti</p>
+          </div>
+        )}
+      </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section">
+      <div class="container">
+        <div class="newsletter">
+          <div class="newsletter__content">
+            <h2 class="newsletter__title">Pretplatite se na naš newsletter</h2>
+            <p class="newsletter__description">
+              Budite prvi koji će saznati za nove članke, savjete i ekskluzivne ponude
+            </p>
+          </div>
+          <form class="newsletter__form">
+            <input
+              type="email"
+              class="newsletter__input"
+              placeholder="Vaša email adresa"
+              required
+            />
+            <button type="submit" class="newsletter__button">
+              Pretplati se
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* Breadcrumb */
+  .breadcrumb {
+    background: var(--color-gray-50);
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .breadcrumb__list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .breadcrumb__item {
+    font-size: var(--text-sm);
+  }
+
+  .breadcrumb__item a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .breadcrumb__item a:hover {
+    color: var(--color-primary);
+  }
+
+  .breadcrumb__item.active {
+    color: var(--text-primary);
+    font-weight: var(--font-medium);
+  }
+
+  .breadcrumb__item:not(:last-child)::after {
+    content: '/';
+    margin: 0 var(--space-2);
+    color: var(--text-muted);
+  }
+
+  /* Page Header */
+  .page-header {
+    padding: var(--space-16) 0;
+    background: linear-gradient(135deg, #0056b3 0%, #003d82 100%);
+    color: var(--color-white);
+    text-align: center;
+  }
+
+  .page-header__title {
+    font-size: var(--text-5xl);
+    font-weight: var(--font-bold);
+    margin-bottom: var(--space-4);
+  }
+
+  .page-header__description {
+    font-size: var(--text-xl);
+    opacity: 0.95;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Section Title */
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-8);
+  }
+
+  .section-title svg {
+    color: var(--color-primary);
+  }
+
+  /* Featured Section */
+  .featured-section {
+    padding: var(--space-16) 0;
+    background: var(--color-white);
+  }
+
+  .featured-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: var(--space-8);
+  }
+
+  /* Posts Section */
+  .posts-section {
+    padding: var(--space-16) 0;
+    background: var(--bg-secondary);
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--space-8);
+  }
+
+  /* Empty State */
+  .empty-state {
+    text-align: center;
+    padding: var(--space-16) var(--space-8);
+    color: var(--text-secondary);
+  }
+
+  .empty-state svg {
+    margin: 0 auto var(--space-6);
+    color: var(--color-gray-300);
+  }
+
+  .empty-state h3 {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-3);
+  }
+
+  .empty-state p {
+    font-size: var(--text-lg);
+  }
+
+  /* Newsletter Section */
+  .newsletter-section {
+    padding: var(--space-16) 0;
+    background: var(--color-white);
+  }
+
+  .newsletter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-8);
+    padding: var(--space-12);
+    background: linear-gradient(135deg, #0056b3 0%, #003d82 100%);
+    border-radius: var(--border-radius-2xl);
+    color: var(--color-white);
+  }
+
+  .newsletter__content {
+    flex: 1;
+  }
+
+  .newsletter__title {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    margin-bottom: var(--space-2);
+  }
+
+  .newsletter__description {
+    font-size: var(--text-lg);
+    opacity: 0.95;
+  }
+
+  .newsletter__form {
+    display: flex;
+    gap: var(--space-3);
+    max-width: 500px;
+  }
+
+  .newsletter__input {
+    flex: 1;
+    padding: var(--space-4) var(--space-5);
+    border: 2px solid var(--color-white);
+    border-radius: var(--border-radius-lg);
+    font-size: var(--text-base);
+    background: var(--color-white);
+    color: var(--text-primary);
+    transition: all var(--transition-fast);
+  }
+
+  .newsletter__input:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
+  }
+
+  .newsletter__input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .newsletter__button {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-6);
+    background: var(--color-accent);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--border-radius-lg);
+    font-size: var(--text-base);
+    font-weight: var(--font-semibold);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+  }
+
+  .newsletter__button:hover {
+    background: var(--color-accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .featured-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .posts-grid {
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: var(--space-6);
+    }
+
+    .newsletter {
+      flex-direction: column;
+      text-align: center;
+      gap: var(--space-6);
+    }
+
+    .newsletter__form {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .page-header {
+      padding: var(--space-10) 0;
+    }
+
+    .page-header__title {
+      font-size: var(--text-4xl);
+    }
+
+    .page-header__description {
+      font-size: var(--text-base);
+      padding: 0 var(--space-4);
+    }
+
+    .featured-section,
+    .posts-section,
+    .newsletter-section {
+      padding: var(--space-12) 0;
+    }
+
+    .section-title {
+      font-size: var(--text-2xl);
+      margin-bottom: var(--space-6);
+    }
+
+    .posts-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+
+    .newsletter {
+      padding: var(--space-8);
+    }
+
+    .newsletter__title {
+      font-size: var(--text-2xl);
+    }
+
+    .newsletter__description {
+      font-size: var(--text-base);
+    }
+
+    .newsletter__form {
+      flex-direction: column;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .page-header__title {
+      font-size: var(--text-3xl);
+    }
+
+    .breadcrumb__item {
+      font-size: var(--text-xs);
+    }
+
+    .newsletter {
+      padding: var(--space-6);
+      border-radius: var(--border-radius-xl);
+    }
+
+    .newsletter__title {
+      font-size: var(--text-xl);
+    }
+
+    .newsletter__description {
+      font-size: var(--text-sm);
+    }
+  }
+</style>
+
+<script>
+  // Newsletter form submission
+  const newsletterForm = document.querySelector('.newsletter__form');
+
+  newsletterForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const email = formData.get('email');
+
+    // TODO: Implement newsletter subscription logic
+    console.log('Newsletter subscription:', email);
+    alert('Hvala na pretplati! Uskoro ćete primiti prvi email.');
+
+    (e.target as HTMLFormElement).reset();
+  });
+</script>

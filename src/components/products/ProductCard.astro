@@ -1591,6 +1591,105 @@ const discountPercentage = product.originalPrice && product.price
       font-size: 14px;
     }
   }
+
+  /* ========================================
+     MOBILE PERFORMANCE OPTIMIZATIONS
+     Removes animations and heavy effects
+     ======================================== */
+
+  /* Detect touch devices and disable hover effects */
+  @media (hover: none) and (pointer: coarse) {
+    /* Completely disable all hover animations */
+    .product-card:hover,
+    .product-card--list:hover {
+      transform: none !important;
+      box-shadow: var(--shadow-card) !important;
+    }
+
+    .product-card:hover .product-card__image img {
+      transform: none !important;
+    }
+
+    .btn--primary:hover,
+    .btn--secondary:hover {
+      transform: none !important;
+    }
+
+    .product-card--list .btn--primary:hover,
+    .product-card--list .btn--secondary:hover {
+      transform: none !important;
+    }
+
+    .product-card__name a:hover {
+      color: inherit !important;
+    }
+  }
+
+  /* Mobile-specific optimizations */
+  @media (max-width: 768px) {
+    /* Simplify box-shadow for better performance */
+    .product-card {
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+      /* Force GPU acceleration */
+      transform: translateZ(0);
+      will-change: auto !important;
+    }
+
+    .product-card--list {
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    /* Disable ALL transform animations */
+    .product-card,
+    .product-card--list,
+    .product-card__image img,
+    .btn--primary,
+    .btn--secondary {
+      transition: none !important;
+      transform: none !important;
+    }
+
+    /* Remove hover state completely on mobile */
+    .product-card:hover,
+    .product-card--list:hover {
+      transform: none !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .product-card:hover .product-card__image img {
+      transform: none !important;
+    }
+
+    /* Simplify button hover states */
+    .btn--primary:hover,
+    .btn--secondary:hover {
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Remove complex shadows from other elements */
+    .product-card__badge,
+    .availability-badge,
+    .efficiency-badge {
+      box-shadow: none !important;
+    }
+  }
+
+  /* Ultra small devices - even more aggressive optimizations */
+  @media (max-width: 480px) {
+    /* Use only borders instead of shadows */
+    .product-card,
+    .product-card--list {
+      box-shadow: none !important;
+      border: 1px solid #e5e7eb !important;
+    }
+
+    /* Disable all transitions */
+    * {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
 </style>
 
 <script>

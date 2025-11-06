@@ -575,6 +575,7 @@ const viewMode = url.searchParams.get('view') || 'list';
   .cta__description {
     font-size: var(--text-lg);
     opacity: 0.95;
+    padding-right: 50px;
   }
 
   .cta__actions {
@@ -630,9 +631,10 @@ const viewMode = url.searchParams.get('view') || 'list';
 
     .products-sidebar {
       display: none;
-      position: static;
-      max-height: none;
-      overflow: visible;
+      position: static !important; /* Disable sticky to prevent repaint calculations */
+      max-height: none !important;
+      overflow: visible !important;
+      transform: none !important; /* Prevent any transform calculations */
     }
 
     .page-header {

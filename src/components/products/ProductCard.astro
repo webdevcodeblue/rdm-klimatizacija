@@ -1,5 +1,7 @@
 ---
 // ProductCard komponenta za prikaz pojedinačnog proizvoda
+import { formatPower, formatArea } from '../../utils/formatSpecifications';
+
 export interface Product {
   id: string;
   slug: string;
@@ -58,8 +60,8 @@ const discountPercentage = product.originalPrice && product.price
     </span>
   )}
 
-  {discountPercentage > 0 && !product.badge && (
-    <span class="product-card__badge product-card__badge--discount">
+  {discountPercentage > 0 && (
+    <span class={`product-card__badge product-card__badge--discount ${product.badge ? 'product-card__badge--stacked' : ''}`}>
       -{discountPercentage}%
     </span>
   )}
@@ -111,7 +113,7 @@ const discountPercentage = product.originalPrice && product.price
               <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
             </svg>
             <span class="quick-info-label">Snaga hlađenja</span>
-            <span class="quick-info-value">{product.cooling}</span>
+            <span class="quick-info-value">{formatPower(product.cooling)}</span>
           </div>
         )}
         {product.heating && (
@@ -128,7 +130,7 @@ const discountPercentage = product.originalPrice && product.price
               <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
             </svg>
             <span class="quick-info-label">Snaga grijanja</span>
-            <span class="quick-info-value">{product.heating}</span>
+            <span class="quick-info-value">{formatPower(product.heating)}</span>
           </div>
         )}
         {product.area && (
@@ -138,7 +140,7 @@ const discountPercentage = product.originalPrice && product.price
               <polyline points="9 22 9 12 15 12 15 22"></polyline>
             </svg>
             <span class="quick-info-label">Prikladno za prostor</span>
-            <span class="quick-info-value">{product.area}</span>
+            <span class="quick-info-value">{formatArea(product.area)}</span>
           </div>
         )}
         {product.energyClass && (
@@ -207,7 +209,7 @@ const discountPercentage = product.originalPrice && product.price
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
             </svg>
-            <span>{product.area}</span>
+            <span>{formatArea(product.area)}</span>
           </div>
         )}
         {product.energyClass && (
@@ -243,7 +245,7 @@ const discountPercentage = product.originalPrice && product.price
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
               </svg>
-              {product.area}
+              {formatArea(product.area)}
             </span>
           )}
           {product.energyClass && (
@@ -359,6 +361,10 @@ const discountPercentage = product.originalPrice && product.price
     font-weight: var(--font-semibold);
     text-transform: uppercase;
     letter-spacing: var(--tracking-wide);
+  }
+
+  .product-card__badge--stacked {
+    top: 44px;
   }
 
   .product-card__badge--akcija {

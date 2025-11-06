@@ -8,6 +8,7 @@ import ProductTabs from '../../components/products/ProductTabs.astro';
 import RelatedProducts from '../../components/products/RelatedProducts.astro';
 import InquiryModal from '../../components/InquiryModal.astro';
 import { getCollection, getEntry } from 'astro:content';
+import { formatPower, formatArea, formatDimensions, formatWeight, formatSoundLevel } from '../../utils/formatSpecifications';
 
 // Generate static paths for all products
 export async function getStaticPaths() {
@@ -77,22 +78,22 @@ const product = {
       'Energetska klasa grijanja': rawProduct.specifications?.energyClass || 'N/A',
     },
     performance: {
-      'Kapacitet hlađenja': rawProduct.specifications?.cooling || 'N/A',
-      'Kapacitet grijanja': rawProduct.specifications?.heating || 'N/A',
+      'Kapacitet hlađenja': formatPower(rawProduct.specifications?.cooling) || 'N/A',
+      'Kapacitet grijanja': formatPower(rawProduct.specifications?.heating) || 'N/A',
       'SEER': rawProduct.specifications?.seer?.toString() || 'N/A',
       'SCOP': rawProduct.specifications?.scop?.toString() || 'N/A',
-      'Preporučena površina': rawProduct.specifications?.area || 'N/A'
+      'Preporučena površina': formatArea(rawProduct.specifications?.area) || 'N/A'
     },
     technical: {
       'Rashladni plin': rawProduct.specifications?.refrigerant || 'N/A',
       'Napajanje': '220-240V / 50Hz',
-      'Bučnost unutarnje': rawProduct.specifications?.soundLevel || 'N/A'
+      'Bučnost unutarnje': formatSoundLevel(rawProduct.specifications?.soundLevel) || 'N/A'
     },
     dimensions: {
-      'Unutarnja jedinica': rawProduct.specifications?.dimensions?.indoor || 'N/A',
-      'Vanjska jedinica': rawProduct.specifications?.dimensions?.outdoor || 'N/A',
-      'Težina unutarnje': rawProduct.specifications?.weight?.indoor || 'N/A',
-      'Težina vanjske': rawProduct.specifications?.weight?.outdoor || 'N/A'
+      'Unutarnja jedinica': formatDimensions(rawProduct.specifications?.dimensions?.indoor) || 'N/A',
+      'Vanjska jedinica': formatDimensions(rawProduct.specifications?.dimensions?.outdoor) || 'N/A',
+      'Težina unutarnje': formatWeight(rawProduct.specifications?.weight?.indoor) || 'N/A',
+      'Težina vanjske': formatWeight(rawProduct.specifications?.weight?.outdoor) || 'N/A'
     }
   },
   inStock: rawProduct.inStock,

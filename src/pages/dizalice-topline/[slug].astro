@@ -8,6 +8,7 @@ import ProductTabs from '../../components/products/ProductTabs.astro';
 import RelatedProducts from '../../components/products/RelatedProducts.astro';
 import InquiryModal from '../../components/InquiryModal.astro';
 import { getCollection, getEntry } from 'astro:content';
+import { formatPower, formatArea, formatDimensions, formatWeight, formatSoundLevel } from '../../utils/formatSpecifications';
 
 // Generate static paths for all products
 export async function getStaticPaths() {

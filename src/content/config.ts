@@ -34,7 +34,7 @@ const productSchema = z.object({
   discount: optionalNumber(z.number().min(0).max(100)),
   warranty: z.string().optional(),
   description: z.string().optional(),
-  badge: z.enum(['Akcija', 'Novo', 'Premium', 'Bestseller', 'Wi-Fi']).optional(),
+  badge: z.enum(['Akcija', 'Novo', 'Premium', 'Bestseller', 'Wi-Fi']).optional().nullable(),
 
   // ==================== GALERIJA SLIKA ====================
   images: z.array(z.string()).default([]),
@@ -117,7 +117,7 @@ const serviceSchema = z.object({
   // ==================== OPCIONA POLJA ====================
   price: optionalNumber(z.number().positive()), // Cijena je opciona
   duration: z.string().optional(), // Trajanje usluge
-  badge: z.enum(['Hitno', 'Popularno', 'Premium', 'Paket', 'Usluga']).optional(),
+  badge: z.enum(['Hitno', 'Popularno', 'Premium', 'Paket', 'Usluga']).optional().nullable(),
 
   // ==================== GALERIJA SLIKA ====================
   images: z.array(z.string()).default([]),

@@ -1,15 +1,12 @@
 # ========================================
-# DECAP CMS CONFIGURATION
+# NETLIFY CMS CONFIGURATION
 # RDM Klimatizacija - Admin Panel
 # ========================================
 
-# Backend Configuration
+# Backend Configuration - Using proxy for local development
 backend:
-  name: git-gateway
-  branch: main
-
-# Local Development
-local_backend: true
+  name: proxy
+  proxy_url: http://localhost:8081/api/v1
 
 # Media & Public Folders
 media_folder: "public/images/products"
@@ -17,12 +14,6 @@ public_folder: "/images/products"
 
 # Jezik
 locale: 'hr'
-
-# Slug encoding - automatski pretvara hrvatske znakove u ASCII
-slug:
-  encoding: "ascii"
-  clean_accents: true
-  sanitize_replacement: "-"
 
 # ========================================
 # COLLECTIONS - Kategorije proizvoda
@@ -48,7 +39,6 @@ collections:
       # CIJENA I STATUS
       - { label: "Cijena (€)", name: "price", widget: "number", value_type: "int", min: 1, required: false, hint: "Opciono - unesite cijenu proizvoda" }
       - { label: "Originalna cijena (€)", name: "originalPrice", widget: "number", value_type: "int", min: 1, required: false, hint: "Opciono - za prikaz sniženja" }
-      - { label: "Popust (%)", name: "discount", widget: "number", value_type: "int", min: 0, max: 100, required: false }
       - { label: "Garancija", name: "warranty", widget: "string", default: "2 godine", required: false }
       - { label: "Na stanju", name: "inStock", widget: "boolean", default: true }
 
@@ -138,7 +128,6 @@ collections:
       - { label: "Kategorija", name: "category", widget: "hidden", default: "multi-klima" }
       - { label: "Cijena (€)", name: "price", widget: "number", value_type: "int", min: 1, required: false, hint: "Opciono - unesite cijenu proizvoda" }
       - { label: "Originalna cijena (€)", name: "originalPrice", widget: "number", value_type: "int", min: 1, required: false, hint: "Opciono - za prikaz sniženja" }
-      - { label: "Popust (%)", name: "discount", widget: "number", value_type: "int", min: 0, max: 100, required: false }
       - { label: "Garancija", name: "warranty", widget: "string", default: "2 godine", required: false }
       - { label: "Na stanju", name: "inStock", widget: "boolean", default: true }
       - { label: "Glavna slika", name: "image", widget: "image", required: true }

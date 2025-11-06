@@ -110,6 +110,14 @@ if (currentFilters.priceMax !== undefined) {
   );
 }
 
+// Sort products by price (lowest to highest)
+// Use current price (either discounted price or regular price)
+filteredProducts.sort((a, b) => {
+  const priceA = a.price || 0; // Use current price, default to 0 if no price
+  const priceB = b.price || 0;
+  return priceA - priceB; // Ascending order (lowest to highest)
+});
+
 const viewMode = url.searchParams.get('view') || 'list';
 ---
 

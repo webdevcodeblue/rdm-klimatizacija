@@ -1,6 +1,6 @@
 ---
 discount: 12
-name: AS50PDPHRA/1U50KEPFRA
+name: Haier AS50PDPHRA/1U50KEPFRA
 manufacturer: Haier
 model: PEARL PREMIUM INVERTER
 category: klima-uredaji

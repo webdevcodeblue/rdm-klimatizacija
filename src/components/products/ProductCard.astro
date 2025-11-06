@@ -24,6 +24,7 @@ export interface Product {
   inStock: boolean;
   href?: string; // Optional custom href
   description?: string; // Short subtitle for mobile cards
+  infoSheet?: string; // PDF informacijski list
 }
 
 export interface Props {
@@ -47,6 +48,10 @@ const getCategoryPath = (category: string) => {
 };
 
 const productHref = product.href || `${getCategoryPath(product.category)}/${product.slug}`;
+
+// Informacijski list button - otvara PDF ako postoji, inače stranicu proizvoda
+const infoSheetHref = product.infoSheet || productHref;
+const infoSheetTarget = product.infoSheet ? '_blank' : '_self';
 
 const discountPercentage = product.originalPrice && product.price
   ? Math.round((1 - product.price / product.originalPrice) * 100)
@@ -291,7 +296,7 @@ const discountPercentage = product.originalPrice && product.price
               </svg>
               Pošalji upit
             </button>
-            <a href={productHref} class="btn btn--secondary">
+            <a href={infoSheetHref} target={infoSheetTarget} rel={product.infoSheet ? 'noopener noreferrer' : undefined} class="btn btn--secondary">
               Informacijski list proizvoda
             </a>
           </div>

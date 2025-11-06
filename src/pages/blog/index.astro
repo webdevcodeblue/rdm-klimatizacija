@@ -82,34 +82,6 @@ const posts = allBlogPosts
       </div>
     </section>
 
-    <!-- Newsletter Section -->
-    <section class="newsletter-section">
-      <div class="container">
-        <div class="newsletter">
-          <div class="newsletter__content">
-            <h2 class="newsletter__title">Pretplatite se na naš newsletter</h2>
-            <p class="newsletter__description">
-              Budite prvi koji će saznati za nove članke, savjete i ekskluzivne ponude
-            </p>
-          </div>
-          <form class="newsletter__form">
-            <input
-              type="email"
-              class="newsletter__input"
-              placeholder="Vaša email adresa"
-              required
-            />
-            <button type="submit" class="newsletter__button">
-              Pretplati se
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-              </svg>
-            </button>
-          </form>
-        </div>
-      </div>
-    </section>
   </main>
 
   <Footer />
@@ -216,101 +188,11 @@ const posts = allBlogPosts
     font-size: var(--text-lg);
   }
 
-  /* Newsletter Section */
-  .newsletter-section {
-    padding: var(--space-16) 0;
-    background: var(--color-white);
-  }
-
-  .newsletter {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-8);
-    padding: var(--space-12);
-    background: linear-gradient(135deg, #0056b3 0%, #003d82 100%);
-    border-radius: var(--border-radius-2xl);
-    color: var(--color-white);
-  }
-
-  .newsletter__content {
-    flex: 1;
-  }
-
-  .newsletter__title {
-    font-size: var(--text-3xl);
-    font-weight: var(--font-bold);
-    margin-bottom: var(--space-2);
-  }
-
-  .newsletter__description {
-    font-size: var(--text-lg);
-    opacity: 0.95;
-  }
-
-  .newsletter__form {
-    display: flex;
-    gap: var(--space-3);
-    max-width: 500px;
-  }
-
-  .newsletter__input {
-    flex: 1;
-    padding: var(--space-4) var(--space-5);
-    border: 2px solid var(--color-white);
-    border-radius: var(--border-radius-lg);
-    font-size: var(--text-base);
-    background: var(--color-white);
-    color: var(--text-primary);
-    transition: all var(--transition-fast);
-  }
-
-  .newsletter__input:focus {
-    outline: none;
-    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2);
-  }
-
-  .newsletter__input::placeholder {
-    color: var(--text-muted);
-  }
-
-  .newsletter__button {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-4) var(--space-6);
-    background: var(--color-accent);
-    color: var(--color-white);
-    border: none;
-    border-radius: var(--border-radius-lg);
-    font-size: var(--text-base);
-    font-weight: var(--font-semibold);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-    white-space: nowrap;
-  }
-
-  .newsletter__button:hover {
-    background: var(--color-accent-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  }
-
   /* Responsive */
   @media (max-width: 1024px) {
     .posts-grid {
       grid-template-columns: repeat(2, 1fr);
       gap: var(--space-6);
-    }
-
-    .newsletter {
-      flex-direction: column;
-      text-align: center;
-      gap: var(--space-6);
-    }
-
-    .newsletter__form {
-      width: 100%;
     }
   }
 
@@ -328,30 +210,13 @@ const posts = allBlogPosts
       padding: 0 var(--space-4);
     }
 
-    .posts-section,
-    .newsletter-section {
+    .posts-section {
       padding: var(--space-12) 0;
     }
 
     .posts-grid {
       grid-template-columns: 1fr;
       gap: var(--space-4);
-    }
-
-    .newsletter {
-      padding: var(--space-8);
-    }
-
-    .newsletter__title {
-      font-size: var(--text-2xl);
-    }
-
-    .newsletter__description {
-      font-size: var(--text-base);
-    }
-
-    .newsletter__form {
-      flex-direction: column;
     }
   }
 
@@ -363,35 +228,5 @@ const posts = allBlogPosts
     .breadcrumb__item {
       font-size: var(--text-xs);
     }
-
-    .newsletter {
-      padding: var(--space-6);
-      border-radius: var(--border-radius-xl);
-    }
-
-    .newsletter__title {
-      font-size: var(--text-xl);
-    }
-
-    .newsletter__description {
-      font-size: var(--text-sm);
-    }
   }
 </style>
-
-<script>
-  // Newsletter form submission
-  const newsletterForm = document.querySelector('.newsletter__form');
-
-  newsletterForm?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const email = formData.get('email');
-
-    // TODO: Implement newsletter subscription logic
-    console.log('Newsletter subscription:', email);
-    alert('Hvala na pretplati! Uskoro ćete primiti prvi email.');
-
-    (e.target as HTMLFormElement).reset();
-  });
-</script>

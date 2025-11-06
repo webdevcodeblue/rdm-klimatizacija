@@ -36,33 +36,6 @@ const paymentMethods = [
 ---
 
 <footer class="footer">
-  <!-- Newsletter sekcija -->
-  <section class="newsletter">
-    <div class="container">
-      <div class="newsletter__content">
-        <div class="newsletter__info">
-          <h2 class="newsletter__title">Prijavite se na newsletter</h2>
-          <p class="newsletter__description">
-            Budite u toku s najnovijim proizvodima, akcijama i savjetima za održavanje klima uređaja
-          </p>
-        </div>
-        <form class="newsletter__form" action="/newsletter" method="POST">
-          <input
-            type="email"
-            name="email"
-            placeholder="Vaša email adresa"
-            class="newsletter__input"
-            required
-            aria-label="Email adresa za newsletter"
-          >
-          <button type="submit" class="newsletter__button">
-            Prijavite se
-          </button>
-        </form>
-      </div>
-    </div>
-  </section>
-
   <!-- Main footer -->
   <div class="footer__main">
     <div class="container">
@@ -207,74 +180,6 @@ const paymentMethods = [
     background: var(--color-gray-900);
     color: var(--color-gray-300);
     margin-top: var(--space-20);
-  }
-
-  /* Newsletter */
-  .newsletter {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-    padding: var(--space-12) 0;
-    margin-bottom: 0;
-  }
-
-  .newsletter__content {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: var(--space-8);
-    align-items: center;
-  }
-
-  .newsletter__title {
-    color: var(--color-white);
-    font-size: var(--text-3xl);
-    margin-bottom: var(--space-2);
-  }
-
-  .newsletter__description {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: var(--text-lg);
-  }
-
-  .newsletter__form {
-    display: flex;
-    gap: var(--space-3);
-    min-width: 400px;
-  }
-
-  .newsletter__input {
-    flex: 1;
-    padding: var(--space-3) var(--space-4);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: var(--border-radius-lg);
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--color-white);
-    font-size: var(--text-base);
-    transition: all var(--transition-fast);
-  }
-
-  .newsletter__input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
-  }
-
-  .newsletter__input:focus {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.4);
-  }
-
-  .newsletter__button {
-    padding: var(--space-3) var(--space-6);
-    background: var(--color-white);
-    color: var(--color-primary);
-    border: 2px solid var(--color-white);
-    border-radius: var(--border-radius-lg);
-    font-weight: var(--font-semibold);
-    font-size: var(--text-base);
-    cursor: pointer;
-    transition: all var(--transition-fast);
-  }
-
-  .newsletter__button:hover {
-    background: transparent;
-    color: var(--color-white);
   }
 
   /* Main footer */
@@ -452,17 +357,6 @@ const paymentMethods = [
 
   /* Responsive */
   @media (max-width: 1024px) {
-    .newsletter__content {
-      grid-template-columns: 1fr;
-      text-align: center;
-    }
-
-    .newsletter__form {
-      min-width: auto;
-      max-width: 500px;
-      margin: 0 auto;
-    }
-
     .footer__grid {
       grid-template-columns: 1fr 1fr;
       gap: var(--space-8);
@@ -478,22 +372,6 @@ const paymentMethods = [
   }
 
   @media (max-width: 768px) {
-    .newsletter {
-      padding: var(--space-8) 0;
-    }
-
-    .newsletter__title {
-      font-size: var(--text-2xl);
-    }
-
-    .newsletter__description {
-      font-size: var(--text-base);
-    }
-
-    .newsletter__form {
-      flex-direction: column;
-    }
-
     .footer__logo-image {
       height: 58px;
     }

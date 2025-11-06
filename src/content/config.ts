@@ -9,13 +9,21 @@ const optionalNumber = (schema: z.ZodNumber) =>
   z.preprocess((val) => val === "" ? undefined : val, schema.optional());
 
 // ========================================
+// HELPER - Automatski trimuje whitespace iz stringova
+// ========================================
+// Sprječava probleme sa duplikatima zbog nevidljivih razmaka
+// Primjer: "Maxon " i "Maxon" postaju "Maxon"
+const trimmedString = (schema: z.ZodString) =>
+  z.preprocess((val) => typeof val === 'string' ? val.trim() : val, schema);
+
+// ========================================
 // PRODUCT SCHEMA - Univerzalna schema za sve proizvode
 // ========================================
 
 const productSchema = z.object({
   // ==================== OBAVEZNA POLJA ====================
-  name: z.string(),
-  manufacturer: z.string(),
+  name: trimmedString(z.string()),
+  manufacturer: trimmedString(z.string()),
   category: z.enum([
     'klima-uredaji',
     'multi-klima',
@@ -28,7 +36,7 @@ const productSchema = z.object({
   inStock: z.boolean().default(true),
 
   // ==================== OPCIONA POLJA ====================
-  model: z.string().optional(),
+  model: z.preprocess((val) => typeof val === 'string' ? val.trim() : val, z.string().optional()),
   price: optionalNumber(z.number().positive()), // Cijena je opciona za sve proizvode
   originalPrice: optionalNumber(z.number().positive()),
   discount: optionalNumber(z.number().min(0).max(100)),
@@ -108,8 +116,8 @@ const products = defineCollection({
 
 const serviceSchema = z.object({
   // ==================== OBAVEZNA POLJA ====================
-  name: z.string(),
-  manufacturer: z.string().default('RDM Klimatizacija'),
+  name: trimmedString(z.string()),
+  manufacturer: trimmedString(z.string()).default('RDM Klimatizacija'),
   category: z.literal('montaza-servis'),
   image: z.string(),
   inStock: z.boolean().default(true),

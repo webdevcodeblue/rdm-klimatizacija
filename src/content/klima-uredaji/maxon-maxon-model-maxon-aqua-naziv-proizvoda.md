@@ -1,6 +1,6 @@
 ---
 name: Maxon Aqua (naziv proizvoda)
-manufacturer: "Maxon "
+manufacturer: "Maxon"
 model: Maxon Model
 category: klima-uredaji
 price: 800
@@ -17,7 +17,7 @@ specifications:
   power: "2"
   area: "40"
   dimensions:
-    indoor: "80 cm "
+    indoor: "80 cm"
     outdoor: 50 cm
   energyClass: A++
   scop: 8

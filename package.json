@@ -4,7 +4,9 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node scripts/validate-content.js && astro build",
+    "build:skip-validation": "astro build",
+    "validate": "node scripts/validate-content.js",
     "preview": "astro preview",
     "astro": "astro",
     "cms:proxy": "npx decap-server"

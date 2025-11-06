@@ -513,6 +513,7 @@ const viewMode = url.searchParams.get('view') || 'list';
     text-decoration: none;
     cursor: pointer;
     transition: all var(--transition-fast);
+    white-space: nowrap;
   }
 
   .btn--primary {
@@ -651,10 +652,6 @@ const viewMode = url.searchParams.get('view') || 'list';
 
     .cta__actions {
       flex-direction: column;
-      width: 100%;
-    }
-
-    .btn {
       width: 100%;
     }
   }

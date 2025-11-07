@@ -108,31 +108,16 @@ function getFileType(url: string): string {
         {product.specifications && (product.specifications.energyClass || product.specifications.seer || product.specifications.scop) && (
           <div class="energy-label">
             <h4>Energetska oznaka</h4>
-            <div class="energy-label__content">
-              <img
-                src="/images/energy-label-sample.png"
-                alt="Energetska oznaka"
-                class="energy-label__image"
-              />
-              <div class="energy-label__info">
-                {product.specifications.energyClass && (
-                  <p>Energetski razred: <strong>{product.specifications.energyClass}</strong></p>
-                )}
-                {product.specifications.seer && (
-                  <p>SEER: <strong>{product.specifications.seer}</strong></p>
-                )}
-                {product.specifications.scop && (
-                  <p>SCOP: <strong>{product.specifications.scop}</strong></p>
-                )}
-                <a href="#" class="energy-label__link">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="7 10 12 15 17 10"></polyline>
-                    <line x1="12" y1="15" x2="12" y2="3"></line>
-                  </svg>
-                  Preuzmite energetsku oznaku
-                </a>
-              </div>
+            <div class="energy-label__info">
+              {product.specifications.energyClass && (
+                <p>Energetski razred: <strong>{product.specifications.energyClass}</strong></p>
+              )}
+              {product.specifications.seer && (
+                <p>SEER: <strong>{product.specifications.seer}</strong></p>
+              )}
+              {product.specifications.scop && (
+                <p>SCOP: <strong>{product.specifications.scop}</strong></p>
+              )}
             </div>
           </div>
         )}
@@ -412,41 +397,14 @@ function getFileType(url: string): string {
     border-radius: var(--border-radius-lg);
   }
 
-  .energy-label__content {
-    display: flex;
-    gap: var(--space-6);
-    align-items: center;
-  }
-
-  .energy-label__image {
-    width: 200px;
-    height: auto;
-    border: 1px solid var(--color-gray-300);
-    border-radius: var(--border-radius-md);
-  }
-
   .energy-label__info p {
     margin-bottom: var(--space-2);
     color: var(--text-secondary);
+    font-size: var(--text-base);
   }
 
   .energy-label__info strong {
     color: var(--text-primary);
-  }
-
-  .energy-label__link {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    margin-top: var(--space-3);
-    color: var(--color-primary);
-    text-decoration: none;
-    font-size: var(--text-sm);
-    font-weight: var(--font-medium);
-  }
-
-  .energy-label__link:hover {
-    text-decoration: underline;
   }
 
   /* Documents Tab */
@@ -598,15 +556,6 @@ function getFileType(url: string): string {
     .features-grid,
     .benefits-grid {
       grid-template-columns: 1fr;
-    }
-
-    .energy-label__content {
-      flex-direction: column;
-    }
-
-    .energy-label__image {
-      width: 100%;
-      max-width: 200px;
     }
 
     .documents-grid {

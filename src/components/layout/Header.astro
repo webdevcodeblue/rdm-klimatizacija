@@ -1152,6 +1152,36 @@ const navigationItems = [
 
   /* Responsive */
   @media (max-width: 1024px) {
+    /* Disable all scroll animations on mobile/tablet */
+    .header.scrolled .header__topbar,
+    .header.scrolled .header__main,
+    .header.scrolled .logo__image,
+    .header.scrolled .logo__text,
+    .header.scrolled .header__search,
+    .header.scrolled .search-form__input,
+    .header.scrolled .search-form__button,
+    .header.scrolled .search-form__button svg,
+    .header.scrolled .action-btn__text,
+    .header.scrolled .action-btn,
+    .header.scrolled .action-btn svg,
+    .header.scrolled .navigation__link {
+      transition: none !important;
+      transform: none !important;
+    }
+
+    /* Keep static header size on mobile - no changes when scrolling */
+    .header.scrolled .header__main {
+      padding: var(--space-2) 0;
+    }
+
+    .header.scrolled .logo__image {
+      height: 48px; /* Same as default mobile size */
+    }
+
+    .header.scrolled .logo__text {
+      font-size: var(--text-xl); /* Same as default mobile size */
+    }
+
     .header__topbar {
       display: none;
     }
@@ -1208,15 +1238,19 @@ const navigationItems = [
   }
 
   @media (max-width: 480px) {
-    .logo__image {
+    /* Keep static sizes - no scroll animations */
+    .logo__image,
+    .header.scrolled .logo__image {
       height: 43px;
     }
 
-    .header__main {
+    .header__main,
+    .header.scrolled .header__main {
       padding: var(--space-2) 0;
     }
 
-    .logo__text {
+    .logo__text,
+    .header.scrolled .logo__text {
       font-size: var(--text-lg);
     }
   }

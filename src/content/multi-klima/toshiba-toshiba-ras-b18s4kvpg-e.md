@@ -1,6 +1,6 @@
 ---
 name: Toshiba RAS-B18S4KVPG-E
-manufacturer: TOSHIBA
+manufacturer: Toshiba
 model: SUPER DAISEIKAI 10 INVERTER
 category: multi-klima
 price: 800

@@ -12,6 +12,9 @@ import BreadcrumbSchema from '../../components/seo/BreadcrumbSchema.astro';
 import { getCollection, getEntry } from 'astro:content';
 import { formatPower, formatArea, formatDimensions, formatWeight, formatSoundLevel } from '../../utils/formatSpecifications';
 
+// Enable static prerendering
+export const prerender = true;
+
 // Generate static paths for all products
 export async function getStaticPaths() {
   const klimaProducts = await getCollection('klima-uredaji');

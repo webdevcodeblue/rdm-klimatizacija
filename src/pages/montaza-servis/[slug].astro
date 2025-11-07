@@ -5,6 +5,8 @@ import Footer from '../../components/layout/Footer.astro';
 import ProductGallery from '../../components/products/ProductGallery.astro';
 import ProductTabs from '../../components/products/ProductTabs.astro';
 import InquiryModal from '../../components/InquiryModal.astro';
+export const prerender = true;
+
 import { getCollection, getEntry } from 'astro:content';
 
 // Generate static paths for all services

@@ -8,6 +8,8 @@ import ProductTabs from '../../components/products/ProductTabs.astro';
 import RelatedProducts from '../../components/products/RelatedProducts.astro';
 import InquiryModal from '../../components/InquiryModal.astro';
 import ProductSchema from '../../components/seo/ProductSchema.astro';
+export const prerender = true;
+
 import { getCollection, getEntry } from 'astro:content';
 import { formatPower, formatArea, formatDimensions, formatWeight, formatSoundLevel } from '../../utils/formatSpecifications';
 

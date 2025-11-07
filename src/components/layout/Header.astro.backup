@@ -1365,50 +1365,11 @@ const navigationItems = [
   }
   lastStateChangeTime = Date.now();
 
-  // Import and initialize modular scripts
-  const loadHeaderScripts = async () => {
-    // Load search module
-    const searchScript = document.createElement('script');
-    searchScript.src = '/src/scripts/header/search.js';
-    searchScript.onload = () => {
-      if (window.HeaderSearch) {
-        const search = new window.HeaderSearch();
-
-        // Initialize desktop search
-        search.init({
-          inputId: 'searchInput',
-          dropdownId: 'searchDropdown',
-          resultsId: 'searchResults',
-          formId: 'searchForm',
-          isMobile: false
-        });
-
-        // Initialize mobile search
-        search.init({
-          inputId: 'mobileSearchInput',
-          dropdownId: 'mobileSearchDropdown',
-          resultsId: 'mobileSearchResults',
-          formId: 'mobileSearchForm',
-          isMobile: true
-        });
-      }
-    };
-    document.head.appendChild(searchScript);
-
-    // Load scroll module
-    const scrollScript = document.createElement('script');
-    scrollScript.src = '/src/scripts/header/scroll.js';
-    scrollScript.onload = () => {
-      if (window.HeaderScroll) {
-        const scroll = new window.HeaderScroll();
-        scroll.init();
-      }
-    };
-    document.head.appendChild(scrollScript);
-  };
-
-  // Load scripts after DOM is ready
-  loadHeaderScripts();
+  // Search functionality
+  const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+  const searchDropdown = document.getElementById('searchDropdown');
+  const searchResults = document.getElementById('searchResults');
+  const searchForm = document.getElementById('searchForm') as HTMLFormElement;
 
   let searchTimeout: number | null = null;
   let currentQuery = '';

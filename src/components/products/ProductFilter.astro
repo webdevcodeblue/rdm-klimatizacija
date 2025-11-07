@@ -136,16 +136,15 @@ const airflowOptions = [
           type="number"
           class="filter__input"
           name="priceMin"
-          placeholder="Min"
+          placeholder="Minimalna cijena (€)"
           value={currentFilters.priceMin}
           min="0"
         />
-        <span class="filter__range-separator">-</span>
         <input
           type="number"
           class="filter__input"
           name="priceMax"
-          placeholder="Max"
+          placeholder="Maksimalna cijena (€)"
           value={currentFilters.priceMax}
           min="0"
         />
@@ -317,12 +316,12 @@ const airflowOptions = [
 
   .filter__range {
     display: flex;
-    align-items: center;
-    gap: var(--space-2);
+    flex-direction: column;
+    gap: var(--space-3);
   }
 
   .filter__input {
-    flex: 1;
+    width: 100%;
     padding: var(--space-3);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-base);
@@ -341,7 +340,7 @@ const airflowOptions = [
   }
 
   .filter__range-separator {
-    color: var(--text-muted);
+    display: none;
   }
 
   .filter__submit {

@@ -87,11 +87,5 @@
       "permanent": true
     }
   ],
-  "functions": {
-    "src/pages/api/*.json": {
-      "maxDuration": 10
-    }
-  },
-  "regions": ["fra1"],
   "trailingSlash": false
 }

@@ -1599,100 +1599,151 @@ const discountPercentage = product.originalPrice && product.price
 
   /* ========================================
      MOBILE PERFORMANCE OPTIMIZATIONS
-     Removes animations and heavy effects
+     Professional smooth scrolling for mobile
      ======================================== */
 
-  /* Detect touch devices and disable hover effects */
+  /* Touch devices optimization - highest priority */
   @media (hover: none) and (pointer: coarse) {
+    /* Force GPU acceleration for smooth scrolling */
+    .product-card,
+    .product-card--list {
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      -webkit-perspective: 1000px;
+      perspective: 1000px;
+    }
+
     /* Completely disable all hover animations */
     .product-card:hover,
     .product-card--list:hover {
-      transform: none !important;
-      box-shadow: var(--shadow-card) !important;
+      transform: translate3d(0, 0, 0) !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12) !important;
     }
 
     .product-card:hover .product-card__image img {
       transform: none !important;
+      -webkit-transform: none !important;
     }
 
     .btn--primary:hover,
-    .btn--secondary:hover {
-      transform: none !important;
-    }
-
+    .btn--secondary:hover,
     .product-card--list .btn--primary:hover,
     .product-card--list .btn--secondary:hover {
       transform: none !important;
+      -webkit-transform: none !important;
     }
 
     .product-card__name a:hover {
       color: inherit !important;
     }
-  }
 
-  /* Mobile-specific optimizations */
-  @media (max-width: 768px) {
-    /* Simplify box-shadow for better performance */
-    .product-card {
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
-      /* Force GPU acceleration */
-      transform: translateZ(0);
-      will-change: auto !important;
-    }
-
-    .product-card--list {
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
-    }
-
-    /* Disable ALL transform animations */
+    /* Remove all transitions on touch devices */
     .product-card,
     .product-card--list,
     .product-card__image img,
     .btn--primary,
     .btn--secondary {
       transition: none !important;
-      transform: none !important;
-    }
-
-    /* Remove hover state completely on mobile */
-    .product-card:hover,
-    .product-card--list:hover {
-      transform: none !important;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
-    }
-
-    .product-card:hover .product-card__image img {
-      transform: none !important;
-    }
-
-    /* Simplify button hover states */
-    .btn--primary:hover,
-    .btn--secondary:hover {
-      transform: none !important;
-      box-shadow: none !important;
-    }
-
-    /* Remove complex shadows from other elements */
-    .product-card__badge,
-    .availability-badge,
-    .efficiency-badge {
-      box-shadow: none !important;
+      -webkit-transition: none !important;
     }
   }
 
-  /* Ultra small devices - even more aggressive optimizations */
-  @media (max-width: 480px) {
-    /* Use only borders instead of shadows */
+  /* Mobile-specific optimizations - 768px and below */
+  @media (max-width: 768px) {
+    /* iOS smooth scrolling */
     .product-card,
     .product-card--list {
-      box-shadow: none !important;
-      border: 1px solid #e5e7eb !important;
+      -webkit-overflow-scrolling: touch;
     }
 
-    /* Disable all transitions */
-    * {
+    /* Static box-shadow - no transitions */
+    .product-card {
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12) !important;
+      /* Force GPU layer */
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      will-change: transform;
+    }
+
+    .product-card--list {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08) !important;
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+
+    /* Disable ALL animations and transitions */
+    .product-card,
+    .product-card--list,
+    .product-card__image,
+    .product-card__image img,
+    .product-card__content,
+    .btn,
+    .btn--primary,
+    .btn--secondary {
       transition: none !important;
+      -webkit-transition: none !important;
       animation: none !important;
+      -webkit-animation: none !important;
+    }
+
+    /* Remove all transform effects */
+    .product-card,
+    .product-card--list,
+    .product-card__image img {
+      transform: translate3d(0, 0, 0) !important;
+      -webkit-transform: translate3d(0, 0, 0) !important;
+    }
+
+    /* Disable hover states completely */
+    .product-card:hover,
+    .product-card--list:hover {
+      transform: translate3d(0, 0, 0) !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12) !important;
+    }
+
+    .product-card:hover .product-card__image img {
+      transform: translate3d(0, 0, 0) !important;
+      -webkit-transform: translate3d(0, 0, 0) !important;
+      scale: 1 !important;
+    }
+
+    /* Button hover - no animations */
+    .btn--primary:hover,
+    .btn--secondary:hover {
+      transform: translate3d(0, 0, 0) !important;
+      -webkit-transform: translate3d(0, 0, 0) !important;
+    }
+
+    /* Optimize rendering */
+    .product-card__badge,
+    .product-card__stock,
+    .feature-tag,
+    .spec-item {
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+  }
+
+  /* Extra small devices - minimal shadows for best performance */
+  @media (max-width: 480px) {
+    /* Ultra lightweight shadows */
+    .product-card,
+    .product-card--list {
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08) !important;
+      border: 1px solid #e5e7eb;
+    }
+
+    /* Ensure GPU acceleration */
+    .product-card,
+    .product-card--list {
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
     }
   }
 </style>

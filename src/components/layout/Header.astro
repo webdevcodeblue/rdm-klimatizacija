@@ -1327,7 +1327,7 @@ const navigationItems = [
     });
   });
 
-  // Scroll detection for sticky header with debouncing and hysteresis
+  // Scroll detection for sticky header with PROFESSIONAL hysteresis system
   const header = document.getElementById('mainHeader');
   const headerTopbar = document.getElementById('headerTopbar');
   let lastScrollY = window.scrollY;
@@ -1335,38 +1335,41 @@ const navigationItems = [
   let isScrolled = false;
   let lastStateChangeTime = 0;
 
-  // Configuration - proširene granice za MAKSIMALNU stabilnost
-  const SCROLL_UP_THRESHOLD = 120;   // Hide topbar when scrolling down past this point
-  const SCROLL_DOWN_THRESHOLD = 20;  // Show topbar when scrolling up below this point
-  const MIN_STATE_CHANGE_INTERVAL = 300; // Minimum 300ms between state changes (debounce)
-  const VELOCITY_THRESHOLD = 5;      // Minimum scroll velocity to trigger change (prevents micro-movements)
+  // Professional configuration for rock-solid stability
+  const SCROLL_UP_THRESHOLD = 150;   // Activate "scrolled" state when scrolling DOWN past this point
+  const SCROLL_DOWN_THRESHOLD = 50;  // Deactivate "scrolled" state when scrolling UP above this point
+  const MIN_STATE_CHANGE_INTERVAL = 150; // Debounce: minimum time between state changes
+  const DEAD_ZONE = SCROLL_UP_THRESHOLD - SCROLL_DOWN_THRESHOLD; // 100px dead zone where nothing changes
 
   function updateHeader() {
     const currentTime = Date.now();
     const scrollY = window.scrollY;
-    const scrollDelta = scrollY - lastScrollY;
     const timeSinceLastChange = currentTime - lastStateChangeTime;
 
-    // Skip if we're within debounce interval
+    // Debounce: Skip if we're changing states too frequently
     if (timeSinceLastChange < MIN_STATE_CHANGE_INTERVAL) {
       lastScrollY = scrollY;
       ticking = false;
       return;
     }
 
-    // Calculate scroll velocity (pixels per frame)
-    const velocity = Math.abs(scrollDelta);
+    // PURE HYSTERESIS LOGIC - No velocity check!
+    // This is the KEY to prevent jittering with slow scrolling
+    let shouldBeScrolled;
 
-    // Hysteresis: Use different thresholds for scrolling up vs down to prevent flickering
-    const shouldBeScrolled = isScrolled
-      ? scrollY > SCROLL_DOWN_THRESHOLD  // Already scrolled: need to go below lower threshold to unscroll
-      : scrollY > SCROLL_UP_THRESHOLD;   // Not scrolled: need to go above upper threshold to scroll
+    if (isScrolled) {
+      // Already in "scrolled" state
+      // Only switch to "normal" if we scroll ABOVE the lower threshold
+      shouldBeScrolled = scrollY > SCROLL_DOWN_THRESHOLD;
+    } else {
+      // Currently in "normal" state
+      // Only switch to "scrolled" if we scroll BELOW the upper threshold
+      shouldBeScrolled = scrollY > SCROLL_UP_THRESHOLD;
+    }
 
-    // Only change state if:
-    // 1. The new state is different from current state
-    // 2. The scroll velocity is above threshold (prevents micro-movements)
-    // 3. Enough time has passed since last state change (debounce)
-    if (shouldBeScrolled !== isScrolled && velocity >= VELOCITY_THRESHOLD) {
+    // Change state ONLY if the new state is different
+    // NO velocity check - hysteresis alone prevents jittering!
+    if (shouldBeScrolled !== isScrolled) {
       isScrolled = shouldBeScrolled;
       lastStateChangeTime = currentTime;
 

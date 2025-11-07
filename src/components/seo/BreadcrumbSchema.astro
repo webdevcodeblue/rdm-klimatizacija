@@ -1,0 +1,32 @@
+---
+// Breadcrumb Schema Component for SEO
+// Generates JSON-LD structured data for breadcrumb navigation
+
+export interface BreadcrumbItem {
+  name: string;
+  href: string;
+}
+
+export interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+const siteUrl = 'https://rdm-klimatizacija.hr';
+
+// Build breadcrumb list with proper schema
+const breadcrumbList = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map((item, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: item.name,
+    item: item.href.startsWith('http')
+      ? item.href
+      : `${siteUrl}${item.href}`
+  }))
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumbList, null, 2)} />

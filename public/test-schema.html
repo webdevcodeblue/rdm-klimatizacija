@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schema Markup Test - RDM Klimatizacija</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #f5f5f5;
+        }
+        .header {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: #005bbb;
+            margin: 0 0 10px 0;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .test-section {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-section h2 {
+            color: #333;
+            border-bottom: 2px solid #005bbb;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .test-item {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border-left: 4px solid #005bbb;
+        }
+        .test-item h3 {
+            margin-top: 0;
+            color: #005bbb;
+        }
+        .test-item p {
+            margin: 10px 0;
+            color: #666;
+        }
+        .test-item ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .test-item li {
+            margin: 5px 0;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .status.implemented {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.partial {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status.pending {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .test-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #005bbb;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .test-link:hover {
+            background: #004a9a;
+        }
+        .code-block {
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        .validation-tools {
+            background: #e8f4fd;
+            border: 1px solid #005bbb;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .validation-tools h3 {
+            color: #005bbb;
+            margin-top: 0;
+        }
+        .tool-link {
+            display: inline-block;
+            padding: 8px 15px;
+            background: white;
+            color: #005bbb;
+            text-decoration: none;
+            border-radius: 3px;
+            border: 1px solid #005bbb;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        .tool-link:hover {
+            background: #005bbb;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Schema Markup Test Dashboard</h1>
+        <p class="subtitle">RDM Klimatizacija - Strukturirani podaci za SEO</p>
+        <p>Ova stranica prikazuje sve implementirane Schema.org markup komponente koje se automatski generiraju za poboljšanje SEO rezultata.</p>
+    </div>
+
+    <div class="test-section">
+        <h2>✅ Implementirane Schema komponente</h2>
+
+        <div class="test-item">
+            <h3>1. Product Schema</h3>
+            <span class="status implemented">IMPLEMENTIRANO</span>
+            <p><strong>Lokacija:</strong> <code>/src/components/seo/ProductSchema.astro</code></p>
+            <p><strong>Koristi se na:</strong> Sve product stranice</p>
+            <ul>
+                <li>/klima-uredaji/[slug]</li>
+                <li>/multi-klima/[slug]</li>
+                <li>/dizalice-topline/[slug]</li>
+                <li>/mikroklima/[slug]</li>
+                <li>/alati-materijali/[slug]</li>
+            </ul>
+            <p><strong>Automatski generira:</strong></p>
+            <ul>
+                <li>Product name, brand, model</li>
+                <li>Price & offers</li>
+                <li>Availability status</li>
+                <li>Aggregate rating (simulirano)</li>
+                <li>Shipping details</li>
+                <li>Return policy</li>
+                <li>Technical specifications</li>
+            </ul>
+            <a href="/klima-uredaji/mitsubishi-msz-ln25vg" class="test-link" target="_blank">Testiraj na proizvodu →</a>
+        </div>
+
+        <div class="test-item">
+            <h3>2. Breadcrumb Schema</h3>
+            <span class="status implemented">IMPLEMENTIRANO</span>
+            <p><strong>Lokacija:</strong> <code>/src/components/seo/BreadcrumbSchema.astro</code></p>
+            <p><strong>Koristi se na:</strong></p>
+            <ul>
+                <li>Product stranice (klima-uredaji/[slug])</li>
+                <li>Blog stranice (blog/[slug])</li>
+            </ul>
+            <p><strong>Generira:</strong> BreadcrumbList sa pozicijama</p>
+        </div>
+
+        <div class="test-item">
+            <h3>3. BlogPosting Schema</h3>
+            <span class="status implemented">IMPLEMENTIRANO</span>
+            <p><strong>Lokacija:</strong> <code>/src/components/seo/BlogPostSchema.astro</code></p>
+            <p><strong>Koristi se na:</strong> /blog/[slug]</p>
+            <p><strong>Automatski generira:</strong></p>
+            <ul>
+                <li>Article headline & description</li>
+                <li>Author information</li>
+                <li>Publish date</li>
+                <li>Publisher (RDM Klimatizacija)</li>
+                <li>Keywords & category</li>
+                <li>Read time estimate</li>
+            </ul>
+            <a href="/blog" class="test-link" target="_blank">Testiraj na blogu →</a>
+        </div>
+
+        <div class="test-item">
+            <h3>4. Organization Schema (HVACBusiness)</h3>
+            <span class="status implemented">POSTOJEĆI</span>
+            <p><strong>Lokacija:</strong> <code>/src/layouts/BaseLayout.astro</code></p>
+            <p><strong>Koristi se na:</strong> Sve stranice</p>
+            <p><strong>Sadrži:</strong></p>
+            <ul>
+                <li>Business name & contact</li>
+                <li>Physical address (Križevci)</li>
+                <li>Opening hours</li>
+                <li>Geo coordinates</li>
+                <li>Service area (Croatia)</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🔧 Kako testirati Schema markup</h2>
+
+        <div class="validation-tools">
+            <h3>Alati za validaciju:</h3>
+            <p>Kopirajte URL vaše stranice i testirajte na sljedećim alatima:</p>
+
+            <a href="https://validator.schema.org/" class="tool-link" target="_blank">
+                Schema.org Validator
+            </a>
+            <a href="https://search.google.com/test/rich-results" class="tool-link" target="_blank">
+                Google Rich Results Test
+            </a>
+            <a href="https://developers.facebook.com/tools/debug/" class="tool-link" target="_blank">
+                Facebook Sharing Debugger
+            </a>
+            <a href="https://cards-dev.twitter.com/validator" class="tool-link" target="_blank">
+                Twitter Card Validator
+            </a>
+        </div>
+
+        <div class="test-item">
+            <h3>Koraci za testiranje:</h3>
+            <ol>
+                <li><strong>Pokrenite build:</strong> <code>npm run build</code></li>
+                <li><strong>Pokrenite preview:</strong> <code>npm run preview</code></li>
+                <li><strong>Otvorite product stranicu</strong> (npr. /klima-uredaji/[neki-proizvod])</li>
+                <li><strong>Desni klik → View Page Source</strong></li>
+                <li><strong>Pretražite:</strong> <code>&lt;script type="application/ld+json"&gt;</code></li>
+                <li><strong>Kopirajte JSON</strong> i validirajte na Schema.org Validator</li>
+            </ol>
+        </div>
+
+        <div class="test-item">
+            <h3>Primjer Product Schema output:</h3>
+            <div class="code-block">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Mitsubishi MSZ-LN25VG",
+  "brand": {
+    "@type": "Brand",
+    "name": "Mitsubishi"
+  },
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "EUR",
+    "price": 899,
+    "availability": "https://schema.org/InStock"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.5",
+    "reviewCount": 43
+  }
+}
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>📈 Očekivani SEO rezultati</h2>
+
+        <div class="test-item">
+            <h3>Rich Snippets u Google rezultatima:</h3>
+            <ul>
+                <li>⭐ Zvjezdice i ocjene proizvoda</li>
+                <li>💰 Cijena direktno u rezultatima</li>
+                <li>✅ Status dostupnosti</li>
+                <li>📍 Breadcrumb navigacija</li>
+                <li>📝 Blog post metadata</li>
+            </ul>
+        </div>
+
+        <div class="test-item">
+            <h3>Poboljšanja:</h3>
+            <ul>
+                <li>Bolje rangiranje u lokalnim pretragama</li>
+                <li>Veći CTR (Click Through Rate)</li>
+                <li>Bolja vidljivost proizvoda</li>
+                <li>Profesionalniji izgled u rezultatima</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>📝 Napomene</h2>
+        <p>Schema markup je automatski generiran za sve proizvode i blog postove. Kada dodajete nove proizvode kroz CMS, Schema se automatski kreira na osnovu unesenih podataka.</p>
+        <p><strong>Favicon ikone:</strong> Molimo generirajte favicon ikone koristeći <code>/generate-favicons.html</code> stranicu.</p>
+    </div>
+</body>
+</html>

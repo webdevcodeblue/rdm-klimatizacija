@@ -3,6 +3,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import BlogCard from '../../components/blog/BlogCard.astro';
+import BlogPostSchema from '../../components/seo/BlogPostSchema.astro';
+import BreadcrumbSchema from '../../components/seo/BreadcrumbSchema.astro';
 import { getCollection, getEntry } from 'astro:content';
 
 // Get slug from URL params
@@ -59,6 +61,24 @@ const shareUrls = {
   twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(post.title)}`,
   linkedin: `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(currentUrl)}&title=${encodeURIComponent(post.title)}`
 };
+
+// Schema data
+const blogPostData = {
+  title: post.title,
+  description: post.description,
+  author: post.author,
+  date: post.publishDate,
+  image: post.image,
+  category: post.category,
+  tags: post.tags,
+  slug: slug
+};
+
+const breadcrumbItems = [
+  { name: 'Početna', href: '/' },
+  { name: 'Blog', href: '/blog' },
+  { name: post.title, href: `/blog/${slug}` }
+];
 ---
 
 <BaseLayout
@@ -66,6 +86,8 @@ const shareUrls = {
   description={post.description}
   keywords={post.tags?.join(', ') || 'klimatizacija, klima uređaji, savjeti'}
 >
+  <BlogPostSchema post={blogPostData} />
+  <BreadcrumbSchema items={breadcrumbItems} />
   <Header />
 
   <main class="blog-post">

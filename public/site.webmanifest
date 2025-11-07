@@ -1,0 +1,72 @@
+{
+  "name": "RDM Klimatizacija",
+  "short_name": "RDM Klima",
+  "description": "Prodaja, montaža i servis klima uređaja, dizalica topline i ventilacijskih sustava. Ovlašteni Mitsubishi Electric partner.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#005bbb",
+  "orientation": "portrait-primary",
+  "categories": ["business", "shopping", "hvac"],
+  "lang": "hr-HR",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "label": "RDM Klimatizacija početna stranica"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Klima uređaji",
+      "short_name": "Klima",
+      "description": "Pregledaj ponudu klima uređaja",
+      "url": "/klima-uredaji",
+      "icons": [{ "src": "/favicon-32x32.png", "sizes": "32x32" }]
+    },
+    {
+      "name": "Kontakt",
+      "short_name": "Kontakt",
+      "description": "Kontaktirajte nas",
+      "url": "/kontakt",
+      "icons": [{ "src": "/favicon-32x32.png", "sizes": "32x32" }]
+    },
+    {
+      "name": "Servis",
+      "short_name": "Servis",
+      "description": "Servis klima uređaja",
+      "url": "/montaza-servis",
+      "icons": [{ "src": "/favicon-32x32.png", "sizes": "32x32" }]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}

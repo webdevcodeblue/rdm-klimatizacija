@@ -7,6 +7,7 @@ import ProductInfo from '../../components/products/ProductInfo.astro';
 import ProductTabs from '../../components/products/ProductTabs.astro';
 import RelatedProducts from '../../components/products/RelatedProducts.astro';
 import InquiryModal from '../../components/InquiryModal.astro';
+import ProductSchema from '../../components/seo/ProductSchema.astro';
 import { getCollection, getEntry } from 'astro:content';
 import { formatPower, formatArea, formatDimensions, formatWeight, formatSoundLevel } from '../../utils/formatSpecifications';
 
@@ -142,6 +143,7 @@ const pageDescription = `${product.manufacturer} ${product.model} - Multi klima 
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>
+  <ProductSchema product={product} category="Multi klima sistem" />
   <Header />
 
   <main class="product-detail">

@@ -1,0 +1,174 @@
+---
+// Component for performance optimization meta tags and preloads
+---
+
+<!-- DNS Prefetch for External Domains -->
+<link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+<link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+<link rel="dns-prefetch" href="https://www.google-analytics.com" />
+<link rel="dns-prefetch" href="https://www.googleusercontent.com" />
+
+<!-- Preconnect for Critical Origins -->
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+<!-- Preload Critical Resources -->
+<link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/css/critical.css" as="style" />
+<link rel="preload" href="/js/header-final.js" as="script" />
+
+<!-- Prefetch Next Page Resources -->
+<link rel="prefetch" href="/klima-uredaji" />
+<link rel="prefetch" href="/api/search.json" />
+
+<!-- Resource Hints for Images -->
+<link rel="preload" as="image" href="/images/hero-banner.webp" type="image/webp" />
+
+<!-- Modulepreload for ES6 Modules -->
+<link rel="modulepreload" href="/js/header-events.js" />
+
+<!-- Font Display Optimization -->
+<style>
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url('/fonts/inter-var.woff2') format('woff2-variations');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+
+  /* Critical CSS for Above-the-Fold Content */
+  :root {
+    --color-primary: #2563eb;
+    --color-secondary: #10b981;
+    --color-accent: #f59e0b;
+    --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  /* Prevent Layout Shift */
+  img {
+    aspect-ratio: attr(width) / attr(height);
+    width: 100%;
+    height: auto;
+  }
+
+  /* Optimize Text Rendering */
+  body {
+    text-rendering: optimizeSpeed;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Reduce Motion for Accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+</style>
+
+<!-- Web Vitals Tracking -->
+<script>
+  // Report Web Vitals to Analytics
+  function sendWebVitals() {
+    if ('PerformanceObserver' in window && 'PerformanceLongTaskTiming' in window) {
+      // First Contentful Paint
+      new PerformanceObserver((entryList) => {
+        const entries = entryList.getEntries();
+        entries.forEach((entry) => {
+          if (entry.name === 'first-contentful-paint') {
+            console.log('FCP:', entry.startTime);
+            // Send to analytics
+            if (window.gtag) {
+              window.gtag('event', 'web_vitals', {
+                event_category: 'Web Vitals',
+                event_label: 'FCP',
+                value: Math.round(entry.startTime)
+              });
+            }
+          }
+        });
+      }).observe({ entryTypes: ['paint'] });
+
+      // Largest Contentful Paint
+      new PerformanceObserver((entryList) => {
+        const entries = entryList.getEntries();
+        const lastEntry = entries[entries.length - 1];
+        console.log('LCP:', lastEntry.renderTime || lastEntry.loadTime);
+        // Send to analytics
+        if (window.gtag) {
+          window.gtag('event', 'web_vitals', {
+            event_category: 'Web Vitals',
+            event_label: 'LCP',
+            value: Math.round(lastEntry.renderTime || lastEntry.loadTime)
+          });
+        }
+      }).observe({ entryTypes: ['largest-contentful-paint'] });
+
+      // First Input Delay
+      new PerformanceObserver((entryList) => {
+        const entries = entryList.getEntries();
+        entries.forEach((entry) => {
+          console.log('FID:', entry.processingStart - entry.startTime);
+          // Send to analytics
+          if (window.gtag) {
+            window.gtag('event', 'web_vitals', {
+              event_category: 'Web Vitals',
+              event_label: 'FID',
+              value: Math.round(entry.processingStart - entry.startTime)
+            });
+          }
+        });
+      }).observe({ entryTypes: ['first-input'] });
+
+      // Cumulative Layout Shift
+      let clsValue = 0;
+      let clsEntries = [];
+
+      new PerformanceObserver((entryList) => {
+        for (const entry of entryList.getEntries()) {
+          if (!entry.hadRecentInput) {
+            clsValue += entry.value;
+            clsEntries.push(entry);
+          }
+        }
+      }).observe({ entryTypes: ['layout-shift'] });
+
+      // Report CLS when page is about to unload
+      window.addEventListener('beforeunload', () => {
+        console.log('CLS:', clsValue);
+        // Send to analytics
+        if (window.gtag) {
+          window.gtag('event', 'web_vitals', {
+            event_category: 'Web Vitals',
+            event_label: 'CLS',
+            value: Math.round(clsValue * 1000)
+          });
+        }
+      });
+    }
+  }
+
+  // Initialize Web Vitals tracking
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', sendWebVitals);
+  } else {
+    sendWebVitals();
+  }
+</script>
+
+<!-- Lazy Load Polyfill for Older Browsers -->
+<script>
+  if (!('loading' in HTMLImageElement.prototype)) {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/lazysizes@5/lazysizes.min.js';
+    script.async = true;
+    document.body.appendChild(script);
+  }
+</script>

@@ -1,0 +1,139 @@
+---
+export interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+  sizes?: string;
+  srcset?: string;
+  placeholder?: string;
+  format?: 'webp' | 'avif' | 'auto';
+}
+
+const {
+  src,
+  alt,
+  width,
+  height,
+  class: className = '',
+  loading = 'lazy',
+  sizes,
+  srcset,
+  placeholder = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect width="100%25" height="100%25" fill="%23f0f0f0"/%3E%3C/svg%3E',
+  format = 'auto'
+} = Astro.props;
+
+// Generate responsive srcset if not provided
+const generateSrcset = (src: string) => {
+  if (srcset) return srcset;
+
+  const widths = [320, 640, 768, 1024, 1280, 1920];
+  const ext = src.split('.').pop();
+  const base = src.replace(`.${ext}`, '');
+
+  return widths
+    .map(w => `${base}-${w}w.${format === 'auto' ? 'webp' : format} ${w}w`)
+    .join(', ');
+};
+
+// Generate sizes if not provided
+const generateSizes = () => {
+  if (sizes) return sizes;
+  return '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw';
+};
+
+const isExternal = src.startsWith('http');
+const optimizedSrcset = !isExternal ? generateSrcset(src) : undefined;
+const optimizedSizes = !isExternal ? generateSizes() : undefined;
+---
+
+<picture>
+  {/* WebP format for modern browsers */}
+  {!isExternal && format === 'auto' && (
+    <source
+      type="image/webp"
+      srcset={optimizedSrcset}
+      sizes={optimizedSizes}
+    />
+  )}
+
+  {/* AVIF format for cutting-edge browsers */}
+  {!isExternal && format === 'avif' && (
+    <source
+      type="image/avif"
+      srcset={optimizedSrcset?.replace(/webp/g, 'avif')}
+      sizes={optimizedSizes}
+    />
+  )}
+
+  {/* Fallback image */}
+  <img
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    class={`lazy-image ${className}`}
+    loading={loading}
+    decoding="async"
+    data-src={src}
+    srcset={optimizedSrcset}
+    sizes={optimizedSizes}
+  />
+</picture>
+
+<style>
+  .lazy-image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    background-color: #f0f0f0;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .lazy-image[data-loaded="true"] {
+    opacity: 1;
+  }
+
+  .lazy-image:not([data-loaded="true"]) {
+    opacity: 0;
+  }
+</style>
+
+<script>
+  // Intersection Observer for lazy loading
+  if ('IntersectionObserver' in window) {
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target as HTMLImageElement;
+
+          // Load the image
+          if (img.dataset.src) {
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+          }
+
+          // Mark as loaded when complete
+          img.addEventListener('load', () => {
+            img.setAttribute('data-loaded', 'true');
+          });
+
+          // Stop observing
+          observer.unobserve(img);
+        }
+      });
+    }, {
+      rootMargin: '50px 0px',
+      threshold: 0.01
+    });
+
+    // Observe all lazy images
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.lazy-image[loading="lazy"]').forEach(img => {
+        imageObserver.observe(img);
+      });
+    });
+  }
+</script>

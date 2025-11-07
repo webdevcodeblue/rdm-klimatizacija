@@ -1389,86 +1389,61 @@ const navigationItems = [
     });
   });
 
-  // Scroll detection for sticky header with PROFESSIONAL hysteresis system
+  // ========================================
+  // SCROLL DETECTION - Jednostavna hysteresis
+  // 150px → smanjuje se | 60px → vraća se
+  // ========================================
   const header = document.getElementById('mainHeader');
-  const headerTopbar = document.getElementById('headerTopbar');
-  let lastScrollY = window.scrollY;
-  let ticking = false;
   let isScrolled = false;
-  let lastStateChangeTime = 0;
 
-  // Professional configuration for rock-solid stability
-  const SCROLL_UP_THRESHOLD = 150;   // Activate "scrolled" state when scrolling DOWN past this point
-  const SCROLL_DOWN_THRESHOLD = 50;  // Deactivate "scrolled" state when scrolling UP above this point
-  const MIN_STATE_CHANGE_INTERVAL = 150; // Debounce: minimum time between state changes
-  const DEAD_ZONE = SCROLL_UP_THRESHOLD - SCROLL_DOWN_THRESHOLD; // 100px dead zone where nothing changes
+  // Pragovi - optimalna zona za stabilnost!
+  const SHRINK_AT = 150;  // Header se smanjuje na 150px
+  const EXPAND_AT = 60;   // Header se vraća u normalno na 60px
+  // DEAD ZONE: 90px (60-150px) - Stabilna zona bez treperenja!
 
   function updateHeader() {
-    const currentTime = Date.now();
     const scrollY = window.scrollY;
-    const timeSinceLastChange = currentTime - lastStateChangeTime;
-
-    // Debounce: Skip if we're changing states too frequently
-    if (timeSinceLastChange < MIN_STATE_CHANGE_INTERVAL) {
-      lastScrollY = scrollY;
-      ticking = false;
-      return;
-    }
-
-    // PURE HYSTERESIS LOGIC - No velocity check!
-    // This is the KEY to prevent jittering with slow scrolling
-    let shouldBeScrolled;
 
     if (isScrolled) {
-      // Already in "scrolled" state
-      // Only switch to "normal" if we scroll ABOVE the lower threshold
-      shouldBeScrolled = scrollY > SCROLL_DOWN_THRESHOLD;
-    } else {
-      // Currently in "normal" state
-      // Only switch to "scrolled" if we scroll BELOW the upper threshold
-      shouldBeScrolled = scrollY > SCROLL_UP_THRESHOLD;
-    }
-
-    // Change state ONLY if the new state is different
-    // NO velocity check - hysteresis alone prevents jittering!
-    if (shouldBeScrolled !== isScrolled) {
-      isScrolled = shouldBeScrolled;
-      lastStateChangeTime = currentTime;
-
-      if (isScrolled) {
-        header?.classList.add('scrolled');
-      } else {
+      // Header je trenutno mali
+      // Vrati ga u veliko samo ako smo ispod 60px
+      if (scrollY < EXPAND_AT) {
+        isScrolled = false;
         header?.classList.remove('scrolled');
       }
+    } else {
+      // Header je trenutno velik
+      // Smanji ga samo ako smo iznad 150px
+      if (scrollY > SHRINK_AT) {
+        isScrolled = true;
+        header?.classList.add('scrolled');
+      }
     }
-
-    lastScrollY = scrollY;
-    ticking = false;
   }
 
-  function requestTick() {
+  // Slušaj scroll
+  let ticking = false;
+  window.addEventListener('scroll', () => {
     if (!ticking) {
-      window.requestAnimationFrame(updateHeader);
+      window.requestAnimationFrame(() => {
+        updateHeader();
+        ticking = false;
+      });
       ticking = true;
     }
-  }
+  }, { passive: true });
 
-  // Listen to scroll events
-  window.addEventListener('scroll', requestTick, { passive: true });
-
-  // Initial check on page load
-  const initialScrollY = window.scrollY;
-  if (initialScrollY > SCROLL_UP_THRESHOLD) {
+  // Inicijalizacija pri učitavanju
+  if (window.scrollY > SHRINK_AT) {
     isScrolled = true;
     header?.classList.add('scrolled');
   }
-  lastStateChangeTime = Date.now();
 
   // Import and initialize modular scripts
   const loadHeaderScripts = async () => {
     // Load search module
     const searchScript = document.createElement('script');
-    searchScript.src = '/src/scripts/header/search.js';
+    searchScript.src = '/scripts/header/search.js';
     searchScript.onload = () => {
       if (window.HeaderSearch) {
         const search = new window.HeaderSearch();
@@ -1493,236 +1468,8 @@ const navigationItems = [
       }
     };
     document.head.appendChild(searchScript);
-
-    // Load scroll module
-    const scrollScript = document.createElement('script');
-    scrollScript.src = '/src/scripts/header/scroll.js';
-    scrollScript.onload = () => {
-      if (window.HeaderScroll) {
-        const scroll = new window.HeaderScroll();
-        scroll.init();
-      }
-    };
-    document.head.appendChild(scrollScript);
   };
 
   // Load scripts after DOM is ready
   loadHeaderScripts();
-
-  let searchTimeout: number | null = null;
-  let currentQuery = '';
-
-  // Debounce function
-  function debounce(func: Function, wait: number) {
-    return (...args: any[]) => {
-      if (searchTimeout) clearTimeout(searchTimeout);
-      searchTimeout = window.setTimeout(() => func(...args), wait);
-    };
-  }
-
-  // Format price
-  function formatPrice(price: number | undefined, salePrice?: number) {
-    if (!price) {
-      return 'Na upit';
-    }
-    if (salePrice && salePrice < price) {
-      return `<span class="search-result-item__price--old">${price.toFixed(2)}€</span>${salePrice.toFixed(2)}€`;
-    }
-    return `${price.toFixed(2)}€`;
-  }
-
-  // Perform search
-  async function performSearch(query: string) {
-    if (query.length < 2) {
-      searchDropdown?.classList.remove('active');
-      return;
-    }
-
-    currentQuery = query;
-
-    // Show loading
-    if (searchResults) {
-      searchResults.innerHTML = '<div class="search-dropdown__loading">Pretraga...</div>';
-      searchDropdown?.classList.add('active');
-    }
-
-    try {
-      const response = await fetch(`/api/search.json?q=${encodeURIComponent(query)}`);
-      const data = await response.json();
-
-      // Check if query is still current
-      if (query !== currentQuery) return;
-
-      if (data.results && data.results.length > 0) {
-        const resultsHTML = data.results.slice(0, 8).map((result: any) => `
-          <a href="${result.url}" class="search-result-item">
-            <img
-              src="${result.image || '/images/placeholder.jpg'}"
-              alt="${result.title}"
-              class="search-result-item__image"
-              loading="lazy"
-            >
-            <div class="search-result-item__content">
-              <div class="search-result-item__title">${result.title}</div>
-              <div class="search-result-item__category">${result.categoryName}</div>
-            </div>
-            <div class="search-result-item__price">
-              ${formatPrice(result.price, result.salePrice)}
-            </div>
-          </a>
-        `).join('');
-
-        const footerHTML = data.total > 8
-          ? `<div class="search-dropdown__footer">
-               <a href="/pretraga?q=${encodeURIComponent(query)}" class="search-dropdown__view-all">
-                 Vidi sve rezultate (${data.total})
-               </a>
-             </div>`
-          : '';
-
-        if (searchResults) {
-          searchResults.innerHTML = resultsHTML + footerHTML;
-          searchDropdown?.classList.add('active');
-        }
-      } else {
-        if (searchResults) {
-          searchResults.innerHTML = '<div class="search-dropdown__empty">Nema pronađenih proizvoda</div>';
-          searchDropdown?.classList.add('active');
-        }
-      }
-    } catch (error) {
-      console.error('Search error:', error);
-      if (searchResults) {
-        searchResults.innerHTML = '<div class="search-dropdown__empty">Greška pri pretraživanju</div>';
-      }
-    }
-  }
-
-  // Search input event listener
-  searchInput?.addEventListener('input', debounce((e: Event) => {
-    const query = (e.target as HTMLInputElement).value.trim();
-    performSearch(query);
-  }, 300));
-
-  // Close dropdown when clicking outside
-  document.addEventListener('click', (e: Event) => {
-    const target = e.target as HTMLElement;
-    if (!target.closest('.header__search')) {
-      searchDropdown?.classList.remove('active');
-    }
-  });
-
-  // Keep dropdown open when clicking inside search area
-  searchInput?.addEventListener('focus', () => {
-    if (currentQuery.length >= 2) {
-      searchDropdown?.classList.add('active');
-    }
-  });
-
-  // Close dropdown on form submit
-  searchForm?.addEventListener('submit', () => {
-    searchDropdown?.classList.remove('active');
-  });
-
-  // Mobile search functionality
-  const mobileSearchInput = document.getElementById('mobileSearchInput') as HTMLInputElement;
-  const mobileSearchDropdown = document.getElementById('mobileSearchDropdown');
-  const mobileSearchResults = document.getElementById('mobileSearchResults');
-  const mobileSearchForm = document.getElementById('mobileSearchForm') as HTMLFormElement;
-
-  let mobileSearchTimeout: number | null = null;
-  let currentMobileQuery = '';
-
-  // Perform mobile search (reuse same logic)
-  async function performMobileSearch(query: string) {
-    if (query.length < 2) {
-      mobileSearchDropdown?.classList.remove('active');
-      return;
-    }
-
-    currentMobileQuery = query;
-
-    // Show loading
-    if (mobileSearchResults) {
-      mobileSearchResults.innerHTML = '<div class="search-dropdown__loading">Pretraga...</div>';
-      mobileSearchDropdown?.classList.add('active');
-    }
-
-    try {
-      const response = await fetch(`/api/search.json?q=${encodeURIComponent(query)}`);
-      const data = await response.json();
-
-      // Check if query is still current
-      if (query !== currentMobileQuery) return;
-
-      if (data.results && data.results.length > 0) {
-        const resultsHTML = data.results.slice(0, 8).map((result: any) => `
-          <a href="${result.url}" class="search-result-item">
-            <img
-              src="${result.image || '/images/placeholder.jpg'}"
-              alt="${result.title}"
-              class="search-result-item__image"
-              loading="lazy"
-            >
-            <div class="search-result-item__content">
-              <div class="search-result-item__title">${result.title}</div>
-              <div class="search-result-item__category">${result.categoryName}</div>
-            </div>
-            <div class="search-result-item__price">
-              ${formatPrice(result.price, result.salePrice)}
-            </div>
-          </a>
-        `).join('');
-
-        const footerHTML = data.total > 8
-          ? `<div class="search-dropdown__footer">
-               <a href="/pretraga?q=${encodeURIComponent(query)}" class="search-dropdown__view-all">
-                 Vidi sve rezultate (${data.total})
-               </a>
-             </div>`
-          : '';
-
-        if (mobileSearchResults) {
-          mobileSearchResults.innerHTML = resultsHTML + footerHTML;
-          mobileSearchDropdown?.classList.add('active');
-        }
-      } else {
-        if (mobileSearchResults) {
-          mobileSearchResults.innerHTML = '<div class="search-dropdown__empty">Nema pronađenih proizvoda</div>';
-          mobileSearchDropdown?.classList.add('active');
-        }
-      }
-    } catch (error) {
-      console.error('Mobile search error:', error);
-      if (mobileSearchResults) {
-        mobileSearchResults.innerHTML = '<div class="search-dropdown__empty">Greška pri pretraživanju</div>';
-      }
-    }
-  }
-
-  // Mobile search input event listener
-  mobileSearchInput?.addEventListener('input', debounce((e: Event) => {
-    const query = (e.target as HTMLInputElement).value.trim();
-    performMobileSearch(query);
-  }, 300));
-
-  // Mobile search focus
-  mobileSearchInput?.addEventListener('focus', () => {
-    if (currentMobileQuery.length >= 2) {
-      mobileSearchDropdown?.classList.add('active');
-    }
-  });
-
-  // Close mobile dropdown on form submit
-  mobileSearchForm?.addEventListener('submit', () => {
-    mobileSearchDropdown?.classList.remove('active');
-  });
-
-  // Close mobile dropdown when clicking outside
-  document.addEventListener('click', (e: Event) => {
-    const target = e.target as HTMLElement;
-    if (!target.closest('.mobile-menu__search')) {
-      mobileSearchDropdown?.classList.remove('active');
-    }
-  });
 </script>

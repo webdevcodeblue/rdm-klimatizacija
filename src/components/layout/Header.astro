@@ -1335,11 +1335,11 @@ const navigationItems = [
   let isScrolled = false;
   let lastStateChangeTime = 0;
 
-  // Configuration - proširene granice za stabilnost
-  const SCROLL_UP_THRESHOLD = 100;   // Hide topbar when scrolling down past this point
-  const SCROLL_DOWN_THRESHOLD = 30;  // Show topbar when scrolling up below this point
-  const MIN_STATE_CHANGE_INTERVAL = 200; // Minimum 200ms between state changes (debounce)
-  const VELOCITY_THRESHOLD = 2;      // Minimum scroll velocity to trigger change (prevents micro-movements)
+  // Configuration - proširene granice za MAKSIMALNU stabilnost
+  const SCROLL_UP_THRESHOLD = 120;   // Hide topbar when scrolling down past this point
+  const SCROLL_DOWN_THRESHOLD = 20;  // Show topbar when scrolling up below this point
+  const MIN_STATE_CHANGE_INTERVAL = 300; // Minimum 300ms between state changes (debounce)
+  const VELOCITY_THRESHOLD = 5;      // Minimum scroll velocity to trigger change (prevents micro-movements)
 
   function updateHeader() {
     const currentTime = Date.now();

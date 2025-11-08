@@ -1,0 +1,484 @@
+# ========================================
+# NETLIFY CMS CONFIGURATION
+# RDM Klimatizacija - Admin Panel
+# ========================================
+
+# Backend Configuration - GitHub OAuth
+backend:
+  name: github
+  repo: webdevcodeblue/rdm-klimatizacija
+  branch: main
+
+# Media & Public Folders
+media_folder: "public/images/products"
+public_folder: "/images/products"
+
+# Jezik
+locale: 'hr'
+
+# ========================================
+# COLLECTIONS - Kategorije proizvoda
+# ========================================
+
+collections:
+  # ==================== KLIMA UREĐAJI ====================
+  - name: "klima-uredaji"
+    label: "Klima uređaji"
+    label_singular: "Klima uređaj"
+    folder: "src/content/klima-uredaji"
+    create: true
+    slug: "{{manufacturer}}-{{model}}-{{name}}"
+    format: "frontmatter"
+    extension: "md"
+    fields:
+      # OSNOVNI PODACI
+      - { label: "Naziv proizvoda", name: "name", widget: "string", required: true }
+      - { label: "Proizvođač", name: "manufacturer", widget: "string", required: true }
+      - { label: "Model", name: "model", widget: "string", required: false }
+      - { label: "Kategorija", name: "category", widget: "hidden", default: "klima-uredaji" }
+
+      # CIJENA I STATUS
+      - { label: "Cijena (€)", name: "price", widget: "number", value_type: "int", min: 1, required: false, hint: "Opciono - unesite cijenu proizvoda" }
+      - { label: "Originalna cijena (€)", name: "originalPrice", widget: "number", value_type: "int", min: 1, required: false, hint: "Opciono - za prikaz sniženja" }
+      - { label: "Garancija", name: "warranty", widget: "string", default: "2 godine", required: false }
+      - { label: "Na stanju", name: "inStock", widget: "boolean", default: true }
+
+      # SLIKE
+      - { label: "Glavna slika", name: "image", widget: "image", required: true }
+      - { label: "Galerija slika", name: "images", widget: "list", field: { label: "Slika", name: "image", widget: "image" }, required: false }
+
+      # SPECIJALNE OZNAKE
+      - { label: "Oznaka", name: "badge", widget: "select", options: ["Akcija", "Novo", "Premium", "Bestseller", "Wi-Fi"], required: false }
+      - { label: "Featured (na početnoj)", name: "featured", widget: "boolean", default: false }
+      - { label: "Na akciji", name: "onSale", widget: "boolean", default: false }
+      - { label: "Popularno", name: "popular", widget: "boolean", default: false }
+
+      # SPECIFIKACIJE
+      - label: "Specifikacije"
+        name: "specifications"
+        widget: "object"
+        required: false
+        fields:
+          - { label: "Snaga", name: "power", widget: "string", required: false }
+          - { label: "Hlađenje", name: "cooling", widget: "string", required: false }
+          - { label: "Grijanje", name: "heating", widget: "string", required: false }
+          - { label: "Površina", name: "area", widget: "string", required: false }
+          - { label: "Energetska klasa", name: "energyClass", widget: "select", options: ["A+++", "A++", "A+", "A", "B", "C", "D"], required: false }
+          - { label: "SEER", name: "seer", widget: "number", value_type: "float", required: false }
+          - { label: "SCOP", name: "scop", widget: "number", value_type: "float", required: false }
+          - { label: "Bučnost", name: "soundLevel", widget: "string", required: false }
+          - { label: "Rashladni plin", name: "refrigerant", widget: "string", default: "R32", required: false }
+          - label: "Dimenzije"
+            name: "dimensions"
+            widget: "object"
+            required: false
+            fields:
+              - { label: "Unutarnja jedinica", name: "indoor", widget: "string", required: false }
+              - { label: "Vanjska jedinica", name: "outdoor", widget: "string", required: false }
+          - label: "Težina"
+            name: "weight"
+            widget: "object"
+            required: false
+            fields:
+              - { label: "Unutarnja jedinica", name: "indoor", widget: "string", required: false }
+              - { label: "Vanjska jedinica", name: "outdoor", widget: "string", required: false }
+
+      # FEATURES
+      - label: "Značajke"
+        name: "features"
+        widget: "list"
+        required: false
+        field: { label: "Značajka", name: "feature", widget: "string" }
+
+      # DOKUMENTI
+      - label: "Informacijski list (PDF)"
+        name: "infoSheet"
+        widget: "file"
+        required: false
+        media_folder: "/public/documents"
+        public_folder: "/documents"
+        hint: "Glavni informacijski list - prikazuje se kao poseban gumb i u tab-u Dokumenti"
+      - label: "Dodatni dokumenti"
+        name: "documents"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Naziv dokumenta", name: "name", widget: "string", hint: "Npr. 'Upute za montažu', 'Tehnički list'" }
+          - label: "PDF datoteka"
+            name: "url"
+            widget: "file"
+            media_folder: "/public/documents"
+            public_folder: "/documents"
+
+      # OPIS
+      - { label: "Opis proizvoda", name: "body", widget: "markdown", required: false }
+
+  # ==================== MULTI KLIMA ====================
+  - name: "multi-klima"
+    label: "Multi klima"
+    label_singular: "Multi klima sistem"
+    folder: "src/content/multi-klima"
+    create: true
+    slug: "{{manufacturer}}-{{model}}-{{name}}"
+    format: "frontmatter"
+    extension: "md"
+    fields:
+      - { label: "Naziv proizvoda", name: "name", widget: "string", required: true }
+      - { label: "Proizvođač", name: "manufacturer", widget: "string", required: true }
+      - { label: "Model", name: "model", widget: "string", required: false }
+      - { label: "Kategorija", name: "category", widget: "hidden", default: "multi-klima" }
+      - { label: "Cijena (€)", name: "price", widget: "number", value_type: "int", min: 1, required: false, hint: "Opciono - unesite cijenu proizvoda" }
+      - { label: "Originalna cijena (€)", name: "originalPrice", widget: "number", value_type: "int", min: 1, required: false, hint: "Opciono - za prikaz sniženja" }
+      - { label: "Garancija", name: "warranty", widget: "string", default: "2 godine", required: false }
+      - { label: "Na stanju", name: "inStock", widget: "boolean", default: true }
+      - { label: "Glavna slika", name: "image", widget: "image", required: true }
+      - { label: "Galerija slika", name: "images", widget: "list", field: { label: "Slika", name: "image", widget: "image" }, required: false }
+      - { label: "Oznaka", name: "badge", widget: "select", options: ["Akcija", "Novo", "Premium", "Bestseller", "Wi-Fi"], required: false }
+      - { label: "Featured (na početnoj)", name: "featured", widget: "boolean", default: false }
+      - { label: "Na akciji", name: "onSale", widget: "boolean", default: false }
+      - { label: "Popularno", name: "popular", widget: "boolean", default: false }
+      - label: "Specifikacije"
+        name: "specifications"
+        widget: "object"
+        required: false
+        fields:
+          - { label: "Snaga", name: "power", widget: "string", required: false }
+          - { label: "Hlađenje", name: "cooling", widget: "string", required: false }
+          - { label: "Grijanje", name: "heating", widget: "string", required: false }
+          - { label: "Površina", name: "area", widget: "string", required: false }
+          - { label: "Energetska klasa", name: "energyClass", widget: "select", options: ["A+++", "A++", "A+", "A", "B", "C", "D"], required: false }
+          - { label: "SEER", name: "seer", widget: "number", value_type: "float", required: false }
+          - { label: "SCOP", name: "scop", widget: "number", value_type: "float", required: false }
+          - { label: "Bučnost", name: "soundLevel", widget: "string", required: false }
+          - { label: "Rashladni plin", name: "refrigerant", widget: "string", default: "R32", required: false }
+      - label: "Značajke"
+        name: "features"
+        widget: "list"
+        required: false
+        field: { label: "Značajka", name: "feature", widget: "string" }
+
+      # DOKUMENTI
+      - label: "Informacijski list (PDF)"
+        name: "infoSheet"
+        widget: "file"
+        required: false
+        media_folder: "/public/documents"
+        public_folder: "/documents"
+        hint: "Glavni informacijski list - prikazuje se kao poseban gumb i u tab-u Dokumenti"
+      - label: "Dodatni dokumenti"
+        name: "documents"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Naziv dokumenta", name: "name", widget: "string", hint: "Npr. 'Upute za montažu', 'Tehnički list'" }
+          - label: "PDF datoteka"
+            name: "url"
+            widget: "file"
+            media_folder: "/public/documents"
+            public_folder: "/documents"
+
+      - { label: "Opis proizvoda", name: "body", widget: "markdown", required: false }
+
+  # ==================== DIZALICE TOPLINE ====================
+  - name: "dizalice-topline"
+    label: "Dizalice topline"
+    label_singular: "Dizalica topline"
+    folder: "src/content/dizalice-topline"
+    create: true
+    slug: "{{manufacturer}}-{{model}}-{{name}}"
+    format: "frontmatter"
+    extension: "md"
+    fields:
+      - { label: "Naziv proizvoda", name: "name", widget: "string", required: true }
+      - { label: "Proizvođač", name: "manufacturer", widget: "string", required: true }
+      - { label: "Model", name: "model", widget: "string", required: false }
+      - { label: "Kategorija", name: "category", widget: "hidden", default: "dizalice-topline" }
+      - { label: "Cijena (€)", name: "price", widget: "number", value_type: "int", min: 1, required: false, hint: "Opciono - unesite cijenu proizvoda" }
+      - { label: "Originalna cijena (€)", name: "originalPrice", widget: "number", value_type: "int", min: 1, required: false, hint: "Opciono - za prikaz sniženja" }
+      - { label: "Garancija", name: "warranty", widget: "string", default: "2 godine", required: false }
+      - { label: "Na stanju", name: "inStock", widget: "boolean", default: true }
+      - { label: "Glavna slika", name: "image", widget: "image", required: true }
+      - { label: "Galerija slika", name: "images", widget: "list", field: { label: "Slika", name: "image", widget: "image" }, required: false }
+      - { label: "Oznaka", name: "badge", widget: "select", options: ["Akcija", "Novo", "Premium", "Bestseller"], required: false }
+      - { label: "Featured (na početnoj)", name: "featured", widget: "boolean", default: false }
+      - { label: "Na akciji", name: "onSale", widget: "boolean", default: false }
+      - { label: "Popularno", name: "popular", widget: "boolean", default: false }
+      - label: "Specifikacije"
+        name: "specifications"
+        widget: "object"
+        required: false
+        fields:
+          - { label: "Snaga", name: "power", widget: "string", required: false }
+          - { label: "Hlađenje", name: "cooling", widget: "string", required: false }
+          - { label: "Grijanje", name: "heating", widget: "string", required: false }
+          - { label: "Površina", name: "area", widget: "string", required: false }
+          - { label: "Energetska klasa", name: "energyClass", widget: "select", options: ["A+++", "A++", "A+", "A"], required: false }
+          - { label: "SCOP", name: "scop", widget: "number", value_type: "float", required: false }
+      - label: "Značajke"
+        name: "features"
+        widget: "list"
+        required: false
+        field: { label: "Značajka", name: "feature", widget: "string" }
+
+      # DOKUMENTI
+      - label: "Informacijski list (PDF)"
+        name: "infoSheet"
+        widget: "file"
+        required: false
+        media_folder: "/public/documents"
+        public_folder: "/documents"
+        hint: "Glavni informacijski list - prikazuje se kao poseban gumb i u tab-u Dokumenti"
+      - label: "Dodatni dokumenti"
+        name: "documents"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Naziv dokumenta", name: "name", widget: "string", hint: "Npr. 'Upute za montažu', 'Tehnički list'" }
+          - label: "PDF datoteka"
+            name: "url"
+            widget: "file"
+            media_folder: "/public/documents"
+            public_folder: "/documents"
+
+      - { label: "Opis proizvoda", name: "body", widget: "markdown", required: false }
+
+  # ==================== MIKROKLIMA ====================
+  - name: "mikroklima"
+    label: "Mikroklima"
+    label_singular: "Mikroklima uređaj"
+    folder: "src/content/mikroklima"
+    create: true
+    slug: "{{manufacturer}}-{{model}}-{{name}}"
+    format: "frontmatter"
+    extension: "md"
+    fields:
+      - { label: "Naziv proizvoda", name: "name", widget: "string", required: true }
+      - { label: "Proizvođač", name: "manufacturer", widget: "string", required: true }
+      - { label: "Model", name: "model", widget: "string", required: false }
+      - { label: "Kategorija", name: "category", widget: "hidden", default: "mikroklima" }
+      - { label: "Cijena (€)", name: "price", widget: "number", value_type: "int", min: 1, required: false, hint: "Opciono - unesite cijenu proizvoda" }
+      - { label: "Originalna cijena (€)", name: "originalPrice", widget: "number", value_type: "int", min: 1, required: false, hint: "Opciono - za prikaz sniženja" }
+      - { label: "Garancija", name: "warranty", widget: "string", default: "2 godine", required: false }
+      - { label: "Na stanju", name: "inStock", widget: "boolean", default: true }
+      - { label: "Glavna slika", name: "image", widget: "image", required: true }
+      - { label: "Galerija slika", name: "images", widget: "list", field: { label: "Slika", name: "image", widget: "image" }, required: false }
+      - { label: "Oznaka", name: "badge", widget: "select", options: ["Akcija", "Novo", "Premium", "Bestseller"], required: false }
+      - { label: "Featured (na početnoj)", name: "featured", widget: "boolean", default: false }
+      - { label: "Na akciji", name: "onSale", widget: "boolean", default: false }
+      - { label: "Popularno", name: "popular", widget: "boolean", default: false }
+      - label: "Specifikacije"
+        name: "specifications"
+        widget: "object"
+        required: false
+        fields:
+          - { label: "Protok zraka", name: "airflow", widget: "string", required: false }
+          - { label: "Površina", name: "area", widget: "string", required: false }
+          - { label: "Bučnost", name: "soundLevel", widget: "string", required: false }
+      - label: "Značajke"
+        name: "features"
+        widget: "list"
+        required: false
+        field: { label: "Značajka", name: "feature", widget: "string" }
+
+      # DOKUMENTI
+      - label: "Informacijski list (PDF)"
+        name: "infoSheet"
+        widget: "file"
+        required: false
+        media_folder: "/public/documents"
+        public_folder: "/documents"
+        hint: "Glavni informacijski list - prikazuje se kao poseban gumb i u tab-u Dokumenti"
+      - label: "Dodatni dokumenti"
+        name: "documents"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Naziv dokumenta", name: "name", widget: "string", hint: "Npr. 'Upute za montažu', 'Tehnički list'" }
+          - label: "PDF datoteka"
+            name: "url"
+            widget: "file"
+            media_folder: "/public/documents"
+            public_folder: "/documents"
+
+      - { label: "Opis proizvoda", name: "body", widget: "markdown", required: false }
+
+  # ==================== ALATI I MATERIJALI ====================
+  - name: "alati-materijali"
+    label: "Alati i materijali"
+    label_singular: "Alat/Materijal"
+    folder: "src/content/alati-materijali"
+    create: true
+    slug: "{{manufacturer}}-{{name}}"
+    format: "frontmatter"
+    extension: "md"
+    fields:
+      - { label: "Naziv proizvoda", name: "name", widget: "string", required: true }
+      - { label: "Proizvođač", name: "manufacturer", widget: "string", required: true }
+      - { label: "Model", name: "model", widget: "string", required: false }
+      - { label: "Kategorija", name: "category", widget: "hidden", default: "alati-materijali" }
+      - { label: "Cijena (€)", name: "price", widget: "number", value_type: "int", min: 1, required: false, hint: "Opciono - unesite cijenu proizvoda" }
+      - { label: "Originalna cijena (€)", name: "originalPrice", widget: "number", value_type: "int", min: 1, required: false, hint: "Opciono - za prikaz sniženja" }
+      - { label: "Garancija", name: "warranty", widget: "string", required: false }
+      - { label: "Na stanju", name: "inStock", widget: "boolean", default: true }
+      - { label: "Glavna slika", name: "image", widget: "image", required: true }
+      - { label: "Galerija slika", name: "images", widget: "list", field: { label: "Slika", name: "image", widget: "image" }, required: false }
+      - { label: "Oznaka", name: "badge", widget: "select", options: ["Akcija", "Novo", "Bestseller"], required: false }
+      - { label: "Featured (na početnoj)", name: "featured", widget: "boolean", default: false }
+      - { label: "Na akciji", name: "onSale", widget: "boolean", default: false }
+      - { label: "Popularno", name: "popular", widget: "boolean", default: false }
+      - label: "Značajke"
+        name: "features"
+        widget: "list"
+        required: false
+        field: { label: "Značajka", name: "feature", widget: "string" }
+
+      # DOKUMENTI
+      - label: "Informacijski list (PDF)"
+        name: "infoSheet"
+        widget: "file"
+        required: false
+        media_folder: "/public/documents"
+        public_folder: "/documents"
+        hint: "Glavni informacijski list - prikazuje se kao poseban gumb i u tab-u Dokumenti"
+      - label: "Dodatni dokumenti"
+        name: "documents"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Naziv dokumenta", name: "name", widget: "string", hint: "Npr. 'Upute za montažu', 'Tehnički list'" }
+          - label: "PDF datoteka"
+            name: "url"
+            widget: "file"
+            media_folder: "/public/documents"
+            public_folder: "/documents"
+
+      - { label: "Opis proizvoda", name: "body", widget: "markdown", required: false }
+
+  # ==================== MONTAŽA I SERVIS ====================
+  - name: "montaza-servis"
+    label: "Montaža i servis"
+    label_singular: "Usluga"
+    folder: "src/content/montaza-servis"
+    create: true
+    slug: "{{name}}"
+    format: "frontmatter"
+    extension: "md"
+    fields:
+      - { label: "Naziv usluge", name: "name", widget: "string", required: true }
+      - { label: "Proizvođač", name: "manufacturer", widget: "hidden", default: "RDM Klimatizacija" }
+      - { label: "Kategorija", name: "category", widget: "hidden", default: "montaza-servis" }
+      - { label: "Cijena (€)", name: "price", widget: "number", value_type: "int", min: 1, required: false, hint: "Opciono - unesite cijenu usluge" }
+      - { label: "Slika", name: "image", widget: "image", required: true }
+      - { label: "Na stanju", name: "inStock", widget: "boolean", default: true }
+      - label: "Što uključuje"
+        name: "features"
+        widget: "list"
+        required: false
+        field: { label: "Stavka", name: "feature", widget: "string" }
+
+      # DOKUMENTI
+      - label: "Informacijski list (PDF)"
+        name: "infoSheet"
+        widget: "file"
+        required: false
+        media_folder: "/public/documents"
+        public_folder: "/documents"
+        hint: "Glavni informacijski list - prikazuje se kao poseban gumb i u tab-u Dokumenti"
+      - label: "Dodatni dokumenti"
+        name: "documents"
+        widget: "list"
+        required: false
+        fields:
+          - { label: "Naziv dokumenta", name: "name", widget: "string", hint: "Npr. 'Upute za montažu', 'Cjenik'" }
+          - label: "PDF datoteka"
+            name: "url"
+            widget: "file"
+            media_folder: "/public/documents"
+            public_folder: "/documents"
+
+      - { label: "Opis usluge", name: "body", widget: "markdown", required: false }
+
+  # ==================== BLOG ====================
+  - name: "blog"
+    label: "Blog"
+    label_singular: "Blog članak"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}"
+    format: "frontmatter"
+    extension: "md"
+    media_folder: "public/images/blog"
+    public_folder: "/images/blog"
+    fields:
+      # OSNOVNI PODACI
+      - { label: "Naslov", name: "title", widget: "string", required: true, hint: "Naslov blog članka - bit će automatski korišten za URL" }
+      - { label: "Kratak opis", name: "description", widget: "text", required: true, hint: "Kratak opis članka (1-2 rečenice) za prikaz u listi i SEO" }
+      - { label: "Autor", name: "author", widget: "string", default: "RDM Klimatizacija", required: true }
+
+      # DATUM OBJAVE - VAŽNO: Format mora biti ISO 8601
+      - label: "Datum objave"
+        name: "publishDate"
+        widget: "datetime"
+        required: true
+        date_format: "DD.MM.YYYY"
+        time_format: "HH:mm"
+        format: "YYYY-MM-DDTHH:mm:ss.000Z"
+        picker_utc: false
+        hint: "Datum i vrijeme objave članka"
+
+      # SLIKA
+      - label: "Glavna slika"
+        name: "image"
+        widget: "image"
+        required: true
+        hint: "Preporučena dimenzija: 1200x630px"
+        media_folder: "/public/images/blog"
+        public_folder: "/images/blog"
+
+      # KATEGORIJA
+      - label: "Kategorija"
+        name: "category"
+        widget: "select"
+        required: false
+        options:
+          - "Vodič za kupovinu"
+          - "Savjeti za održavanje"
+          - "Energetska učinkovitost"
+          - "Novosti"
+          - "Tehnologija"
+          - "Preporuke stručnjaka"
+        hint: "Odaberite kategoriju članka"
+
+      # TAGOVI
+      - label: "Tagovi (ključne riječi)"
+        name: "tags"
+        widget: "list"
+        required: false
+        max: 5
+        min: 0
+        field: { label: "Tag", name: "tag", widget: "string" }
+        hint: "Dodajte do 5 ključnih riječi vezanih uz članak"
+
+      # SPECIJALNE OZNAKE
+      - label: "Istaknuti članak"
+        name: "featured"
+        widget: "boolean"
+        default: false
+        required: false
+        hint: "Istaknuti članci se prikazuju s posebnom oznakom"
+
+      - label: "Objavljeno"
+        name: "published"
+        widget: "boolean"
+        default: true
+        required: true
+        hint: "Ako nije označeno, članak neće biti vidljiv na web stranici"
+
+      # SADRŽAJ
+      - label: "Sadržaj članka"
+        name: "body"
+        widget: "markdown"
+        required: true
+        hint: "Glavni sadržaj blog članka - koristite Markdown formatiranje"
+        modes: ["rich_text", "raw"]
+        buttons: ["bold", "italic", "code", "link", "heading-two", "heading-three", "quote", "bulleted-list", "numbered-list"]

@@ -4,7 +4,7 @@ name: KLIMA TEST
 manufacturer: KLIMA TEST
 model: KLIMA
 category: klima-uredaji
-price: 500
+price: 400
 originalPrice: 800
 warranty: 2 godine
 inStock: true
@@ -12,6 +12,7 @@ image: /images/products/montaza-klime.png
 badge: Novo
 featured: true
 onSale: false
+popular: true
 specifications:
   power: ""
   area: "43"
@@ -30,6 +31,5 @@ isNew: true
 documents:
   - name: test.pdf
     url: /documents/rm_logo_v2.pdf
-popular: true
 ---
 KLIMA  <https://www.rmfrigoteam.hr/>

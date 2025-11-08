@@ -48,13 +48,28 @@
     // Wait for CMS to load, then initialize manually
     const initCMS = () => {
       if (typeof CMS !== 'undefined') {
-        CMS.init({
-          config: {
-            // Use proxy backend for local development (reads/writes to files)
-            backend: {
+        // Auto-detect environment: local vs production
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+        // Backend configuration based on environment
+        const backendConfig = isLocal
+          ? {
+              // Local development: use proxy backend
               name: 'proxy',
               proxy_url: 'http://localhost:8081/api/v1'
-            },
+            }
+          : {
+              // Production: use GitHub backend with OAuth
+              name: 'github',
+              repo: 'webdevcodeblue/rdm-klimatizacija',
+              branch: 'main',
+              base_url: 'https://rmfrigotema.plavecstudio.com',
+              auth_endpoint: '/api/auth'
+            };
+
+        CMS.init({
+          config: {
+            backend: backendConfig,
             media_folder: 'public/images/products',
             public_folder: '/images/products',
             locale: 'hr',

@@ -8,6 +8,8 @@ backend:
   name: github
   repo: webdevcodeblue/rdm-klimatizacija
   branch: main
+  base_url: https://rmfrigotema.plavecstudio.com
+  auth_endpoint: /api/auth
 
 # Media & Public Folders
 media_folder: "public/images/products"

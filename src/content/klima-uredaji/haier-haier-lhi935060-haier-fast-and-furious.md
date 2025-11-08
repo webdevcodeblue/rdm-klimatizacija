@@ -3,7 +3,7 @@ name: Haier Fast and Furious
 manufacturer: Haier
 model: Haier LHI935060
 category: klima-uredaji
-price: 479
+price: 399
 warranty: 2 godine
 inStock: true
 image: /images/products/android-chrome-512x512.png

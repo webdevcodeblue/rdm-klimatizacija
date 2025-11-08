@@ -52,10 +52,15 @@ export const GET: APIRoute = async ({ request, redirect }) => {
 <body>
   <script>
     (function() {
+      const data = {
+        token: "${tokenData.access_token}",
+        provider: "github"
+      };
+
       function receiveMessage(e) {
         console.log("receiveMessage %o", e);
         window.opener.postMessage(
-          'authorization:github:success:${JSON.stringify(tokenData)}',
+          "authorization:github:success:" + JSON.stringify(data),
           e.origin
         );
         window.removeEventListener("message", receiveMessage, false);

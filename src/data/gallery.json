@@ -1,0 +1,28 @@
+{
+  "categories": [
+    {
+      "id": "kucne-klime",
+      "title": "Kućne klime",
+      "description": "Profesionalna montaža i servis kućnih klima uređaja",
+      "slug": "kucne-klime"
+    },
+    {
+      "id": "dizalice-topline",
+      "title": "Dizalice topline",
+      "description": "Instalacija dizalica topline za grijanje i hlađenje",
+      "slug": "dizalice-topline"
+    },
+    {
+      "id": "rashladna-oprema",
+      "title": "Rashladna oprema",
+      "description": "Rashladni sustavi i komercijalna rashladna oprema",
+      "slug": "rashladna-oprema"
+    },
+    {
+      "id": "komercijalne-klime-vrf",
+      "title": "Komercijalne klime i VRF sustavi",
+      "description": "VRF sustavi i komercijalna klimatizacija",
+      "slug": "komercijalne-klime-vrf"
+    }
+  ]
+}

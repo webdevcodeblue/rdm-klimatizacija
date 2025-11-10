@@ -1,0 +1,319 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import ProductGallery from '../../components/products/ProductGallery.astro';
+import ProductInfo from '../../components/products/ProductInfo.astro';
+import ProductTabs from '../../components/products/ProductTabs.astro';
+import RelatedProducts from '../../components/products/RelatedProducts.astro';
+import InquiryModal from '../../components/InquiryModal.astro';
+import ProductSchema from '../../components/seo/ProductSchema.astro';
+export const prerender = true;
+
+import { getCollection, getEntry } from 'astro:content';
+import { formatPower, formatArea, formatDimensions, formatWeight, formatSoundLevel } from '../../utils/formatSpecifications';
+
+// Generate static paths for all products
+export async function getStaticPaths() {
+  const products = await getCollection('alati-materijali');
+  return products.map((product) => ({
+    params: { slug: product.slug },
+    props: { product }
+  }));
+}
+
+// Get product from props or fetch manually for SSR mode
+let entry = Astro.props.product;
+
+// SSR fallback - fetch product manually if not in props (dev mode)
+if (!entry) {
+  const { slug } = Astro.params;
+  entry = await getEntry('alati-materijali', slug);
+
+  // If still not found, redirect to 404
+  if (!entry) {
+    return Astro.redirect('/404');
+  }
+}
+
+const rawProduct = entry.data;
+
+// Render markdown content to HTML
+const renderedContent = await entry.render();
+
+// Convert Content Collection data to format expected by components
+const product = {
+  slug: entry.slug,
+  id: entry.slug,
+  name: rawProduct.name,
+  manufacturer: rawProduct.manufacturer,
+  model: rawProduct.model,
+  category: rawProduct.category,
+  subcategory: rawProduct.subcategory,
+  price: rawProduct.price,
+  originalPrice: rawProduct.originalPrice,
+  warranty: rawProduct.warranty,
+  images: rawProduct.images.length > 0 ? rawProduct.images : [rawProduct.image],
+  specifications: {
+    type: rawProduct.specifications?.type,
+    compatibility: rawProduct.specifications?.compatibility,
+    systems: rawProduct.specifications?.systems,
+    voltage: rawProduct.specifications?.voltage,
+    cableLength: rawProduct.specifications?.cableLength,
+    display: rawProduct.specifications?.display,
+    mounting: rawProduct.specifications?.mounting,
+    material: rawProduct.specifications?.material,
+    size: rawProduct.specifications?.size,
+    quantity: rawProduct.specifications?.quantity
+  },
+  features: rawProduct.features,
+  descriptionContent: renderedContent.Content,
+  technicalSpecs: {
+    general: {
+      'Tip proizvoda': rawProduct.specifications?.type || 'N/A',
+      'Proizvođač': rawProduct.manufacturer || 'N/A',
+      'Model': rawProduct.model || 'N/A',
+      ...(rawProduct.code && { 'Šifra': rawProduct.code })
+    },
+    compatibility: {
+      ...(rawProduct.specifications?.compatibility && { 'Kompatibilnost': rawProduct.specifications.compatibility }),
+      ...(rawProduct.specifications?.systems && { 'Sistemi': rawProduct.specifications.systems })
+    },
+    technical: {
+      ...(rawProduct.specifications?.voltage && { 'Napajanje': rawProduct.specifications.voltage }),
+      ...(rawProduct.specifications?.cableLength && { 'Dužina kabla': rawProduct.specifications.cableLength }),
+      ...(rawProduct.specifications?.display && { 'Displej': rawProduct.specifications.display }),
+      ...(rawProduct.specifications?.mounting && { 'Montaža': rawProduct.specifications.mounting }),
+      ...(rawProduct.specifications?.material && { 'Materijal': rawProduct.specifications.material }),
+      ...(rawProduct.specifications?.size && { 'Veličina': rawProduct.specifications.size }),
+      ...(rawProduct.specifications?.quantity && { 'Količina': rawProduct.specifications.quantity })
+    }
+  },
+  inStock: rawProduct.inStock,
+  badge: rawProduct.badge,
+  code: rawProduct.code,
+  infoSheet: rawProduct.infoSheet,
+  documents: rawProduct.documents || []
+};
+
+// Get all products for related products section
+const allProducts = await getCollection('alati-materijali');
+
+// Smart related products - prioritize "Popular" products
+const relatedProducts = allProducts
+  .filter(p => p.slug !== entry.slug) // Exclude current product
+  .sort((a, b) => {
+    // Popular products first
+    if (a.data.popular && !b.data.popular) return -1;
+    if (!a.data.popular && b.data.popular) return 1;
+    return 0; // Keep original order for rest
+  })
+  .slice(0, 8) // Show 8 related products
+  .map(p => ({
+    id: p.slug,
+    slug: p.slug,
+    name: p.data.name,
+    manufacturer: p.data.manufacturer,
+    model: p.data.model,
+    price: p.data.price,
+    originalPrice: p.data.originalPrice,
+    image: p.data.image,
+    images: p.data.images.length > 0 ? p.data.images : [p.data.image],
+    subcategory: p.data.subcategory,
+    specifications: p.data.specifications,
+    features: p.data.features,
+    inStock: p.data.inStock,
+    badge: p.data.badge,
+    href: `/alati-materijali/${p.slug}`
+  }));
+
+// SEO meta data
+const pageTitle = `${product.manufacturer ? product.manufacturer + ' ' : ''}${product.name} - RDM Klimatizacija`;
+const pageDescription = `${product.manufacturer ? product.manufacturer + ' ' : ''}${product.model || ''} - ${product.description ? product.description.substring(0, 150) : 'Alati i materijali za klima uređaje'}${product.price ? `. Cijena: ${product.price}€` : ''}`;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <ProductSchema product={product} category="Alati i materijali" />
+  <Header />
+
+  <main class="product-detail">
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <div class="container">
+        <ol class="breadcrumb__list">
+          <li class="breadcrumb__item">
+            <a href="/" class="breadcrumb__link">Početna</a>
+          </li>
+          <li class="breadcrumb__item">
+            <a href="/alati-materijali" class="breadcrumb__link">Alati i materijali</a>
+          </li>
+          <li class="breadcrumb__item">
+            <span class="breadcrumb__current">{product.manufacturer ? product.manufacturer + ' ' : ''}{product.model || product.name}</span>
+          </li>
+        </ol>
+      </div>
+    </nav>
+
+    <!-- Product Section -->
+    <section class="product-section">
+      <div class="container">
+        <div class="product-layout">
+          <!-- Left: Gallery -->
+          <div class="product-layout__gallery">
+            <ProductGallery images={product.images} productName={product.name} />
+          </div>
+
+          <!-- Right: Product Info -->
+          <div class="product-layout__info">
+            <ProductInfo product={product} />
+          </div>
+        </div>
+
+        <!-- Product Details Tabs -->
+        <div class="product-details">
+          <ProductTabs product={product} />
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Products -->
+    {relatedProducts.length > 0 && (
+      <section class="related-section">
+        <div class="container">
+          <RelatedProducts products={relatedProducts} />
+        </div>
+      </section>
+    )}
+  </main>
+
+  <Footer />
+  <InquiryModal />
+</BaseLayout>
+
+<style>
+  .product-detail {
+    min-height: 100vh;
+    background: var(--color-gray-50);
+  }
+
+  /* Breadcrumb Navigation */
+  .breadcrumb {
+    background: var(--color-white);
+    border-bottom: 1px solid var(--color-gray-200);
+    padding: var(--space-3) 0;
+  }
+
+  .breadcrumb__list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+  }
+
+  .breadcrumb__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .breadcrumb__item:not(:last-child)::after {
+    content: '/';
+    color: var(--color-gray-400);
+  }
+
+  .breadcrumb__link {
+    color: var(--color-gray-600);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    transition: color var(--transition-fast);
+  }
+
+  .breadcrumb__link:hover {
+    color: var(--color-primary);
+  }
+
+  .breadcrumb__current {
+    color: var(--text-primary);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+  }
+
+  /* Product Section */
+  .product-section {
+    padding: var(--space-8) 0;
+  }
+
+  .product-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
+    margin-bottom: var(--space-12);
+  }
+
+  .product-layout__gallery {
+    position: sticky;
+    top: var(--space-6);
+    height: fit-content;
+  }
+
+  /* Product Details */
+  .product-details {
+    background: var(--color-white);
+    border-radius: var(--border-radius-lg);
+    padding: var(--space-8);
+    margin-top: var(--space-8);
+  }
+
+  /* Related Section */
+  .related-section {
+    background: var(--color-white);
+    padding: var(--space-12) 0;
+    border-top: 1px solid var(--color-gray-200);
+  }
+
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .product-layout {
+      gap: var(--space-8);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .product-layout {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+
+    .product-layout__gallery {
+      position: relative;
+      top: 0;
+    }
+
+    .product-details {
+      padding: var(--space-6) var(--space-4);
+      border-radius: 0;
+      margin-top: var(--space-6);
+    }
+
+    .product-section {
+      padding: var(--space-4) 0;
+    }
+
+    .related-section {
+      padding: var(--space-8) 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .breadcrumb__list {
+      font-size: var(--text-xs);
+    }
+
+    .product-details {
+      padding: var(--space-4);
+    }
+  }
+</style>

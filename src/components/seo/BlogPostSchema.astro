@@ -1,0 +1,82 @@
+---
+// BlogPosting Schema Component for SEO
+// Generates JSON-LD structured data for blog posts
+
+export interface Props {
+  post: {
+    title: string;
+    description: string;
+    author?: string;
+    date: Date | string;
+    image?: string;
+    category?: string;
+    tags?: string[];
+    slug: string;
+  };
+}
+
+const { post } = Astro.props;
+const siteUrl = 'https://rdm-klimatizacija.hr';
+const currentUrl = `${siteUrl}${Astro.url.pathname}`;
+
+// Format date to ISO string
+const publishDate = post.date instanceof Date
+  ? post.date.toISOString()
+  : new Date(post.date).toISOString();
+
+// Build BlogPosting schema
+const blogPostingSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.title,
+  description: post.description,
+  author: {
+    '@type': 'Person',
+    name: post.author || 'RDM Klimatizacija Tim',
+    url: siteUrl
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'RDM Klimatizacija',
+    url: siteUrl,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${siteUrl}/logo.png`,
+      width: 200,
+      height: 60
+    }
+  },
+  datePublished: publishDate,
+  dateModified: publishDate,
+  image: post.image
+    ? (post.image.startsWith('http') ? post.image : `${siteUrl}${post.image}`)
+    : `${siteUrl}/og-image-blog.jpg`,
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': currentUrl
+  },
+  url: currentUrl,
+  ...(post.category ? {
+    articleSection: post.category
+  } : {}),
+  ...(post.tags && post.tags.length > 0 ? {
+    keywords: post.tags.join(', ')
+  } : {}),
+  inLanguage: 'hr-HR',
+  potentialAction: {
+    '@type': 'ReadAction',
+    target: currentUrl
+  },
+  wordCount: 800, // Estimated average
+  timeRequired: 'PT4M', // 4 minutes read time estimate
+  isAccessibleForFree: true,
+  isPartOf: {
+    '@type': 'Blog',
+    name: 'RDM Klimatizacija Blog',
+    description: 'Savjeti i vijesti o klima uređajima, dizalicama topline i ventilaciji',
+    url: `${siteUrl}/blog`
+  }
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(blogPostingSchema, null, 2)} />

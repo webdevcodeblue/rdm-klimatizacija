@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favicon Generator - RDM Klimatizacija</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #005bbb;
+            margin-bottom: 10px;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            background: #e8f4fd;
+            border-left: 4px solid #005bbb;
+        }
+        .instructions {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .instructions ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin: 10px 0;
+        }
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        .file-list {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .file-list ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .file-list li {
+            padding: 5px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .file-list li:last-child {
+            border-bottom: none;
+        }
+        .success { color: #27ae60; }
+        .pending { color: #f39c12; }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #005bbb;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 10px 10px 0;
+        }
+        .button:hover {
+            background: #004a9a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Favicon Generator za RDM Klimatizaciju</h1>
+
+        <div class="status">
+            <h3>📋 Status favicon fajlova:</h3>
+            <div class="file-list">
+                <ul>
+                    <li><span class="success">✅</span> <code>/favicon.svg</code> - Postoji (originalni SVG)</li>
+                    <li><span class="pending">⏳</span> <code>/favicon.ico</code> - Treba generirati</li>
+                    <li><span class="pending">⏳</span> <code>/favicon-16x16.png</code> - Treba generirati</li>
+                    <li><span class="pending">⏳</span> <code>/favicon-32x32.png</code> - Treba generirati</li>
+                    <li><span class="pending">⏳</span> <code>/apple-touch-icon.png</code> - Treba generirati (180x180)</li>
+                    <li><span class="pending">⏳</span> <code>/android-chrome-192x192.png</code> - Treba generirati</li>
+                    <li><span class="pending">⏳</span> <code>/android-chrome-512x512.png</code> - Treba generirati</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>📝 Upute za generiranje favicon ikona:</h3>
+            <ol>
+                <li>Idite na jedan od ovih generatora:
+                    <div style="margin: 10px 0;">
+                        <a href="https://realfavicongenerator.net" target="_blank" class="button">RealFaviconGenerator</a>
+                        <a href="https://favicon.io/favicon-converter/" target="_blank" class="button">Favicon.io</a>
+                    </div>
+                </li>
+                <li>Uploadajte vaš <code>favicon.svg</code> fajl</li>
+                <li>Postavke koje trebate:
+                    <ul>
+                        <li>Master picture: Koristite SVG fajl</li>
+                        <li>Favicon for Desktop Browsers: Generirajte sve veličine</li>
+                        <li>Favicon for Apple Touch: 180x180px</li>
+                        <li>Favicon for Android Chrome: Da, sa manifest.json</li>
+                        <li>Windows Metro: Možete preskočiti</li>
+                        <li>Safari Pinned Tab: Možete preskočiti</li>
+                    </ul>
+                </li>
+                <li>Preuzmite generirane fajlove</li>
+                <li>Kopirajte sljedeće fajlove u <code>/public</code> folder:
+                    <ul>
+                        <li><code>favicon.ico</code></li>
+                        <li><code>favicon-16x16.png</code></li>
+                        <li><code>favicon-32x32.png</code></li>
+                        <li><code>apple-touch-icon.png</code></li>
+                        <li><code>android-chrome-192x192.png</code></li>
+                        <li><code>android-chrome-512x512.png</code></li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="status" style="background: #fff3cd; border-color: #ffc107;">
+            <h3>⚠️ Napomena:</h3>
+            <p>Favicon ikone su binarne datoteke koje se ne mogu kreirati direktno kroz kod.
+            Molimo koristite gore navedene online alate za konverziju vašeg SVG logotipa u potrebne formate.</p>
+            <p><strong>Razlog:</strong> Svaki format ima specifične zahtjeve za optimizaciju, boje i kompresiju koje profesionalni generatori najbolje rješavaju.</p>
+        </div>
+
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+            <p style="color: #666; font-size: 14px;">
+                Nakon što generirate i postavite sve favicon fajlove, možete obrisati ovaj HTML fajl.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

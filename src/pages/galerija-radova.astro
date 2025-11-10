@@ -1,0 +1,677 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import galleryData from '../data/gallery.json';
+import fs from 'fs';
+import path from 'path';
+
+// Učitaj sve slike iz public/images/gallery foldera
+const galleryPath = path.join(process.cwd(), 'public', 'images', 'gallery');
+const categories = fs.readdirSync(galleryPath);
+
+const imagesByCategory = categories.flatMap(category => {
+  const categoryPath = path.join(galleryPath, category);
+  if (!fs.statSync(categoryPath).isDirectory()) return [];
+
+  const files = fs.readdirSync(categoryPath);
+  return files
+    .filter(file => /\.(jpg|jpeg|png)$/i.test(file))
+    .map(filename => ({
+      src: `/images/gallery/${category}/${filename}`,
+      category,
+      filename,
+      path: `/images/gallery/${category}/${filename}`
+    }));
+});
+
+const pageTitle = "Galerija radova | RDM Klimatizacija";
+const pageDescription = "Pogledajte našu galeriju uspješno realiziranih projekata - kućne klime, dizalice topline, rashladna oprema i komercijalni VRF sustavi.";
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <Header />
+
+  <main id="main">
+  <section class="gallery-hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Galerija radova</h1>
+        <p class="lead">Pogledajte naše uspješno realizirane projekte montaže klima uređaja, dizalica topline i rashladne opreme</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery-section">
+    <div class="container">
+      <!-- Filter kategorija -->
+      <div class="gallery-filters">
+        <button class="filter-btn active" data-category="all">
+          Sve ({imagesByCategory.length})
+        </button>
+        {galleryData.categories.map(cat => {
+          const count = imagesByCategory.filter(img => img.category === cat.id).length;
+          return count > 0 && (
+            <button class="filter-btn" data-category={cat.id}>
+              {cat.title} ({count})
+            </button>
+          );
+        })}
+      </div>
+
+      <!-- Grid galerija -->
+      <div class="gallery-grid">
+        {imagesByCategory.map((img, index) => (
+          <div class="gallery-item" data-category={img.category}>
+            <button
+              class="gallery-image-wrapper"
+              data-lightbox-index={index}
+              aria-label={`Otvori sliku ${index + 1}`}
+            >
+              <img
+                src={img.src}
+                alt={`${galleryData.categories.find(c => c.id === img.category)?.title || 'Projekt'} - RDM Klimatizacija`}
+                loading={index < 12 ? 'eager' : 'lazy'}
+                class="gallery-image"
+                data-full-src={img.src}
+              />
+              <div class="gallery-overlay">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                  <line x1="11" y1="8" x2="11" y2="14"></line>
+                  <line x1="8" y1="11" x2="14" y2="11"></line>
+                </svg>
+              </div>
+            </button>
+          </div>
+        ))}
+      </div>
+
+      <!-- Lightbox -->
+      <div id="lightbox" class="lightbox" aria-hidden="true">
+        <button class="lightbox-close" aria-label="Zatvori">×</button>
+        <button class="lightbox-prev" aria-label="Prethodna slika">‹</button>
+        <button class="lightbox-next" aria-label="Sljedeća slika">›</button>
+        <div class="lightbox-content">
+          <img src="" alt="" class="lightbox-image" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="gallery-cta">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Tražite kvalitetne proizvode i profesionalnu montažu?</h2>
+        <p>
+          <strong>RDM Klimatizacija</strong> nudi širok asortiman klima uređaja, dizalica topline i rashladne opreme,
+          dok naš <strong>RM Frigo Team</strong> stručno montira i servisira sve naše proizvode.
+          Jedna firma - kompletan servis od prodaje do instalacije.
+        </p>
+        <div class="cta-buttons">
+          <a href="/kontakt" class="cta-btn cta-btn-primary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            Pošaljite upit
+          </a>
+          <a href="tel:+385915957752" class="cta-btn cta-btn-secondary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+            091 595 7752
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .gallery-hero {
+    position: relative;
+    background: linear-gradient(135deg, #0056b3 0%, #004494 100%);
+    padding: 3rem 0 2.5rem;
+    overflow: hidden;
+  }
+
+  .gallery-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 1;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .gallery-hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  }
+
+  .gallery-hero .lead {
+    font-size: 1.2rem;
+    color: rgba(255,255,255,0.95);
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .gallery-section {
+    padding: 4rem 0;
+    background: #f8f9fa;
+  }
+
+  .gallery-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+  }
+
+  .filter-btn {
+    padding: 0.75rem 1.5rem;
+    background: white;
+    border: 2px solid #4a5568;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #4a5568;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .filter-btn:hover {
+    border-color: #2d3748;
+    color: #2d3748;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+
+  .filter-btn.active {
+    background: #2d3748;
+    border-color: #2d3748;
+    color: white;
+    box-shadow: 0 4px 12px rgba(45,55,72,0.3);
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .gallery-item {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  .gallery-item.hidden {
+    display: none;
+  }
+
+  .gallery-image-wrapper {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 3/2;
+    overflow: hidden;
+    border-radius: 12px;
+    cursor: pointer;
+    background: white;
+    border: none;
+    padding: 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .gallery-image-wrapper:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+
+  .gallery-image-wrapper:hover .gallery-overlay {
+    opacity: 1;
+  }
+
+  .gallery-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .gallery-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    color: white;
+  }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .lightbox.active {
+    display: flex;
+  }
+
+  .lightbox-content {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 20px 100px;
+  }
+
+  .lightbox-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+  }
+
+  .lightbox-close,
+  .lightbox-prev,
+  .lightbox-next {
+    position: fixed;
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.3);
+    color: white;
+    font-size: 2rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+  }
+
+  .lightbox-close {
+    top: 2rem;
+    right: 2rem;
+    font-size: 2.5rem;
+    line-height: 1;
+  }
+
+  .lightbox-prev {
+    left: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .lightbox-next {
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .lightbox-close:hover,
+  .lightbox-prev:hover,
+  .lightbox-next:hover {
+    background: rgba(255,255,255,0.2);
+    border-color: rgba(255,255,255,0.5);
+  }
+
+  @media (max-width: 768px) {
+    .gallery-grid {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+
+    .gallery-hero {
+      padding: 2.5rem 0 2rem;
+    }
+
+    .gallery-hero h1 {
+      font-size: 2rem;
+    }
+
+    .gallery-hero .lead {
+      font-size: 1.1rem;
+    }
+
+    .filter-btn {
+      font-size: 0.9rem;
+      padding: 0.65rem 1.25rem;
+    }
+
+    .lightbox {
+      padding: 0;
+    }
+
+    .lightbox-content {
+      max-width: 100vw;
+      max-height: 100vh;
+      width: 100%;
+      height: 100%;
+    }
+
+    .lightbox-image {
+      max-width: calc(100vw - 2rem);
+      max-height: calc(100vh - 120px);
+      width: auto;
+      height: auto;
+    }
+
+    .lightbox-prev,
+    .lightbox-next {
+      width: 50px;
+      height: 50px;
+      font-size: 1.75rem;
+      background: rgba(0,0,0,0.5);
+      border: 2px solid rgba(255,255,255,0.5);
+    }
+
+    .lightbox-prev {
+      left: 0.5rem;
+    }
+
+    .lightbox-next {
+      right: 0.5rem;
+    }
+
+    .lightbox-close {
+      width: 50px;
+      height: 50px;
+      font-size: 2rem;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: rgba(0,0,0,0.5);
+      border: 2px solid rgba(255,255,255,0.5);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .gallery-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .gallery-hero h1 {
+      font-size: 1.75rem;
+    }
+
+    .gallery-hero .lead {
+      font-size: 1rem;
+    }
+
+    .filter-btn {
+      font-size: 0.85rem;
+      padding: 0.6rem 1rem;
+    }
+  }
+
+  /* CTA Section */
+  .gallery-cta {
+    background: linear-gradient(135deg, #e3f2fd 0%, #f0f7ff 100%);
+    padding: 3rem 0;
+    margin-top: 3rem;
+  }
+
+  .cta-content {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .cta-content h2 {
+    font-size: 1.75rem;
+    color: #1a1a1a;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  .cta-content p {
+    font-size: 1.05rem;
+    color: #4a4a4a;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+  }
+
+  .cta-btn-primary {
+    background: #0056b3;
+    color: white;
+  }
+
+  .cta-btn-primary:hover {
+    background: #004494;
+    transform: translateY(-2px);
+  }
+
+  .cta-btn-secondary {
+    background: white;
+    color: #0056b3;
+    border: 2px solid #0056b3;
+  }
+
+  .cta-btn-secondary:hover {
+    background: #0056b3;
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 768px) {
+    .gallery-cta {
+      padding: 2rem 0;
+      margin-top: 2rem;
+    }
+
+    .cta-content h2 {
+      font-size: 1.5rem;
+    }
+
+    .cta-content p {
+      font-size: 1rem;
+    }
+
+    .cta-buttons {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .cta-btn {
+      justify-content: center;
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .cta-content h2 {
+      font-size: 1.25rem;
+    }
+
+    .cta-content p {
+      font-size: 0.95rem;
+    }
+
+    .cta-btn {
+      padding: 0.75rem 1.5rem;
+      font-size: 0.95rem;
+    }
+  }
+</style>
+
+<script>
+  // Filter funkcionalnost
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const galleryItems = document.querySelectorAll('.gallery-item');
+
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const category = btn.dataset.category;
+
+      // Update active button
+      filterButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Filter items
+      galleryItems.forEach(item => {
+        if (category === 'all' || item.dataset.category === category) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+    });
+  });
+
+  // Lightbox funkcionalnost
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImage = lightbox?.querySelector('.lightbox-image') as HTMLImageElement;
+  const lightboxClose = lightbox?.querySelector('.lightbox-close');
+  const lightboxPrev = lightbox?.querySelector('.lightbox-prev');
+  const lightboxNext = lightbox?.querySelector('.lightbox-next');
+  const galleryImageWrappers = document.querySelectorAll('.gallery-image-wrapper');
+
+  let currentImageIndex = 0;
+  const allImages = Array.from(galleryImageWrappers);
+
+  function openLightbox(index: number) {
+    const wrapper = allImages[index];
+    const img = wrapper?.querySelector('.gallery-image') as HTMLImageElement;
+
+    if (img && lightboxImage && lightbox) {
+      // Use original high-quality image instead of optimized thumbnail
+      const fullSrc = img.getAttribute('data-full-src') || img.src;
+      lightboxImage.src = fullSrc;
+      lightboxImage.alt = img.alt;
+      currentImageIndex = index;
+      lightbox.classList.add('active');
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeLightbox() {
+    if (lightbox) {
+      lightbox.classList.remove('active');
+      lightbox.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+  }
+
+  function showPrevImage() {
+    currentImageIndex = (currentImageIndex - 1 + allImages.length) % allImages.length;
+    openLightbox(currentImageIndex);
+  }
+
+  function showNextImage() {
+    currentImageIndex = (currentImageIndex + 1) % allImages.length;
+    openLightbox(currentImageIndex);
+  }
+
+  galleryImageWrappers.forEach((wrapper, index) => {
+    wrapper.addEventListener('click', () => openLightbox(index));
+  });
+
+  lightboxClose?.addEventListener('click', closeLightbox);
+  lightboxPrev?.addEventListener('click', showPrevImage);
+  lightboxNext?.addEventListener('click', showNextImage);
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox?.classList.contains('active')) return;
+
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') showPrevImage();
+    if (e.key === 'ArrowRight') showNextImage();
+  });
+
+  // Close on background click
+  lightbox?.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  // Touch/Swipe support for mobile
+  let touchStartX = 0;
+  let touchEndX = 0;
+  let touchStartY = 0;
+  let touchEndY = 0;
+
+  function handleSwipe() {
+    const swipeThreshold = 50;
+    const horizontalSwipe = Math.abs(touchEndX - touchStartX);
+    const verticalSwipe = Math.abs(touchEndY - touchStartY);
+
+    // Only trigger if horizontal swipe is more significant than vertical
+    if (horizontalSwipe > verticalSwipe && horizontalSwipe > swipeThreshold) {
+      if (touchEndX < touchStartX) {
+        // Swipe left - next image
+        showNextImage();
+      } else if (touchEndX > touchStartX) {
+        // Swipe right - previous image
+        showPrevImage();
+      }
+    }
+  }
+
+  lightbox?.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  lightbox?.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    touchEndY = e.changedTouches[0].screenY;
+    handleSwipe();
+  }, { passive: true });
+</script>

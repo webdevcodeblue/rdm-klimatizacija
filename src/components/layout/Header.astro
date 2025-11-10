@@ -1,0 +1,1478 @@
+---
+// Header komponenta za RDM Klimatizacija
+const currentPath = Astro.url.pathname;
+
+const navigationItems = [
+  {
+    label: 'KLIMA UREĐAJI',
+    href: '/klima-uredaji',
+    hasDropdown: true,
+    dropdownItems: [
+      { label: 'Svi proizvodi', href: '/klima-uredaji' },
+      { label: 'Toshiba', href: '/klima-uredaji?brand=toshiba' },
+      { label: 'Haier', href: '/klima-uredaji?brand=haier' },
+      { label: 'Maxon', href: '/klima-uredaji?brand=maxon' }
+    ]
+  },
+  {
+    label: 'MULTI KLIMA',
+    href: '/multi-klima',
+    hasDropdown: true,
+    dropdownItems: [
+      { label: 'Svi proizvodi', href: '/multi-klima' },
+      { label: 'Toshiba', href: '/multi-klima?brand=toshiba' },
+      { label: 'Haier', href: '/multi-klima?brand=haier' },
+      { label: 'Maxon', href: '/multi-klima?brand=maxon' }
+    ]
+  },
+  {
+    label: 'DIZALICE TOPLINE',
+    href: '/dizalice-topline',
+    hasDropdown: true,
+    dropdownItems: [
+      { label: 'Svi proizvodi', href: '/dizalice-topline' },
+      { label: 'Toshiba', href: '/dizalice-topline?brand=toshiba' },
+      { label: 'Haier', href: '/dizalice-topline?brand=haier' },
+      { label: 'Maxon', href: '/dizalice-topline?brand=maxon' }
+    ]
+  },
+  {
+    label: 'MIKROKLIMA',
+    href: '/mikroklima',
+    hasDropdown: true,
+    dropdownItems: [
+      { label: 'Svi uređaji', href: '/mikroklima' },
+      { label: 'Toshiba', href: '/mikroklima?brand=toshiba' },
+      { label: 'Haier', href: '/mikroklima?brand=haier' },
+      { label: 'Maxon', href: '/mikroklima?brand=maxon' }
+    ]
+  },
+  {
+    label: 'ALATI I MATERIJALI',
+    href: '/alati-materijali',
+    hasDropdown: false
+  },
+  {
+    label: 'MONTAŽA I SERVIS',
+    href: '/montaza-servis',
+    hasDropdown: false
+  },
+  {
+    label: 'AKCIJE',
+    href: '/akcije',
+    hasDropdown: false,
+    highlight: true
+  }
+];
+---
+
+<header class="header" id="mainHeader">
+  <!-- Top bar -->
+  <div class="header__topbar" id="headerTopbar">
+    <div class="container">
+      <div class="topbar__content">
+        <div class="topbar__info">
+          <span class="topbar__item">
+            <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+            Besplatna dostava za narudžbe iznad 200€
+          </span>
+          <span class="topbar__item">
+            <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+            </svg>
+            <a href="tel:+385915957752">+385 91 595 77 52</a>
+          </span>
+          <span class="topbar__item">
+            <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+            <a href="mailto:rmfrigoteam@gmail.com">rmfrigoteam@gmail.com</a>
+          </span>
+        </div>
+        <div class="topbar__actions">
+          <a href="/" class="topbar__link">Početna</a>
+          <a href="/galerija-radova" class="topbar__link">Galerija</a>
+          <a href="/blog" class="topbar__link">Blog</a>
+          <a href="/o-nama" class="topbar__link">O nama</a>
+          <a href="/kontakt" class="topbar__link">Kontakt</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main header -->
+  <div class="header__main" id="headerMain">
+    <div class="container">
+      <div class="header__content">
+        <!-- Logo -->
+        <a href="/" class="header__logo">
+          <img src="/logo.png" alt="RDM Klimatizacija Logo" class="logo__image" />
+          <span class="logo__text">
+            <strong>RDM</strong> Klimatizacija
+          </span>
+        </a>
+
+        <!-- Search bar -->
+        <div class="header__search">
+          <form class="search-form" action="/pretraga" method="GET" id="searchForm">
+            <input
+              type="search"
+              name="q"
+              placeholder="Pretražite proizvode..."
+              class="search-form__input"
+              id="searchInput"
+              aria-label="Pretraži proizvode"
+              autocomplete="off"
+            >
+            <button type="submit" class="search-form__button" aria-label="Pretraži">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+              </svg>
+            </button>
+          </form>
+
+          <!-- Search Results Dropdown -->
+          <div class="search-dropdown" id="searchDropdown" role="listbox" aria-hidden="true">
+            <div class="search-dropdown__results" id="searchResults"></div>
+          </div>
+        </div>
+
+        <!-- Secondary Navigation (visible only when scrolled) -->
+        <nav class="header__secondary-nav" aria-label="Sekundarna navigacija">
+          <a href="/" class="secondary-nav__link">Početna</a>
+          <a href="/galerija-radova" class="secondary-nav__link">Galerija</a>
+          <a href="/blog" class="secondary-nav__link">Blog</a>
+          <a href="/o-nama" class="secondary-nav__link">O nama</a>
+          <a href="/kontakt" class="secondary-nav__link">Kontakt</a>
+        </nav>
+
+        <!-- Actions -->
+        <div class="header__actions">
+          <button class="action-btn" aria-label="Pošalji upit">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+            <span class="action-btn__text">Upit</span>
+          </button>
+        </div>
+
+        <!-- Mobile menu button -->
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Otvori mobilni meni" aria-expanded="false">
+          <span class="mobile-menu-btn__line"></span>
+          <span class="mobile-menu-btn__line"></span>
+          <span class="mobile-menu-btn__line"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navigation" role="navigation" aria-label="Glavna navigacija">
+    <div class="container">
+      <ul class="navigation__list">
+        {navigationItems.map((item) => (
+          <li class="navigation__item">
+            <a
+              href={item.href}
+              class={`navigation__link ${item.highlight ? 'navigation__link--highlight' : ''} ${currentPath === item.href ? 'navigation__link--active' : ''}`}
+              aria-current={currentPath === item.href ? 'page' : undefined}
+            >
+              {item.label}
+              {item.hasDropdown && (
+                <svg class="navigation__arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              )}
+            </a>
+            {item.hasDropdown && item.dropdownItems && (
+              <div class="navigation__dropdown">
+                <ul class="dropdown__list">
+                  {item.dropdownItems.map((dropdownItem) => (
+                    dropdownItem.divider ? (
+                      <li class="dropdown__divider" role="separator"></li>
+                    ) : (
+                      <li class="dropdown__item">
+                        <a href={dropdownItem.href} class="dropdown__link">
+                          {dropdownItem.label}
+                        </a>
+                      </li>
+                    )
+                  ))}
+                </ul>
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu__content">
+      <div class="mobile-menu__header">
+        <a href="/" class="mobile-menu__logo">
+          <img src="/logo.png" alt="RDM Klimatizacija Logo" class="mobile-menu__logo-image" />
+          <span><strong>RDM</strong> Klimatizacija</span>
+        </a>
+        <button class="mobile-menu__close" id="mobileMenuClose" aria-label="Zatvori meni">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="mobile-menu__search">
+        <form class="search-form" action="/pretraga" method="GET" id="mobileSearchForm">
+          <input
+            type="search"
+            name="q"
+            placeholder="Pretražite proizvode..."
+            class="search-form__input"
+            id="mobileSearchInput"
+            aria-label="Pretraži proizvode"
+            autocomplete="off"
+          />
+          <button type="submit" class="search-form__button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+          </button>
+        </form>
+
+        <!-- Mobile Search Results Dropdown -->
+        <div class="mobile-search-dropdown" id="mobileSearchDropdown" role="listbox" aria-hidden="true">
+          <div class="search-dropdown__results" id="mobileSearchResults"></div>
+        </div>
+      </div>
+
+      <nav class="mobile-menu__nav">
+        <h3 class="mobile-menu__title">Proizvodi</h3>
+        <ul class="mobile-menu__list">
+          {navigationItems.map((item, index) => (
+            <li class="mobile-menu__item">
+              {item.hasDropdown && item.dropdownItems ? (
+                <>
+                  <button
+                    class="mobile-menu__toggle"
+                    data-menu-index={index}
+                    aria-expanded="false"
+                  >
+                    <span>{item.label}</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </button>
+                  <ul class="mobile-menu__submenu" data-submenu-index={index}>
+                    {item.dropdownItems.map((dropdownItem) => (
+                      dropdownItem.divider ? (
+                        <li class="mobile-menu__divider" role="separator"></li>
+                      ) : (
+                        <li class="mobile-menu__subitem">
+                          <a href={dropdownItem.href} class="mobile-menu__sublink">
+                            {dropdownItem.label}
+                          </a>
+                        </li>
+                      )
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <a href={item.href} class={`mobile-menu__link ${item.highlight ? 'mobile-menu__link--highlight' : ''}`}>
+                  {item.label}
+                </a>
+              )}
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <nav class="mobile-menu__nav">
+        <h3 class="mobile-menu__title">Informacije</h3>
+        <ul class="mobile-menu__list">
+          <li class="mobile-menu__item"><a href="/" class="mobile-menu__link">Početna</a></li>
+          <li class="mobile-menu__item"><a href="/galerija-radova" class="mobile-menu__link">Galerija</a></li>
+          <li class="mobile-menu__item"><a href="/blog" class="mobile-menu__link">Blog</a></li>
+          <li class="mobile-menu__item"><a href="/o-nama" class="mobile-menu__link">O nama</a></li>
+          <li class="mobile-menu__item"><a href="/kontakt" class="mobile-menu__link">Kontakt</a></li>
+        </ul>
+      </nav>
+
+      <div class="mobile-menu__footer">
+        <a href="tel:+385915957752" class="mobile-menu__contact">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+          </svg>
+          +385 91 595 77 52
+        </a>
+        <button class="mobile-menu__inquiry" onclick="window.openInquiryModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+          </svg>
+          Pošalji upit
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    background: var(--color-white);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .header.scrolled {
+    box-shadow: var(--shadow-lg);
+  }
+
+  .header.scrolled .header__topbar {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    padding: 0;
+    border: none;
+  }
+
+  .header.scrolled .header__main {
+    padding: var(--space-1) 0;
+  }
+
+  .header.scrolled .logo__image {
+    height: 43px;
+  }
+
+  .header.scrolled .logo__text {
+    font-size: calc(var(--text-xl) * 0.95);
+  }
+
+  .header.scrolled .header__search {
+    max-width: 400px;
+  }
+
+  .header.scrolled .search-form__input {
+    height: 52px;
+    font-size: var(--text-base);
+    padding: var(--space-3) var(--space-4);
+    padding-right: var(--space-12);
+  }
+
+  .header.scrolled .search-form__button {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .header.scrolled .search-form__button svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .header.scrolled .action-btn__text {
+    display: none;
+  }
+
+  .header.scrolled .action-btn {
+    padding: var(--space-3);
+    width: 44px;
+    height: 44px;
+  }
+
+  .header.scrolled .action-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .header.scrolled .navigation__link {
+    padding: var(--space-4) var(--space-5);
+  }
+
+  /* Topbar */
+  .header__topbar {
+    background: var(--color-gray-50);
+    border-bottom: 1px solid var(--border-color);
+    font-size: var(--text-sm);
+    max-height: 200px;
+    opacity: 1;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .topbar__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-2) 0;
+    gap: var(--space-4);
+  }
+
+  .topbar__info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+  }
+
+  .topbar__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    color: var(--text-secondary);
+  }
+
+  .topbar__item a {
+    color: inherit;
+    transition: color var(--transition-fast);
+  }
+
+  .topbar__item a:hover {
+    color: var(--color-primary);
+  }
+
+  .icon {
+    flex-shrink: 0;
+  }
+
+  .topbar__actions {
+    display: flex;
+    gap: var(--space-4);
+  }
+
+  .topbar__link {
+    color: var(--text-secondary);
+    font-weight: var(--font-medium);
+    transition: color var(--transition-fast);
+  }
+
+  .topbar__link:hover {
+    color: var(--color-primary);
+  }
+
+  /* Main header */
+  .header__main {
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--border-color);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .header__content {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    align-items: center;
+    gap: var(--space-8);
+  }
+
+  /* Logo */
+  .header__logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    text-decoration: none;
+  }
+
+  .logo__image {
+    height: 58px;
+    width: auto;
+    object-fit: contain;
+    transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .logo__text {
+    font-size: var(--text-2xl);
+    color: var(--text-primary);
+    font-family: var(--font-heading);
+    transition: font-size 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+  }
+
+  .logo__text strong {
+    color: var(--color-primary);
+    font-weight: var(--font-extrabold);
+  }
+
+  /* Search */
+  .header__search {
+    position: relative;
+    max-width: 600px;
+    width: 100%;
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .search-form {
+    position: relative;
+    display: flex;
+  }
+
+  .search-form__input {
+    flex: 1;
+    padding: var(--space-3) var(--space-4);
+    padding-right: calc(var(--space-12) + var(--space-4));
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-full);
+    font-size: var(--text-base);
+    height: 52px;
+    transition: all var(--transition-fast);
+  }
+
+  .search-form__input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+    outline: none;
+  }
+
+  .search-form__button {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-radius: 50%;
+    border: none;
+    transition: background-color var(--transition-fast);
+    cursor: pointer;
+  }
+
+  .search-form__button svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+    stroke-width: 2.5;
+    flex-shrink: 0;
+  }
+
+  .search-form__button:hover {
+    background: var(--color-primary-hover);
+  }
+
+  /* Search Dropdown */
+  .search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: auto;
+    margin-top: var(--space-2);
+    background: var(--color-white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-xl);
+    max-height: 500px;
+    width: 650px;
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all var(--transition-fast);
+    z-index: 1000;
+  }
+
+  .search-dropdown.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .search-dropdown__results {
+    padding: var(--space-2);
+  }
+
+  /* Global styles for dynamically created search results */
+  :global(.search-result-item) {
+    display: grid;
+    grid-template-columns: 70px 1fr auto;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    border-radius: var(--border-radius-md);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    cursor: pointer;
+  }
+
+  :global(.search-result-item:hover) {
+    background: var(--color-gray-50);
+  }
+
+  :global(.search-result-item__image) {
+    width: 70px !important;
+    height: 70px !important;
+    border-radius: var(--border-radius-sm);
+    object-fit: cover;
+    background: var(--color-gray-100);
+    border: 1px solid var(--border-color);
+    flex-shrink: 0;
+  }
+
+  :global(.search-result-item__content) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    min-width: 0;
+  }
+
+  :global(.search-result-item__title) {
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  :global(.search-result-item__category) {
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+  }
+
+  :global(.search-result-item__price) {
+    font-size: var(--text-base);
+    font-weight: var(--font-bold);
+    color: var(--color-primary);
+    white-space: nowrap;
+  }
+
+  :global(.search-result-item__price--old) {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    text-decoration: line-through;
+    margin-right: var(--space-1);
+  }
+
+  .search-dropdown__footer {
+    padding: var(--space-3);
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+  }
+
+  .search-dropdown__view-all {
+    display: inline-block;
+    padding: var(--space-2) var(--space-4);
+    color: var(--color-primary);
+    font-weight: var(--font-semibold);
+    font-size: var(--text-sm);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .search-dropdown__view-all:hover {
+    color: var(--color-primary-hover);
+  }
+
+  .search-dropdown__empty {
+    padding: var(--space-8);
+    text-align: center;
+    color: var(--text-secondary);
+  }
+
+  .search-dropdown__loading {
+    padding: var(--space-4);
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+  }
+
+  /* Secondary Navigation - visible only when scrolled */
+  .header__secondary-nav {
+    display: none; /* Hidden by default */
+    align-items: center;
+    gap: var(--space-4);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .header.scrolled .header__secondary-nav {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .secondary-nav__link {
+    position: relative;
+    padding: var(--space-2) var(--space-3);
+    color: var(--text-primary);
+    font-weight: var(--font-medium);
+    font-size: var(--text-sm);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color var(--transition-fast);
+  }
+
+  .secondary-nav__link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 80%;
+    height: 2px;
+    background: var(--color-primary);
+    transition: transform var(--transition-fast);
+  }
+
+  .secondary-nav__link:hover {
+    color: var(--color-primary);
+  }
+
+  .secondary-nav__link:hover::after {
+    transform: translateX(-50%) scaleX(1);
+  }
+
+  /* Actions */
+  .header__actions {
+    display: flex;
+    gap: var(--space-3);
+  }
+
+  .action-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    background: var(--color-white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    color: var(--text-primary);
+    font-weight: var(--font-medium);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .action-btn:hover {
+    background: var(--color-gray-50);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .action-btn__text {
+    font-size: var(--text-sm);
+  }
+
+  /* Navigation */
+  .navigation {
+    background: var(--color-primary);
+  }
+
+  .navigation__list {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .navigation__item {
+    position: relative;
+  }
+
+  .navigation__link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-4) var(--space-5);
+    color: var(--color-white);
+    font-weight: var(--font-semibold);
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    transition: background-color var(--transition-fast);
+    text-decoration: none;
+  }
+
+  .navigation__link:hover {
+    background: var(--color-primary-dark);
+  }
+
+  .navigation__link--active {
+    background: var(--color-primary-dark);
+  }
+
+  .navigation__link--highlight {
+    background: var(--color-secondary);
+  }
+
+  .navigation__link--highlight:hover {
+    background: var(--color-secondary-dark);
+  }
+
+  .navigation__arrow {
+    transition: transform var(--transition-fast);
+  }
+
+  .navigation__item:hover .navigation__arrow {
+    transform: rotate(180deg);
+  }
+
+  /* Dropdown Menus */
+  .navigation__dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 220px;
+    background: var(--color-white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all var(--transition-fast);
+    z-index: 100;
+  }
+
+  .navigation__item:hover .navigation__dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .dropdown__list {
+    list-style: none;
+    margin: 0;
+    padding: var(--space-2);
+  }
+
+  .dropdown__item {
+    margin: 0;
+  }
+
+  .dropdown__link {
+    display: block;
+    padding: var(--space-2) var(--space-3);
+    color: var(--text-primary);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    text-transform: none;
+    letter-spacing: normal;
+    text-decoration: none;
+    border-radius: var(--border-radius-md);
+    transition: all var(--transition-fast);
+  }
+
+  .dropdown__link:hover {
+    background: var(--color-gray-100);
+    color: var(--color-primary);
+    padding-left: var(--space-4);
+  }
+
+  .dropdown__divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: var(--space-2) 0;
+    list-style: none;
+  }
+
+  /* Mobile menu button */
+  .mobile-menu-btn {
+    display: none;
+    position: absolute;
+    top: 50%;
+    right: var(--space-4);
+    transform: translateY(-50%);
+    z-index: 100;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+  }
+
+  .mobile-menu-btn__line {
+    width: 28px;
+    height: 3px;
+    background: var(--text-primary);
+    border-radius: 2px;
+    transition: all var(--transition-fast);
+  }
+
+  .mobile-menu-btn[aria-expanded="true"] .mobile-menu-btn__line:nth-child(1) {
+    transform: rotate(45deg) translate(7px, 7px);
+  }
+
+  .mobile-menu-btn[aria-expanded="true"] .mobile-menu-btn__line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .mobile-menu-btn[aria-expanded="true"] .mobile-menu-btn__line:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+  }
+
+  /* Mobile menu */
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 320px;
+    max-width: 85vw;
+    background: var(--color-white);
+    box-shadow: var(--shadow-2xl);
+    transform: translateX(100%);
+    transition: transform var(--transition-base);
+    z-index: calc(var(--z-modal) - 1);
+    overflow-y: auto;
+  }
+
+  .mobile-menu.active {
+    transform: translateX(0);
+  }
+
+  .mobile-menu__content {
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .mobile-menu__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .mobile-menu__logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .mobile-menu__logo-image {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .mobile-menu__logo strong {
+    color: var(--color-primary);
+  }
+
+  .mobile-menu__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    background: var(--color-gray-100);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .mobile-menu__close:hover {
+    background: var(--color-gray-200);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .mobile-menu__close:active {
+    transform: scale(0.95);
+  }
+
+  .mobile-menu__search {
+    position: relative;
+  }
+
+  .mobile-menu__search .search-form__input {
+    width: 100%;
+    padding: var(--space-3) var(--space-4);
+    padding-right: 50px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+  }
+
+  .mobile-menu__search .search-form__button {
+    position: absolute;
+    right: var(--space-2);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /* Mobile Search Dropdown */
+  .mobile-search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: var(--space-2);
+    background: var(--color-white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-xl);
+    max-height: 400px;
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all var(--transition-fast);
+    z-index: 1000;
+  }
+
+  .mobile-search-dropdown.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .mobile-menu__nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .mobile-menu__title {
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
+  }
+
+  .mobile-menu__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .mobile-menu__item {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .mobile-menu__link {
+    display: block;
+    padding: var(--space-3) 0;
+    color: var(--text-primary);
+    font-weight: var(--font-medium);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .mobile-menu__link:hover {
+    color: var(--color-primary);
+  }
+
+  .mobile-menu__link--highlight {
+    color: var(--color-secondary);
+  }
+
+  /* Mobile menu toggle button */
+  .mobile-menu__toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: var(--space-3) 0;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-weight: var(--font-medium);
+    text-align: left;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+  }
+
+  .mobile-menu__toggle:hover {
+    color: var(--color-primary);
+  }
+
+  .mobile-menu__toggle svg {
+    transition: transform var(--transition-fast);
+  }
+
+  .mobile-menu__toggle[aria-expanded="true"] svg {
+    transform: rotate(180deg);
+  }
+
+  /* Mobile submenu */
+  .mobile-menu__submenu {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 var(--space-4);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition-base);
+  }
+
+  .mobile-menu__submenu--expanded {
+    max-height: 500px;
+  }
+
+  .mobile-menu__subitem {
+    border: none;
+  }
+
+  .mobile-menu__sublink {
+    display: block;
+    padding: var(--space-2) 0;
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .mobile-menu__sublink:hover {
+    color: var(--color-primary);
+  }
+
+  .mobile-menu__divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: var(--space-2) 0;
+    list-style: none;
+  }
+
+  .mobile-menu__footer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-color);
+  }
+
+  .mobile-menu__contact,
+  .mobile-menu__inquiry {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    border-radius: var(--border-radius-lg);
+    font-weight: var(--font-semibold);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+  }
+
+  .mobile-menu__contact {
+    background: var(--color-gray-100);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+  }
+
+  .mobile-menu__inquiry {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+  }
+
+  .mobile-menu__inquiry:hover {
+    background: var(--color-primary-hover);
+  }
+
+  /* Backdrop */
+  .mobile-menu-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: calc(var(--z-modal) - 2);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-base);
+  }
+
+  .mobile-menu-backdrop.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    /* Disable all scroll animations on mobile/tablet */
+    .header.scrolled .header__topbar,
+    .header.scrolled .header__main,
+    .header.scrolled .logo__image,
+    .header.scrolled .logo__text,
+    .header.scrolled .header__search,
+    .header.scrolled .search-form__input,
+    .header.scrolled .search-form__button,
+    .header.scrolled .search-form__button svg,
+    .header.scrolled .action-btn__text,
+    .header.scrolled .action-btn,
+    .header.scrolled .action-btn svg,
+    .header.scrolled .navigation__link {
+      transition: none !important;
+      transform: none !important;
+    }
+
+    /* Keep static header size on mobile - no changes when scrolling */
+    .header.scrolled .header__main {
+      padding: var(--space-2) 0;
+    }
+
+    .header.scrolled .logo__image {
+      height: 48px; /* Same as default mobile size */
+    }
+
+    .header.scrolled .logo__text {
+      font-size: var(--text-xl); /* Same as default mobile size */
+    }
+
+    .header__topbar {
+      display: none;
+    }
+
+    .header__content {
+      grid-template-columns: auto 1fr;
+    }
+
+    .header__search {
+      display: none;
+    }
+
+    .navigation {
+      display: none;
+    }
+
+    /* Hide secondary navigation on mobile/tablet - use mobile menu instead */
+    .header__secondary-nav,
+    .header.scrolled .header__secondary-nav {
+      display: none !important;
+    }
+
+    .mobile-menu-btn {
+      display: flex;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .header__actions {
+      display: none;
+    }
+
+    .logo__image {
+      height: 48px;
+    }
+
+    .logo__text {
+      font-size: var(--text-xl);
+    }
+
+    .header__main {
+      padding: var(--space-2) 0;
+    }
+
+    .mobile-menu {
+      width: 100%;
+      max-width: 100vw;
+    }
+
+    .search-dropdown {
+      width: calc(100vw - var(--space-8));
+      max-width: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-10px);
+    }
+
+    .search-dropdown.active {
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+
+  @media (max-width: 480px) {
+    /* Keep static sizes - no scroll animations */
+    .logo__image,
+    .header.scrolled .logo__image {
+      height: 43px;
+    }
+
+    .header__main,
+    .header.scrolled .header__main {
+      padding: var(--space-2) 0;
+    }
+
+    .logo__text,
+    .header.scrolled .logo__text {
+      font-size: var(--text-lg);
+    }
+  }
+</style>
+
+<script>
+  // Mobile menu functionality
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const mobileMenuClose = document.getElementById('mobileMenuClose');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  // Create backdrop
+  const backdrop = document.createElement('div');
+  backdrop.className = 'mobile-menu-backdrop';
+  document.body.appendChild(backdrop);
+
+  function toggleMobileMenu() {
+    const isOpen = mobileMenu?.classList.contains('active');
+
+    if (isOpen) {
+      mobileMenu?.classList.remove('active');
+      backdrop.classList.remove('active');
+      mobileMenuBtn?.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    } else {
+      mobileMenu?.classList.add('active');
+      backdrop.classList.add('active');
+      mobileMenuBtn?.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  mobileMenuBtn?.addEventListener('click', toggleMobileMenu);
+  mobileMenuClose?.addEventListener('click', toggleMobileMenu);
+  backdrop.addEventListener('click', toggleMobileMenu);
+
+  // Close on link click
+  mobileMenu?.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu?.classList.remove('active');
+      backdrop.classList.remove('active');
+      mobileMenuBtn?.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    });
+  });
+
+  // Mobile submenu toggle functionality
+  const mobileToggles = mobileMenu?.querySelectorAll('.mobile-menu__toggle');
+
+  mobileToggles?.forEach((toggle) => {
+    toggle.addEventListener('click', () => {
+      const menuIndex = toggle.getAttribute('data-menu-index');
+      const submenu = mobileMenu?.querySelector(`[data-submenu-index="${menuIndex}"]`);
+      const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+
+      if (submenu) {
+        if (isExpanded) {
+          submenu.classList.remove('mobile-menu__submenu--expanded');
+          toggle.setAttribute('aria-expanded', 'false');
+        } else {
+          // Close other submenus
+          mobileMenu?.querySelectorAll('.mobile-menu__submenu').forEach(sub => {
+            sub.classList.remove('mobile-menu__submenu--expanded');
+          });
+          mobileToggles?.forEach(tog => {
+            tog.setAttribute('aria-expanded', 'false');
+          });
+
+          // Open this submenu
+          submenu.classList.add('mobile-menu__submenu--expanded');
+          toggle.setAttribute('aria-expanded', 'true');
+        }
+      }
+    });
+  });
+
+  // ========================================
+  // SCROLL DETECTION - Jednostavna hysteresis
+  // 150px → smanjuje se | 60px → vraća se
+  // ========================================
+  const header = document.getElementById('mainHeader');
+  let isScrolled = false;
+
+  // Pragovi - optimalna zona za stabilnost!
+  const SHRINK_AT = 150;  // Header se smanjuje na 150px
+  const EXPAND_AT = 60;   // Header se vraća u normalno na 60px
+  // DEAD ZONE: 90px (60-150px) - Stabilna zona bez treperenja!
+
+  function updateHeader() {
+    const scrollY = window.scrollY;
+
+    if (isScrolled) {
+      // Header je trenutno mali
+      // Vrati ga u veliko samo ako smo ispod 60px
+      if (scrollY < EXPAND_AT) {
+        isScrolled = false;
+        header?.classList.remove('scrolled');
+      }
+    } else {
+      // Header je trenutno velik
+      // Smanji ga samo ako smo iznad 150px
+      if (scrollY > SHRINK_AT) {
+        isScrolled = true;
+        header?.classList.add('scrolled');
+      }
+    }
+  }
+
+  // Slušaj scroll
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        updateHeader();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  // Inicijalizacija pri učitavanju
+  if (window.scrollY > SHRINK_AT) {
+    isScrolled = true;
+    header?.classList.add('scrolled');
+  }
+
+  // Import and initialize modular scripts
+  const loadHeaderScripts = async () => {
+    // Load search module
+    const searchScript = document.createElement('script');
+    searchScript.src = '/scripts/header/search.js';
+    searchScript.onload = () => {
+      if (window.HeaderSearch) {
+        const search = new window.HeaderSearch();
+
+        // Initialize desktop search
+        search.init({
+          inputId: 'searchInput',
+          dropdownId: 'searchDropdown',
+          resultsId: 'searchResults',
+          formId: 'searchForm',
+          isMobile: false
+        });
+
+        // Initialize mobile search
+        search.init({
+          inputId: 'mobileSearchInput',
+          dropdownId: 'mobileSearchDropdown',
+          resultsId: 'mobileSearchResults',
+          formId: 'mobileSearchForm',
+          isMobile: true
+        });
+      }
+    };
+    document.head.appendChild(searchScript);
+  };
+
+  // Load scripts after DOM is ready
+  loadHeaderScripts();
+</script>

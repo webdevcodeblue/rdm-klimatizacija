@@ -1,0 +1,641 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import ProductFilter from '../../components/products/ProductFilter.astro';
+import ProductCard from '../../components/products/ProductCard.astro';
+import InquiryModal from '../../components/InquiryModal.astro';
+import { getCollection } from 'astro:content';
+
+// Category mapping for display names and paths
+const categoryConfig: Record<string, { name: string; path: string }> = {
+  'klima-uredaji': { name: 'Klima uređaji', path: '/klima-uredaji' },
+  'multi-klima': { name: 'Multi klima', path: '/multi-klima' },
+  'dizalice-topline': { name: 'Dizalice topline', path: '/dizalice-topline' },
+  'mikroklima': { name: 'Mikroklima', path: '/mikroklima' },
+  'alati-materijali': { name: 'Alati i materijali', path: '/alati-materijali' },
+  'montaza-servis': { name: 'Montaža i servis', path: '/montaza-servis' }
+};
+
+// Collect all products from all categories
+const allProducts: Array<{ entry: any; categoryName: string; categoryPath: string }> = [];
+
+for (const [collectionName, config] of Object.entries(categoryConfig)) {
+  try {
+    const collectionItems = await getCollection(collectionName as any);
+    allProducts.push(...collectionItems.map(item => ({
+      entry: item,
+      categoryName: config.name,
+      categoryPath: config.path
+    })));
+  } catch (error) {
+    // Collection doesn't exist or is empty, skip it
+    console.log(`Skipping collection: ${collectionName}`);
+  }
+}
+
+// Filter only products with "Akcija" badge or onSale flag
+const akcijeProducts = allProducts.filter(p =>
+  p.entry.data.badge?.toLowerCase() === 'akcija' || p.entry.data.onSale === true
+);
+
+// Convert to ProductCard format
+const products = akcijeProducts.map(p => ({
+  id: p.entry.slug,
+  slug: p.entry.slug,
+  name: p.entry.data.name,
+  manufacturer: p.entry.data.manufacturer,
+  category: p.categoryName,
+  price: p.entry.data.price,
+  originalPrice: p.entry.data.originalPrice,
+  power: p.entry.data.specifications?.power || '',
+  cooling: p.entry.data.specifications?.cooling || '',
+  heating: p.entry.data.specifications?.heating || '',
+  area: p.entry.data.specifications?.area || '',
+  airflow: p.entry.data.specifications?.airflow || '',
+  energyClass: p.entry.data.specifications?.energyClass || '',
+  seer: p.entry.data.specifications?.seer,
+  scop: p.entry.data.specifications?.scop,
+  features: p.entry.data.features || [],
+  badge: p.entry.data.badge,
+  image: p.entry.data.image,
+  inStock: p.entry.data.inStock,
+  href: `${p.categoryPath}/${p.entry.slug}`,
+  description: p.entry.data.model || ''
+}));
+
+// Get categories for filters
+const categories = [...new Set(products.map(p => p.category))].sort();
+const manufacturers = [...new Set(products.map(p => p.manufacturer).filter(Boolean))].sort();
+
+// Get filter params from URL
+const url = Astro.url;
+
+const currentFilters = {
+  manufacturer: url.searchParams.get('manufacturer') || undefined,
+  category: url.searchParams.get('category') || undefined,
+  power: url.searchParams.get('power') || undefined,
+  area: url.searchParams.get('area') || undefined,
+  energyClass: url.searchParams.get('energyClass') || undefined,
+  priceMin: url.searchParams.get('priceMin') ? Number(url.searchParams.get('priceMin')) : undefined,
+  priceMax: url.searchParams.get('priceMax') ? Number(url.searchParams.get('priceMax')) : undefined
+};
+
+// Filter products based on current filters
+let filteredProducts = products;
+
+if (currentFilters.manufacturer) {
+  filteredProducts = filteredProducts.filter(p => p.manufacturer === currentFilters.manufacturer);
+}
+
+if (currentFilters.category) {
+  filteredProducts = filteredProducts.filter(p => p.category === currentFilters.category);
+}
+
+if (currentFilters.priceMin !== undefined) {
+  filteredProducts = filteredProducts.filter(p => p.price >= currentFilters.priceMin!);
+}
+
+if (currentFilters.priceMax !== undefined) {
+  filteredProducts = filteredProducts.filter(p => p.price <= currentFilters.priceMax!);
+}
+
+// Sort products by price (lowest to highest)
+// Use current price (either discounted price or regular price)
+filteredProducts.sort((a, b) => {
+  const priceA = a.price || 0; // Use current price, default to 0 if no price
+  const priceB = b.price || 0;
+  return priceA - priceB; // Ascending order (lowest to highest)
+});
+
+const viewMode = url.searchParams.get('view') || 'list';
+---
+
+<BaseLayout
+  title="Akcije - Sniženi klima uređaji i oprema"
+  description="Trenutne akcije i popusti na klima uređaje, multi split sisteme, dizalice topline i dodatnu opremu. Iskoristite posebne ponude!"
+  keywords="akcije klima uređaji, sniženje klima, popust klima, akcijska ponuda, rasprodaja klima"
+>
+  <Header />
+
+  <main class="products-page">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <div class="container">
+        <nav aria-label="Breadcrumb">
+          <ol class="breadcrumb__list">
+            <li class="breadcrumb__item">
+              <a href="/">Početna</a>
+            </li>
+            <li class="breadcrumb__item active">
+              Akcije
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Page Header -->
+    <section class="page-header">
+      <div class="container">
+        <div class="page-header__content">
+          <div class="page-header__badge">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 6v6l4 2"></path>
+            </svg>
+            Ograničena ponuda
+          </div>
+          <h1 class="page-header__title">Akcije i popusti</h1>
+          <p class="page-header__description">
+            Iskoristite trenutne akcije i uštedite na vrhunskim klima uređajima i opremi.
+            Sve akcije su vremenski ograničene!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products-section">
+      <div class="container">
+        <div class="products-layout">
+          <!-- Sidebar Filters -->
+          <aside class="products-sidebar">
+            <ProductFilter
+              manufacturers={manufacturers}
+              categories={categories}
+              currentFilters={currentFilters}
+            />
+          </aside>
+
+          <!-- Main Content -->
+          <div class="products-main">
+            <!-- Toolbar -->
+            <div class="products-toolbar">
+              <div class="products-toolbar__info">
+                <span class="products-count">
+                  Prikazano <strong>{filteredProducts.length}</strong> {filteredProducts.length === 1 ? 'proizvod' : filteredProducts.length < 5 ? 'proizvoda' : 'proizvoda'} na akciji
+                </span>
+              </div>
+
+              <div class="products-toolbar__controls">
+                <div class="view-switcher">
+                  <button
+                    class={`view-switcher__btn ${viewMode === 'grid' ? 'active' : ''}`}
+                    data-view="grid"
+                    aria-label="Grid view"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="14" width="7" height="7"></rect>
+                      <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                  </button>
+                  <button
+                    class={`view-switcher__btn ${viewMode === 'list' ? 'active' : ''}`}
+                    data-view="list"
+                    aria-label="List view"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="8" y1="6" x2="21" y2="6"></line>
+                      <line x1="8" y1="12" x2="21" y2="12"></line>
+                      <line x1="8" y1="18" x2="21" y2="18"></line>
+                      <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                      <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                      <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Products Grid/List -->
+            {filteredProducts.length > 0 ? (
+              <div class={`products-grid products-grid--${viewMode}`}>
+                {filteredProducts.map((product) => (
+                  <ProductCard product={product} viewMode={viewMode} />
+                ))}
+              </div>
+            ) : (
+              <div class="no-products">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <h3>Trenutno nema aktivnih akcija</h3>
+                <p>Provjerite ponovo uskoro ili pregledajte našu kompletnu ponudu proizvoda.</p>
+                <a href="/" class="btn btn--primary">
+                  Pregledajte ponudu
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+  <InquiryModal />
+</BaseLayout>
+
+<style>
+  /* Breadcrumb */
+  .breadcrumb {
+    background: var(--color-gray-50);
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .breadcrumb__list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .breadcrumb__item {
+    font-size: var(--text-sm);
+  }
+
+  .breadcrumb__item a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .breadcrumb__item a:hover {
+    color: var(--color-primary);
+  }
+
+  .breadcrumb__item.active {
+    color: var(--text-primary);
+    font-weight: var(--font-medium);
+  }
+
+  .breadcrumb__item:not(:last-child)::after {
+    content: '/';
+    margin: 0 var(--space-2);
+    color: var(--text-muted);
+  }
+
+  /* Page Header - RED GRADIENT for AKCIJE */
+  .page-header {
+    padding: var(--space-12) 0;
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    color: var(--color-white);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: pulse 4s ease-in-out infinite;
+  }
+
+  .page-header::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -5%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: pulse 5s ease-in-out infinite reverse;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 0.8;
+    }
+  }
+
+  .page-header__content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .page-header__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--border-radius-full);
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-4);
+    backdrop-filter: blur(10px);
+  }
+
+  .page-header__badge svg {
+    animation: rotate 3s linear infinite;
+  }
+
+  @keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .page-header__title {
+    font-size: var(--text-5xl);
+    font-weight: var(--font-bold);
+    margin-bottom: var(--space-4);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .page-header__description {
+    font-size: var(--text-xl);
+    opacity: 0.95;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* Products Section */
+  .products-section {
+    padding: var(--space-16) 0;
+    background: var(--bg-secondary);
+  }
+
+  .products-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: var(--space-8);
+  }
+
+  .products-sidebar {
+    position: sticky;
+    top: 20px;
+    align-self: start;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f1f5f9;
+  }
+
+  .products-sidebar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .products-sidebar::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+  }
+
+  .products-sidebar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+
+  .products-sidebar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+
+  /* Toolbar */
+  .products-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-6);
+    padding: var(--space-4);
+    background: var(--color-white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .products-count {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+  }
+
+  .products-count strong {
+    color: var(--text-primary);
+    font-weight: var(--font-semibold);
+  }
+
+  .products-toolbar__controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .view-switcher {
+    display: flex;
+    gap: var(--space-1);
+    padding: var(--space-1);
+    background: var(--color-gray-100);
+    border-radius: var(--border-radius-base);
+  }
+
+  .view-switcher__btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: var(--border-radius-base);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .view-switcher__btn:hover {
+    background: var(--color-white);
+    color: var(--text-primary);
+  }
+
+  .view-switcher__btn.active {
+    background: var(--color-white);
+    color: var(--color-primary);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Products Grid */
+  .products-grid {
+    display: grid;
+    gap: var(--space-6);
+    margin-bottom: var(--space-12);
+  }
+
+  .products-grid--grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  .products-grid--list {
+    grid-template-columns: 1fr;
+  }
+
+  /* No Products State */
+  .no-products {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-16) var(--space-6);
+    text-align: center;
+    background: var(--color-white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .no-products svg {
+    color: var(--color-gray-300);
+    margin-bottom: var(--space-6);
+  }
+
+  .no-products h3 {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-3);
+  }
+
+  .no-products p {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-6);
+    max-width: 400px;
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .products-layout {
+      grid-template-columns: 1fr;
+    }
+
+    .products-sidebar {
+      display: none;
+      position: static !important; /* Disable sticky to prevent repaint calculations */
+      max-height: none !important;
+      overflow: visible !important;
+      transform: none !important; /* Prevent any transform calculations */
+    }
+
+    .page-header {
+      padding: var(--space-10) 0;
+    }
+
+    .page-header__title {
+      font-size: var(--text-4xl);
+    }
+
+    .products-section {
+      padding: var(--space-12) 0;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .breadcrumb {
+      padding: var(--space-2) 0;
+    }
+
+    .breadcrumb__item {
+      font-size: var(--text-xs);
+    }
+
+    .page-header {
+      padding: var(--space-8) 0;
+    }
+
+    .page-header__title {
+      font-size: var(--text-3xl);
+      padding: 0 var(--space-4);
+    }
+
+    .page-header__description {
+      font-size: var(--text-base);
+      padding: 0 var(--space-4);
+    }
+
+    .products-section {
+      padding: var(--space-8) 0;
+    }
+
+    .products-toolbar {
+      flex-direction: column;
+      gap: var(--space-3);
+      padding: var(--space-3);
+    }
+
+    .products-count {
+      text-align: center;
+    }
+
+    .products-toolbar__controls {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .view-switcher {
+      display: none;
+    }
+
+    .products-grid {
+      gap: var(--space-3);
+    }
+
+    .products-grid--grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .page-header__title {
+      font-size: var(--text-2xl);
+    }
+
+    .page-header__description {
+      font-size: var(--text-sm);
+    }
+
+    .page-header__badge {
+      font-size: var(--text-xs);
+      padding: var(--space-1) var(--space-3);
+    }
+
+    .products-toolbar {
+      padding: var(--space-2);
+    }
+  }
+</style>
+
+<script>
+  // View switcher
+  document.querySelectorAll('.view-switcher__btn').forEach(button => {
+    button.addEventListener('click', () => {
+      const view = button.dataset.view;
+      const url = new URL(window.location.href);
+      url.searchParams.set('view', view);
+      window.location.href = url.toString();
+    });
+  });
+</script>

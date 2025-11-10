@@ -1,0 +1,28 @@
+# RDM Klimatizacija Robots.txt
+# Generated: 2025-11-07
+
+# Allow all search engines
+User-agent: *
+Allow: /
+
+# Disallow admin and API paths
+Disallow: /admin/
+Disallow: /api/
+Disallow: /config.yml
+
+# Block specific bots if needed
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+# Sitemap location
+Sitemap: https://rdm-klimatizacija.hr/sitemap-index.xml
+
+# Croatian search engines
+User-agent: SeznamBot
+Allow: /
+
+User-agent: Najdi.si
+Allow: /

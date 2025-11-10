@@ -1,0 +1,331 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import ProductGallery from '../../components/products/ProductGallery.astro';
+import ProductInfo from '../../components/products/ProductInfo.astro';
+import ProductTabs from '../../components/products/ProductTabs.astro';
+import RelatedProducts from '../../components/products/RelatedProducts.astro';
+import InquiryModal from '../../components/InquiryModal.astro';
+import ProductSchema from '../../components/seo/ProductSchema.astro';
+export const prerender = true;
+
+import { getCollection, getEntry } from 'astro:content';
+import { formatPower, formatArea, formatDimensions, formatWeight, formatSoundLevel } from '../../utils/formatSpecifications';
+
+// Generate static paths for all products
+export async function getStaticPaths() {
+  const products = await getCollection('dizalice-topline');
+  return products.map((product) => ({
+    params: { slug: product.slug },
+    props: { product }
+  }));
+}
+
+// Get product from props or fetch manually for SSR mode
+let entry = Astro.props.product;
+
+// SSR fallback - fetch product manually if not in props (dev mode)
+if (!entry) {
+  const { slug } = Astro.params;
+  entry = await getEntry('dizalice-topline', slug);
+
+  // If still not found, redirect to 404
+  if (!entry) {
+    return Astro.redirect('/404');
+  }
+}
+
+const rawProduct = entry.data;
+
+// Render markdown content to HTML
+const renderedContent = await entry.render();
+
+// Convert Content Collection data to format expected by components
+const product = {
+  slug: entry.slug,
+  id: entry.slug,
+  name: rawProduct.name,
+  manufacturer: rawProduct.manufacturer,
+  model: rawProduct.model,
+  category: rawProduct.category,
+  price: rawProduct.price,
+  originalPrice: rawProduct.originalPrice,
+  warranty: rawProduct.warranty,
+  images: rawProduct.images.length > 0 ? rawProduct.images : [rawProduct.image],
+  specifications: {
+    power: rawProduct.specifications?.power,
+    cooling: rawProduct.specifications?.cooling,
+    heating: rawProduct.specifications?.heating,
+    area: rawProduct.specifications?.area,
+    energyClass: rawProduct.specifications?.energyClass,
+    seer: rawProduct.specifications?.seer,
+    scop: rawProduct.specifications?.scop || rawProduct.specifications?.cop,
+    soundLevel: rawProduct.specifications?.soundLevel,
+    refrigerant: rawProduct.specifications?.refrigerant,
+    temperature: rawProduct.specifications?.temperature,
+    tankVolume: rawProduct.specifications?.tankVolume,
+    dimensions: {
+      indoor: rawProduct.specifications?.dimensions?.indoor || rawProduct.specifications?.dimensions || 'N/A',
+      outdoor: rawProduct.specifications?.dimensions?.outdoor || 'Monoblok jedinica'
+    },
+    weight: {
+      indoor: rawProduct.specifications?.weight?.indoor || 'N/A',
+      outdoor: rawProduct.specifications?.weight?.outdoor || 'N/A'
+    }
+  },
+  features: rawProduct.features,
+  descriptionContent: renderedContent.Content,
+  technicalSpecs: {
+    general: {
+      'Tip uređaja': 'Dizalica topline',
+      'Namjena': 'Hlađenje i grijanje',
+      'Energetska klasa hlađenja': rawProduct.specifications?.energyClass || 'N/A',
+      'Energetska klasa grijanja': rawProduct.specifications?.energyClass || 'N/A',
+    },
+    performance: {
+      'Kapacitet hlađenja': rawProduct.specifications?.cooling || 'N/A',
+      'Kapacitet grijanja': rawProduct.specifications?.heating || 'N/A',
+      'Snaga uređaja': rawProduct.specifications?.power || 'N/A',
+      'SEER': rawProduct.specifications?.seer?.toString() || 'N/A',
+      'SCOP/COP': (rawProduct.specifications?.scop || rawProduct.specifications?.cop)?.toString() || 'N/A',
+      'Preporučena površina': rawProduct.specifications?.area || 'N/A',
+      'Radna temperatura': rawProduct.specifications?.temperature || 'N/A'
+    },
+    technical: {
+      'Rashladni plin': rawProduct.specifications?.refrigerant || 'N/A',
+      'Volumen bojlera': rawProduct.specifications?.tankVolume || 'N/A',
+      'Napajanje': '220-240V / 50Hz',
+      'Bučnost': rawProduct.specifications?.soundLevel || 'N/A'
+    },
+    dimensions: {
+      'Dimenzije jedinice': rawProduct.specifications?.dimensions?.indoor || rawProduct.specifications?.dimensions || 'N/A',
+      'Težina jedinice': rawProduct.specifications?.weight?.indoor || 'N/A'
+    }
+  },
+  inStock: rawProduct.inStock,
+  badge: rawProduct.badge,
+  infoSheet: rawProduct.infoSheet,
+  documents: rawProduct.documents || []
+};
+
+// Get all products for related products section
+const allProducts = await getCollection('dizalice-topline');
+
+// Smart related products - prioritize "Popular" products
+const relatedProducts = allProducts
+  .filter(p => p.slug !== entry.slug) // Exclude current product
+  .sort((a, b) => {
+    // Popular products first
+    if (a.data.popular && !b.data.popular) return -1;
+    if (!a.data.popular && b.data.popular) return 1;
+    return 0; // Keep original order for rest
+  })
+  .slice(0, 8) // Show 8 related products
+  .map(p => ({
+    id: p.slug,
+    slug: p.slug,
+    name: p.data.name,
+    manufacturer: p.data.manufacturer,
+    model: p.data.model,
+    price: p.data.price,
+    originalPrice: p.data.originalPrice,
+    image: p.data.image,
+    images: p.data.images.length > 0 ? p.data.images : [p.data.image],
+    specifications: p.data.specifications,
+    features: p.data.features,
+    inStock: p.data.inStock,
+    badge: p.data.badge,
+    href: `/dizalice-topline/${p.slug}`
+  }));
+
+// SEO meta data
+const pageTitle = `${product.manufacturer} ${product.name} - RDM Klimatizacija`;
+const pageDescription = `${product.manufacturer} ${product.model} - Dizalica topline, energetski razred ${product.specifications.energyClass}.${product.price ? ` Cijena: ${product.price}€` : ''}`;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <ProductSchema product={product} category="Dizalica topline" />
+  <Header />
+
+  <main class="product-detail">
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <div class="container">
+        <ol class="breadcrumb__list">
+          <li class="breadcrumb__item">
+            <a href="/" class="breadcrumb__link">Početna</a>
+          </li>
+          <li class="breadcrumb__item">
+            <a href="/dizalice-topline" class="breadcrumb__link">Dizalice topline</a>
+          </li>
+          <li class="breadcrumb__item">
+            <span class="breadcrumb__current">{product.manufacturer} {product.model}</span>
+          </li>
+        </ol>
+      </div>
+    </nav>
+
+    <!-- Product Section -->
+    <section class="product-section">
+      <div class="container">
+        <div class="product-layout">
+          <!-- Left: Gallery -->
+          <div class="product-layout__gallery">
+            <ProductGallery images={product.images} productName={product.name} />
+          </div>
+
+          <!-- Right: Product Info -->
+          <div class="product-layout__info">
+            <ProductInfo product={product} />
+          </div>
+        </div>
+
+        <!-- Product Details Tabs -->
+        <div class="product-details">
+          <ProductTabs product={product} />
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Products -->
+    {relatedProducts.length > 0 && (
+      <section class="related-section">
+        <div class="container">
+          <RelatedProducts products={relatedProducts} />
+        </div>
+      </section>
+    )}
+  </main>
+
+  <Footer />
+  <InquiryModal />
+</BaseLayout>
+
+<style>
+  .product-detail {
+    min-height: 100vh;
+    background: var(--color-gray-50);
+  }
+
+  /* Breadcrumb Navigation */
+  .breadcrumb {
+    background: var(--color-white);
+    border-bottom: 1px solid var(--color-gray-200);
+    padding: var(--space-3) 0;
+  }
+
+  .breadcrumb__list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+  }
+
+  .breadcrumb__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .breadcrumb__item:not(:last-child)::after {
+    content: '/';
+    color: var(--color-gray-400);
+  }
+
+  .breadcrumb__link {
+    color: var(--color-gray-600);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    transition: color var(--transition-fast);
+  }
+
+  .breadcrumb__link:hover {
+    color: var(--color-primary);
+  }
+
+  .breadcrumb__current {
+    color: var(--text-primary);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+  }
+
+  /* Product Section */
+  .product-section {
+    padding: var(--space-8) 0;
+  }
+
+  .product-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
+    margin-bottom: var(--space-12);
+  }
+
+  .product-layout__gallery {
+    position: sticky;
+    top: var(--space-6);
+    height: fit-content;
+  }
+
+  /* Product Details */
+  .product-details {
+    background: var(--color-white);
+    border-radius: var(--border-radius-lg);
+    padding: var(--space-8);
+    margin-top: var(--space-8);
+  }
+
+  /* Related Section */
+  .related-section {
+    background: var(--color-white);
+    padding: var(--space-12) 0;
+    border-top: 1px solid var(--color-gray-200);
+  }
+
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .product-layout {
+      gap: var(--space-8);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .product-layout {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+
+    .product-layout__gallery {
+      position: relative;
+      top: 0;
+    }
+
+    .product-details {
+      padding: var(--space-6) var(--space-4);
+      border-radius: 0;
+      margin-top: var(--space-6);
+    }
+
+    .product-section {
+      padding: var(--space-4) 0;
+    }
+
+    .related-section {
+      padding: var(--space-8) 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .breadcrumb__list {
+      font-size: var(--text-xs);
+    }
+
+    .product-details {
+      padding: var(--space-4);
+    }
+  }
+</style>

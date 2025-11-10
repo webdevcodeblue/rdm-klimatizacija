@@ -1,0 +1,417 @@
+---
+// Hero sekcija za homepage
+import { Image } from 'astro:assets';
+import heroImage from '../../assets/images/hero/klima_uredaji_za_dom.jpg';
+---
+
+<section class="hero">
+  <div class="hero__background">
+    <Image
+      src={heroImage}
+      alt="Klima uređaji za dom - RDM Klimatizacija"
+      class="hero__image"
+      widths={[400, 768, 1024, 1920]}
+      sizes="100vw"
+      loading="eager"
+      quality={90}
+    />
+    <div class="hero__overlay"></div>
+  </div>
+
+  <div class="container">
+    <div class="hero__content">
+      <h1 class="hero__title">
+        Profesionalna klimatizacija za
+        <span class="hero__highlight">vaš dom i poslovni prostor</span>
+      </h1>
+
+      <p class="hero__description">
+        Ovlašteni serviser vodećih svjetskih proizvođača.
+        Prodaja, montaža i servis klima uređaja, dizalica topline i ventilacijskih sustava.
+      </p>
+
+      <div class="hero__search">
+        <form class="search-box" id="heroSearchForm">
+          <div class="search-box__filters">
+            <select class="search-box__select" name="category" id="heroCategory">
+              <option value="">Sve kategorije</option>
+              <option value="klima-uredaji">Klima uređaji</option>
+              <option value="multi-klima">Multi klima</option>
+              <option value="dizalice-topline">Dizalice topline</option>
+              <option value="mikroklima">Mikroklima</option>
+            </select>
+
+            <select class="search-box__select" name="power" id="heroPower">
+              <option value="">Snaga</option>
+              <option value="2-2.5">2.0 - 2.5 kW</option>
+              <option value="2.5-3.5">2.5 - 3.5 kW</option>
+              <option value="3.5-5">3.5 - 5.0 kW</option>
+              <option value="5-7">5.0 - 7.0 kW</option>
+              <option value="7-10">7.0 - 10.0 kW</option>
+              <option value="10+">10.0+ kW</option>
+            </select>
+
+            <select class="search-box__select" name="area" id="heroArea">
+              <option value="">Površina</option>
+              <option value="0-20">do 20 m²</option>
+              <option value="20-30">20 - 30 m²</option>
+              <option value="30-40">30 - 40 m²</option>
+              <option value="40-60">40 - 60 m²</option>
+              <option value="60-80">60 - 80 m²</option>
+              <option value="80+">80+ m²</option>
+            </select>
+          </div>
+
+          <button type="submit" class="search-box__button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+            Pronađi idealnu klimu
+          </button>
+        </form>
+      </div>
+
+      <div class="hero__stats">
+        <div class="stat">
+          <span class="stat__number">1000+</span>
+          <span class="stat__label">Zadovoljnih kupaca</span>
+        </div>
+        <div class="stat">
+          <span class="stat__number">50+</span>
+          <span class="stat__label">Proizvoda u ponudi</span>
+        </div>
+        <div class="stat">
+          <span class="stat__number">10+</span>
+          <span class="stat__label">Godina iskustva</span>
+        </div>
+        <div class="stat">
+          <span class="stat__number">24/7</span>
+          <span class="stat__label">Podrška</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    padding: var(--space-16) 0;
+    overflow: hidden;
+  }
+
+  .hero__background {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+  }
+
+  .hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.7) 0%,
+      rgba(0, 0, 0, 0.5) 50%,
+      rgba(0, 0, 0, 0.3) 100%
+    );
+  }
+
+  .hero__content {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    color: var(--color-white);
+  }
+
+  .hero__title {
+    font-size: clamp(var(--text-3xl), 6vw, var(--text-6xl));
+    font-weight: var(--font-extrabold);
+    line-height: var(--leading-tight);
+    margin-bottom: var(--space-6);
+    animation: fadeInUp 0.8s ease-out;
+    color: var(--color-white);
+  }
+
+  .hero__highlight {
+    display: block;
+    color: #60a5fa;
+    text-shadow: 0 2px 8px rgba(96, 165, 250, 0.3);
+  }
+
+  .hero__description {
+    font-size: var(--text-xl);
+    opacity: 0.95;
+    margin-bottom: var(--space-10);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    animation: fadeInUp 0.8s ease-out 0.2s backwards;
+  }
+
+  /* Search Box */
+  .hero__search {
+    margin-bottom: var(--space-12);
+    animation: fadeInUp 0.8s ease-out 0.4s backwards;
+  }
+
+  .search-box {
+    background: var(--color-white);
+    border-radius: var(--border-radius-2xl);
+    padding: var(--space-6);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .search-box__filters {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+  }
+
+  .search-box__select {
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    font-size: var(--text-base);
+    color: var(--text-primary);
+    background: var(--color-white);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .search-box__select:hover {
+    border-color: var(--color-primary);
+  }
+
+  .search-box__select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+  }
+
+  .search-box__button {
+    width: 100%;
+    padding: var(--space-4) var(--space-6);
+    background: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--border-radius-lg);
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .search-box__button:hover {
+    background: var(--color-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 86, 179, 0.3);
+  }
+
+  /* Stats */
+  .hero__stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-6);
+    animation: fadeInUp 0.8s ease-out 0.6s backwards;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .stat__number {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    color: var(--color-white);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .stat__label {
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wider);
+    opacity: 0.9;
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .hero {
+      padding: var(--space-12) 0;
+    }
+
+    .hero__title {
+      font-size: var(--text-4xl);
+    }
+
+    .hero__description {
+      font-size: var(--text-lg);
+      margin-bottom: var(--space-8);
+    }
+
+    .hero__search {
+      margin-bottom: var(--space-10);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      min-height: auto;
+      padding: var(--space-10) 0;
+    }
+
+    .hero__title {
+      font-size: var(--text-3xl);
+      margin-bottom: var(--space-4);
+    }
+
+    .hero__description {
+      font-size: var(--text-base);
+      margin-bottom: var(--space-6);
+      padding: 0 var(--space-4);
+    }
+
+    .hero__search {
+      margin-bottom: var(--space-8);
+    }
+
+    .search-box {
+      padding: var(--space-4);
+      border-radius: var(--border-radius-xl);
+    }
+
+    .search-box__filters {
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+      margin-bottom: var(--space-3);
+    }
+
+    .search-box__select {
+      padding: var(--space-3);
+      font-size: var(--text-sm);
+    }
+
+    .search-box__button {
+      padding: var(--space-3) var(--space-5);
+      font-size: var(--text-base);
+    }
+
+    .hero__stats {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-6);
+    }
+
+    .stat__number {
+      font-size: var(--text-2xl);
+    }
+
+    .stat__label {
+      font-size: var(--text-xs);
+      text-align: center;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero {
+      padding: var(--space-8) 0;
+    }
+
+    .hero__title {
+      font-size: var(--text-2xl);
+      line-height: 1.2;
+    }
+
+    .hero__description {
+      font-size: var(--text-sm);
+      padding: 0 var(--space-2);
+    }
+
+    .search-box {
+      padding: var(--space-3);
+    }
+
+    .search-box__select {
+      padding: var(--space-2);
+    }
+
+    .hero__stats {
+      gap: var(--space-4);
+    }
+
+    .stat__number {
+      font-size: var(--text-xl);
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('heroSearchForm') as HTMLFormElement;
+
+    if (!form) return;
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      // Get selected values
+      const categorySelect = document.getElementById('heroCategory') as HTMLSelectElement;
+      const powerSelect = document.getElementById('heroPower') as HTMLSelectElement;
+      const areaSelect = document.getElementById('heroArea') as HTMLSelectElement;
+
+      const category = categorySelect?.value || '';
+      const power = powerSelect?.value || '';
+      const area = areaSelect?.value || '';
+
+      // Determine target category (default to klima-uredaji if none selected)
+      let targetCategory = category || 'klima-uredaji';
+
+      // Build query string
+      const params = new URLSearchParams();
+      if (power) params.append('power', power);
+      if (area) params.append('area', area);
+
+      // Build final URL
+      const queryString = params.toString();
+      const targetUrl = queryString
+        ? `/${targetCategory}?${queryString}`
+        : `/${targetCategory}`;
+
+      // Redirect to target page with filters
+      window.location.href = targetUrl;
+    });
+  });
+</script>

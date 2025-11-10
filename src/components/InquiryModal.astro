@@ -1,0 +1,627 @@
+---
+// InquiryModal komponenta za slanje upita o proizvodu
+---
+
+<div id="inquiryModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal__backdrop"></div>
+  <div class="modal__content">
+    <button class="modal__close" aria-label="Zatvori">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <div class="modal__header">
+      <h2 id="modal-title" class="modal__title">Pošaljite upit za proizvod</h2>
+      <p class="modal__subtitle">Ispunite formu i kontaktirati ćemo vas u najkraćem mogućem roku</p>
+    </div>
+
+    <div class="modal__product-info" id="modalProductInfo">
+      <!-- Populated dynamically via JavaScript -->
+    </div>
+
+    <form class="inquiry-form" id="inquiryForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstName" class="form-label">Ime <span class="required">*</span></label>
+          <input
+            type="text"
+            id="firstName"
+            name="firstName"
+            class="form-input"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="lastName" class="form-label">Prezime <span class="required">*</span></label>
+          <input
+            type="text"
+            id="lastName"
+            name="lastName"
+            class="form-input"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email" class="form-label">Email adresa <span class="required">*</span></label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-input"
+            placeholder="ime@primjer.hr"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="phone" class="form-label">Telefon <span class="required">*</span></label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            class="form-input"
+            placeholder="099 123 4567"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="company" class="form-label">Tvrtka</label>
+        <input
+          type="text"
+          id="company"
+          name="company"
+          class="form-input"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="location" class="form-label">Lokacija ugradnje</label>
+        <input
+          type="text"
+          id="location"
+          name="location"
+          class="form-input"
+          placeholder="Grad, kvart"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Trebate uslugu</label>
+        <div class="checkbox-group">
+          <label class="checkbox">
+            <input type="checkbox" name="services" value="dostava" />
+            <span>Dostava</span>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" name="services" value="montaza" checked />
+            <span>Montaža</span>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" name="services" value="demontaza" />
+            <span>Demontaža starog uređaja</span>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" name="services" value="servis" />
+            <span>Redovito servisiranje</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="message" class="form-label">Dodatne napomene</label>
+        <textarea
+          id="message"
+          name="message"
+          class="form-textarea"
+          rows="4"
+          placeholder="Opišite svoje potrebe, posebne zahtjeve ili pitanja..."
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="checkbox">
+          <input type="checkbox" name="gdpr" required />
+          <span>
+            Slažem se s <a href="/politika-privatnosti" target="_blank">politikom privatnosti</a>
+            i obradom osobnih podataka <span class="required">*</span>
+          </span>
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn--secondary" id="cancelBtn">
+          Odustani
+        </button>
+        <button type="submit" class="btn btn--primary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 2L11 13"></path>
+            <path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
+          </svg>
+          Pošalji upit
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Success Message -->
+<div id="successModal" class="modal modal--success" role="dialog" aria-modal="true">
+  <div class="modal__backdrop"></div>
+  <div class="modal__content modal__content--small">
+    <div class="success-icon">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+    </div>
+    <h3 class="success-title">Upit je uspješno poslan!</h3>
+    <p class="success-message">
+      Hvala vam na interesu. Naš tim će vas kontaktirati u najkraćem mogućem roku.
+    </p>
+    <button class="btn btn--primary" id="successCloseBtn">
+      Zatvori
+    </button>
+  </div>
+</div>
+
+<style>
+  .modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    padding: var(--space-4);
+    overflow-y: auto;
+  }
+
+  .modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal__backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .modal__content {
+    position: relative;
+    background: var(--color-white);
+    border-radius: var(--border-radius-2xl);
+    box-shadow: var(--shadow-2xl);
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: var(--space-8);
+    animation: slideUp 0.3s ease-out;
+  }
+
+  .modal__content--small {
+    max-width: 400px;
+    text-align: center;
+  }
+
+  .modal__close {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-gray-100);
+    border: none;
+    border-radius: var(--border-radius-full);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .modal__close:hover {
+    background: var(--color-gray-200);
+    transform: rotate(90deg);
+  }
+
+  .modal__header {
+    margin-bottom: var(--space-6);
+  }
+
+  .modal__title {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
+  }
+
+  .modal__subtitle {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+  }
+
+  .modal__product-info {
+    padding: var(--space-4);
+    background: var(--color-gray-50);
+    border-radius: var(--border-radius-lg);
+    margin-bottom: var(--space-6);
+    display: none;
+  }
+
+  .modal__product-info.active {
+    display: block;
+  }
+
+  .product-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .product-info__image {
+    width: 80px;
+    height: 80px;
+    background: var(--color-white);
+    border-radius: var(--border-radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .product-info__image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .product-info__details {
+    flex: 1;
+  }
+
+  .product-info__name {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+  }
+
+  .product-info__specs {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+  }
+
+  /* Form Styles */
+  .inquiry-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .form-label {
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    color: var(--text-primary);
+  }
+
+  .required {
+    color: var(--color-danger);
+  }
+
+  .form-input,
+  .form-textarea {
+    padding: var(--space-3);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-base);
+    font-size: var(--text-base);
+    font-family: inherit;
+    transition: all var(--transition-fast);
+  }
+
+  .form-input:hover,
+  .form-textarea:hover {
+    border-color: var(--color-gray-400);
+  }
+
+  .form-input:focus,
+  .form-textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+  }
+
+  .form-input::placeholder,
+  .form-textarea::placeholder {
+    color: var(--text-muted);
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .checkbox {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    cursor: pointer;
+  }
+
+  .checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+
+  .checkbox span {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+  }
+
+  .checkbox a {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  .form-actions {
+    display: flex;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    border: none;
+    border-radius: var(--border-radius-lg);
+    font-size: var(--text-base);
+    font-weight: var(--font-semibold);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .btn--primary {
+    background: var(--color-primary);
+    color: var(--color-white);
+    flex: 1;
+  }
+
+  .btn--primary:hover {
+    background: var(--color-primary-hover);
+    transform: translateY(-2px);
+  }
+
+  .btn--secondary {
+    background: var(--color-gray-100);
+    color: var(--text-primary);
+  }
+
+  .btn--secondary:hover {
+    background: var(--color-gray-200);
+  }
+
+  /* Success Modal */
+  .success-icon {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto var(--space-6);
+    background: var(--color-success);
+    border-radius: var(--border-radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-white);
+    animation: scaleIn 0.5s ease-out;
+  }
+
+  .success-title {
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-3);
+  }
+
+  .success-message {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-6);
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      transform: scale(0);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .modal__content {
+      padding: var(--space-6);
+    }
+
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+      flex-direction: column;
+    }
+
+    .btn {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  const inquiryModal = document.getElementById('inquiryModal');
+  const successModal = document.getElementById('successModal');
+  const inquiryForm = document.getElementById('inquiryForm');
+  const modalProductInfo = document.getElementById('modalProductInfo');
+  const cancelBtn = document.getElementById('cancelBtn');
+  const successCloseBtn = document.getElementById('successCloseBtn');
+  const modalClose = document.querySelector('.modal__close');
+
+  // Open inquiry modal with product info
+  window.openInquiryModal = function(productData) {
+    if (productData) {
+      modalProductInfo.innerHTML = `
+        <div class="product-info">
+          <div class="product-info__image">
+            <img src="${productData.image}" alt="${productData.name}" />
+          </div>
+          <div class="product-info__details">
+            <div class="product-info__name">${productData.manufacturer} ${productData.name}</div>
+            <div class="product-info__specs">
+              ${productData.power} • ${productData.area} • ${productData.energyClass}
+            </div>
+          </div>
+        </div>
+      `;
+      modalProductInfo.classList.add('active');
+    } else {
+      modalProductInfo.classList.remove('active');
+    }
+
+    inquiryModal?.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  };
+
+  // Close modal functions
+  function closeInquiryModal() {
+    inquiryModal?.classList.remove('active');
+    document.body.style.overflow = '';
+    inquiryForm?.reset();
+  }
+
+  function closeSuccessModal() {
+    successModal?.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  // Event listeners
+  modalClose?.addEventListener('click', closeInquiryModal);
+  cancelBtn?.addEventListener('click', closeInquiryModal);
+  successCloseBtn?.addEventListener('click', closeSuccessModal);
+
+  // Close on backdrop click
+  inquiryModal?.addEventListener('click', (e) => {
+    if (e.target === inquiryModal || e.target.classList.contains('modal__backdrop')) {
+      closeInquiryModal();
+    }
+  });
+
+  successModal?.addEventListener('click', (e) => {
+    if (e.target === successModal || e.target.classList.contains('modal__backdrop')) {
+      closeSuccessModal();
+    }
+  });
+
+  // Handle form submission
+  inquiryForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(inquiryForm);
+    const data = Object.fromEntries(formData);
+
+    // Collect checkbox values
+    const services = formData.getAll('services');
+    data.services = services;
+
+    console.log('Sending inquiry:', data);
+
+    // Simulate API call
+    setTimeout(() => {
+      closeInquiryModal();
+      successModal?.classList.add('active');
+
+      // Auto close success modal after 5 seconds
+      setTimeout(() => {
+        closeSuccessModal();
+      }, 5000);
+    }, 1000);
+  });
+
+  // Handle inquiry buttons from product cards
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('[data-action="inquiry"]').forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const card = button.closest('.product-card');
+        if (card) {
+          // Extract product data from card
+          const productData = {
+            id: card.dataset.productId,
+            name: card.querySelector('.product-card__name a')?.textContent,
+            manufacturer: card.querySelector('.product-card__manufacturer')?.textContent,
+            power: card.querySelector('.spec:nth-child(1) span')?.textContent,
+            area: card.querySelector('.spec:nth-child(2) span')?.textContent,
+            energyClass: card.querySelector('.spec--energy')?.textContent,
+            image: card.querySelector('.product-card__image img')?.src || '/images/placeholder.jpg'
+          };
+
+          window.openInquiryModal(productData);
+        } else {
+          window.openInquiryModal();
+        }
+      });
+    });
+  });
+</script>

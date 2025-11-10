@@ -1,0 +1,232 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/layout/Header.astro';
+import Footer from '../../components/layout/Footer.astro';
+import BlogCard from '../../components/blog/BlogCard.astro';
+import { getCollection } from 'astro:content';
+
+// Dohvati sve blog postove
+const allBlogPosts = await getCollection('blog', ({ data }) => {
+  return data.published !== false; // Prikaži samo objavljene postove
+});
+
+// Sortiraj postove po datumu (najnoviji prvi)
+const posts = allBlogPosts
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
+  .map(post => ({
+    slug: post.slug,
+    title: post.data.title,
+    description: post.data.description,
+    author: post.data.author,
+    publishDate: post.data.publishDate,
+    image: post.data.image,
+    category: post.data.category,
+    tags: post.data.tags,
+    featured: post.data.featured
+  }));
+---
+
+<BaseLayout
+  title="Blog - Savjeti i vijesti o klima uređajima | RDM Klimatizacija"
+  description="Pročitajte stručne savjete, vodič za kupovinu i novosti iz svijeta klimatizacije i dizalica topline"
+  keywords="blog klimatizacija, savjeti klima uređaji, kako odabrati klimu, servis klima, RDM blog"
+>
+  <Header />
+
+  <main class="blog-page">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <div class="container">
+        <nav aria-label="Breadcrumb">
+          <ol class="breadcrumb__list">
+            <li class="breadcrumb__item">
+              <a href="/">Početna</a>
+            </li>
+            <li class="breadcrumb__item active">
+              Blog
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Page Header -->
+    <section class="page-header">
+      <div class="container">
+        <h1 class="page-header__title">Blog RDM Klimatizacija</h1>
+        <p class="page-header__description">
+          Stručni savjeti, vodič za kupovinu i novosti iz svijeta klimatizacije
+        </p>
+      </div>
+    </section>
+
+    <!-- All Posts Section -->
+    <section class="posts-section">
+      <div class="container">
+        {posts.length > 0 ? (
+          <div class="posts-grid">
+            {posts.map(post => (
+              <BlogCard post={post} />
+            ))}
+          </div>
+        ) : (
+          <div class="empty-state">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+              <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+              <polyline points="13 2 13 9 20 9"></polyline>
+            </svg>
+            <h3>Trenutno nema objavljenih članaka</h3>
+            <p>Uskoro ćemo objaviti nove stručne savjete i vijesti</p>
+          </div>
+        )}
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* Breadcrumb */
+  .breadcrumb {
+    background: var(--color-gray-50);
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .breadcrumb__list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .breadcrumb__item {
+    font-size: var(--text-sm);
+  }
+
+  .breadcrumb__item a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .breadcrumb__item a:hover {
+    color: var(--color-primary);
+  }
+
+  .breadcrumb__item.active {
+    color: var(--text-primary);
+    font-weight: var(--font-medium);
+  }
+
+  .breadcrumb__item:not(:last-child)::after {
+    content: '/';
+    margin: 0 var(--space-2);
+    color: var(--text-muted);
+  }
+
+  /* Page Header */
+  .page-header {
+    padding: var(--space-16) 0;
+    background: linear-gradient(135deg, #0056b3 0%, #003d82 100%);
+    color: var(--color-white);
+    text-align: center;
+  }
+
+  .page-header__title {
+    font-size: var(--text-5xl);
+    font-weight: var(--font-bold);
+    margin-bottom: var(--space-4);
+  }
+
+  .page-header__description {
+    font-size: var(--text-xl);
+    opacity: 0.95;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+
+  /* Posts Section */
+  .posts-section {
+    padding: var(--space-16) 0;
+    background: var(--bg-secondary);
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-8);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* Empty State */
+  .empty-state {
+    text-align: center;
+    padding: var(--space-16) var(--space-8);
+    color: var(--text-secondary);
+  }
+
+  .empty-state svg {
+    margin: 0 auto var(--space-6);
+    color: var(--color-gray-300);
+  }
+
+  .empty-state h3 {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-3);
+  }
+
+  .empty-state p {
+    font-size: var(--text-lg);
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .posts-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-6);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .page-header {
+      padding: var(--space-10) 0;
+    }
+
+    .page-header__title {
+      font-size: var(--text-4xl);
+    }
+
+    .page-header__description {
+      font-size: var(--text-base);
+      padding: 0 var(--space-4);
+    }
+
+    .posts-section {
+      padding: var(--space-12) 0;
+    }
+
+    .posts-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .page-header__title {
+      font-size: var(--text-3xl);
+    }
+
+    .breadcrumb__item {
+      font-size: var(--text-xs);
+    }
+  }
+</style>

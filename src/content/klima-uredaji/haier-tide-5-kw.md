@@ -1,0 +1,65 @@
+---
+uniqueId: haier-tide-5-kw
+manufacturer: HAIER
+name: Tide Plus 5 kW
+model: Haier Tide Plus 5 kW
+category: klima-uredaji
+price: 905
+warranty: 5 godine
+inStock: true
+image: /images/products/Haier_Tide_4_1.jpg
+images:
+  - /images/products/Haier_Tide_3-01.jpg
+  - /images/products/TIDE-PLUS-vanjska-1058x446-2.jpg
+  - /images/products/Haier_Tide_4_1.jpg
+badge: Premium
+featured: true
+onSale: true
+popular: true
+specifications:
+  power: ""
+  area: "40"
+  dimensions:
+    indoor: 1008x225x318
+    outdoor: 800x275x553
+  energyClass: A++
+  scop: 3
+  heating: 4,2
+  cooling: "5"
+  refrigerant: R32
+  heatingEnergyClass: A+
+  seer: 6.1
+features:
+  - Pouzdan klima uređaj
+  - Energetski učinkovit
+  - Odličan omjer cijene i performansi
+  - Frost Clean
+  - Wi-Fi upravljanje
+  - Super tihi rad
+  - A++
+  - 5 godina garancije
+infoSheet: https://haier-klima.com/wp-content/uploads/2024/05/Informacijski-list-Haier-Tide-Plus_50kW.pdf
+documents:
+  - name: Energetska naljepnica
+    url: https://haier-klima.com/wp-content/uploads/2023/06/Energetska-Tide-2023_AS50TDMHRA-C.jpg
+  - name: Tehnički podaci
+    url: https://haier-klima.com/wp-content/uploads/2025/05/TEH_Tide-Plus_2025.pdf
+  - name: Upute za korištenje
+    url: https://haier-klima.com/wp-content/uploads/2025/01/Upute-za-korisnika-Tide-Plus-AS68TDRHRA-C.pdf
+---
+**Ugodno okruženje bez osjećaja propuha**\
+Inteligentan zrak funkcija je koja koristi sofisticiranu tehnologiju kako bi automatski prilagodila rad klima uređaja prema okolini i preferencijama korisnika. U modu hlađenja, usmjerava strujanje zraka prema gore, dok u modu grijanja usmjerava prema dolje, što pruža bolji klimatizacijski učinak. Ova funkcija osigurava optimalnu udobnost uz minimalnu potrošnju energije. Na primjer, inteligentni zrak može automatski regulirati brzinu ventilatora, smjer strujanja zraka i temperaturu kako bi održao ugodnu klimu u prostoriji, bez nepotrebnog trošenja energije. Low wind omogućuje brzo postizanje željene temperature i održavanje bez propuha.
+
+**Klimatiziran zrak u pametnom domu**\
+Model Tide pouzdan je klima uređaj jednostavnog dizajna s ekološki prihvatljivom radnom tvari R32. Aplikacija hOn za WI-Fi upravljanje osigurat će beskrajne mogućnosti za svakog korisnika. Bez obzira jeste li kod kuće ili izvan nje, hOn vam omogućuje pametnu kontrolu nad vašim uređajima, pružajući vam više praktičnosti i udobnosti u vašem svakodnevnom životu.
+
+**Frost Clean**
+
+Smrzava isparivač pomoću vlage iz zraka, te na taj način veže čestice nečistoće i otapanjem ih uklanja kroz odvod kondenzata, dok na ispuhu osigurava čisti zrak.
+
+**Super tihi rad**\
+Pruža vam mir i tišinu, optimizirajući rad ventilatora i motora.
+
+**WI-FI kontrola
+Inteligentan zrak**
+Usmjerava strujanje zraka prema gore u modu hlađenja, te prema dolje u modu grijanja, čime postiže bolji klimatizacijski učinak.

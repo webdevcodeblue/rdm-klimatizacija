@@ -1,4 +1,6 @@
 ---
+import { formatWarranty } from '../../utils/formatSpecifications';
+
 // Product Schema Component for SEO
 // Automatically generates JSON-LD structured data for products
 
@@ -119,7 +121,7 @@ const structuredData = {
       name: 'RDM Klimatizacija',
       url: siteUrl
     },
-    warranty: product.warranty || '2 godine',
+    warranty: formatWarranty(product.warranty || '2'),
     ...(product.originalPrice && product.price && product.originalPrice > product.price ? {
       discount: {
         '@type': 'Discount',

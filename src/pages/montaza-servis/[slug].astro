@@ -159,7 +159,7 @@ const pageDescription = `${service.description ? service.description.substring(0
                   <div class="pricing-box">
                     <div class="pricing-box__main">
                       <span class="pricing-box__label">Cijena:</span>
-                      <span class="pricing-box__price">{service.price.toLocaleString('hr-HR')},00 €</span>
+                      <span class="pricing-box__price">{service.price.toFixed(2).replace('.', ',')} €</span>
                     </div>
                   </div>
                 )}
@@ -226,7 +226,7 @@ const pageDescription = `${service.description ? service.description.substring(0
                 <div class="related-card__content">
                   <h3 class="related-card__title">{relService.name}</h3>
                   {relService.price && (
-                    <div class="related-card__price">{relService.price.toLocaleString('hr-HR')},00 €</div>
+                    <div class="related-card__price">{relService.price.toFixed(2).replace('.', ',')} €</div>
                   )}
                 </div>
               </a>

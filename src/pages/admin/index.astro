@@ -80,14 +80,22 @@
                 label_singular: 'Klima uređaj',
                 folder: 'src/content/klima-uredaji',
                 create: true,
-                slug: '{{manufacturer}}-{{model}}-{{name}}',
+                slug: '{{uniqueId}}',
                 fields: [
-                  { label: 'Naziv proizvoda', name: 'name', widget: 'string', required: true },
+                  {
+                    label: '🔒 Jedinstveni ID proizvoda',
+                    name: 'uniqueId',
+                    widget: 'string',
+                    required: true,
+                    pattern: ['^[a-z0-9-]+$', 'GREŠKA: Samo mala slova (a-z), brojevi (0-9) i crtice (-) su dozvoljeni!'],
+                    hint: '⚠️ VAŽNO: Unesite jedinstveni identifikator proizvoda. Primjeri: haier-tide-plus-2-6-kw, maxon-fresh-3-5-kw, lg-dual-inverter-35. \n\n✅ DOZVOLJENO: mala slova (a-z), brojevi (0-9), crtice (-)\n❌ NIJE DOZVOLJENO: razmaci, velika slova, zarezi, točke, kvačice, underscore\n\n🔒 Koristi se za URL i naziv datoteke. NE MOŽE SE PROMIJENITI nakon spremanja! Mora biti jedinstven - ne smije se ponavljati kod drugih proizvoda.'
+                  },
                   { label: 'Proizvođač', name: 'manufacturer', widget: 'string', required: true },
+                  { label: 'Naziv proizvoda', name: 'name', widget: 'string', required: true },
                   { label: 'Model', name: 'model', widget: 'string', required: false },
                   { label: 'Kategorija', name: 'category', widget: 'hidden', default: 'klima-uredaji' },
-                  { label: 'Cijena (€)', name: 'price', widget: 'number', value_type: 'int', required: false, hint: 'Opcionalno - unesite cijenu proizvoda' },
-                  { label: 'Originalna cijena (€)', name: 'originalPrice', widget: 'number', value_type: 'int', required: false, hint: 'Opcionalno - za prikaz sniženja' },
+                  { label: 'Cijena (€)', name: 'price', widget: 'number', value_type: 'float', step: 0.01, required: false, hint: 'Opcionalno - unesite cijenu proizvoda (npr. 425.50)' },
+                  { label: 'Originalna cijena (€)', name: 'originalPrice', widget: 'number', value_type: 'float', step: 0.01, required: false, hint: 'Opcionalno - za prikaz sniženja' },
                   { label: 'Garancija', name: 'warranty', widget: 'string', default: '2 godine', required: false },
                   { label: 'Na stanju', name: 'inStock', widget: 'boolean', default: true },
                   { label: 'Glavna slika', name: 'image', widget: 'image', required: true },
@@ -108,7 +116,6 @@
                   { label: 'Featured (na početnoj)', name: 'featured', widget: 'boolean', default: false },
                   { label: 'Na akciji', name: 'onSale', widget: 'boolean', default: false },
                   { label: 'Popularno', name: 'popular', widget: 'boolean', default: false },
-                  { label: 'Novo u ponudi', name: 'isNew', widget: 'boolean', default: false },
                   {
                     label: 'Specifikacije',
                     name: 'specifications',
@@ -120,6 +127,7 @@
                       { label: 'Grijanje', name: 'heating', widget: 'string', required: false, hint: 'Unesite samo broj (npr. 5.8), mjerna jedinica kW će biti automatski dodana' },
                       { label: 'Površina', name: 'area', widget: 'string', required: false, hint: 'Unesite raspon (npr. 40-50), mjerna jedinica m² će biti automatski dodana' },
                       { label: 'Energetska klasa', name: 'energyClass', widget: 'select', options: ['A+++', 'A++', 'A+', 'A', 'B', 'C', 'D'], required: false },
+                      { label: 'Energetska klasa grijanja', name: 'heatingEnergyClass', widget: 'select', options: ['A+++', 'A++', 'A+', 'A', 'B', 'C', 'D'], required: false },
                       { label: 'SEER', name: 'seer', widget: 'number', value_type: 'float', required: false },
                       { label: 'SCOP', name: 'scop', widget: 'number', value_type: 'float', required: false },
                       { label: 'Bučnost', name: 'soundLevel', widget: 'string', required: false },
@@ -130,8 +138,8 @@
                         widget: 'object',
                         required: false,
                         fields: [
-                          { label: 'Unutarnja jedinica', name: 'indoor', widget: 'string', required: false, hint: 'Unesite dimenzije (npr. 890 x 310 x 220), mjerna jedinica cm će biti automatski dodana' },
-                          { label: 'Vanjska jedinica', name: 'outdoor', widget: 'string', required: false, hint: 'Unesite dimenzije (npr. 845 x 702 x 320), mjerna jedinica cm će biti automatski dodana' }
+                          { label: 'Unutarnja jedinica', name: 'indoor', widget: 'string', required: false, hint: 'Unesite dimenzije (npr. 890 x 310 x 220), mjerna jedinica mm će biti automatski dodana' },
+                          { label: 'Vanjska jedinica', name: 'outdoor', widget: 'string', required: false, hint: 'Unesite dimenzije (npr. 845 x 702 x 320), mjerna jedinica mm će biti automatski dodana' }
                         ]
                       },
                       {
@@ -183,14 +191,22 @@
                 label_singular: 'Multi klima sistem',
                 folder: 'src/content/multi-klima',
                 create: true,
-                slug: '{{manufacturer}}-{{model}}-{{name}}',
+                slug: '{{uniqueId}}',
                 fields: [
-                  { label: 'Naziv proizvoda', name: 'name', widget: 'string', required: true },
+                  {
+                    label: '🔒 Jedinstveni ID proizvoda',
+                    name: 'uniqueId',
+                    widget: 'string',
+                    required: true,
+                    pattern: ['^[a-z0-9-]+$', 'GREŠKA: Samo mala slova (a-z), brojevi (0-9) i crtice (-) su dozvoljeni!'],
+                    hint: '⚠️ VAŽNO: Unesite jedinstveni identifikator proizvoda. Primjeri: haier-multi-3x1-3-5-kw, maxon-multi-2x1-2-6-kw. \n\n✅ DOZVOLJENO: mala slova (a-z), brojevi (0-9), crtice (-)\n❌ NIJE DOZVOLJENO: razmaci, velika slova, zarezi, točke, kvačice, underscore\n\n🔒 Koristi se za URL i naziv datoteke. NE MOŽE SE PROMIJENITI nakon spremanja! Mora biti jedinstven - ne smije se ponavljati kod drugih proizvoda.'
+                  },
                   { label: 'Proizvođač', name: 'manufacturer', widget: 'string', required: true },
+                  { label: 'Naziv proizvoda', name: 'name', widget: 'string', required: true },
                   { label: 'Model', name: 'model', widget: 'string', required: false },
                   { label: 'Kategorija', name: 'category', widget: 'hidden', default: 'multi-klima' },
-                  { label: 'Cijena (€)', name: 'price', widget: 'number', value_type: 'int', required: false, hint: 'Opcionalno - unesite cijenu proizvoda' },
-                  { label: 'Originalna cijena (€)', name: 'originalPrice', widget: 'number', value_type: 'int', required: false, hint: 'Opcionalno - za prikaz sniženja' },
+                  { label: 'Cijena (€)', name: 'price', widget: 'number', value_type: 'float', step: 0.01, required: false, hint: 'Opcionalno - unesite cijenu proizvoda (npr. 425.50)' },
+                  { label: 'Originalna cijena (€)', name: 'originalPrice', widget: 'number', value_type: 'float', step: 0.01, required: false, hint: 'Opcionalno - za prikaz sniženja' },
                   { label: 'Garancija', name: 'warranty', widget: 'string', default: '2 godine', required: false },
                   { label: 'Na stanju', name: 'inStock', widget: 'boolean', default: true },
                   { label: 'Glavna slika', name: 'image', widget: 'image', required: true },
@@ -211,7 +227,6 @@
                   { label: 'Featured (na početnoj)', name: 'featured', widget: 'boolean', default: false },
                   { label: 'Na akciji', name: 'onSale', widget: 'boolean', default: false },
                   { label: 'Popularno', name: 'popular', widget: 'boolean', default: false },
-                  { label: 'Novo u ponudi', name: 'isNew', widget: 'boolean', default: false },
                   {
                     label: 'Specifikacije',
                     name: 'specifications',
@@ -224,6 +239,7 @@
                       { label: 'Grijanje', name: 'heating', widget: 'string', required: false, hint: 'Unesite samo broj (npr. 5.8), mjerna jedinica kW će biti automatski dodana' },
                       { label: 'Površina', name: 'area', widget: 'string', required: false, hint: 'Unesite raspon (npr. 40-50), mjerna jedinica m² će biti automatski dodana' },
                       { label: 'Energetska klasa', name: 'energyClass', widget: 'select', options: ['A+++', 'A++', 'A+', 'A', 'B', 'C', 'D'], required: false },
+                      { label: 'Energetska klasa grijanja', name: 'heatingEnergyClass', widget: 'select', options: ['A+++', 'A++', 'A+', 'A', 'B', 'C', 'D'], required: false },
                       { label: 'SEER', name: 'seer', widget: 'number', value_type: 'float', required: false },
                       { label: 'SCOP', name: 'scop', widget: 'number', value_type: 'float', required: false },
                       { label: 'Bučnost', name: 'soundLevel', widget: 'string', required: false },
@@ -263,10 +279,18 @@
                 label_singular: 'Dizalica topline',
                 folder: 'src/content/dizalice-topline',
                 create: true,
-                slug: '{{manufacturer}}-{{model}}-{{name}}',
+                slug: '{{uniqueId}}',
                 fields: [
-                  { label: 'Naziv proizvoda', name: 'name', widget: 'string', required: true },
+                  {
+                    label: '🔒 Jedinstveni ID proizvoda',
+                    name: 'uniqueId',
+                    widget: 'string',
+                    required: true,
+                    pattern: ['^[a-z0-9-]+$', 'GREŠKA: Samo mala slova (a-z), brojevi (0-9) i crtice (-) su dozvoljeni!'],
+                    hint: '⚠️ VAŽNO: Unesite jedinstveni identifikator proizvoda. Primjeri: haier-heatpump-16-kw, maxon-dizalica-12-kw. \n\n✅ DOZVOLJENO: mala slova (a-z), brojevi (0-9), crtice (-)\n❌ NIJE DOZVOLJENO: razmaci, velika slova, zarezi, točke, kvačice, underscore\n\n🔒 Koristi se za URL i naziv datoteke. NE MOŽE SE PROMIJENITI nakon spremanja! Mora biti jedinstven - ne smije se ponavljati kod drugih proizvoda.'
+                  },
                   { label: 'Proizvođač', name: 'manufacturer', widget: 'string', required: true },
+                  { label: 'Naziv proizvoda', name: 'name', widget: 'string', required: true },
                   { label: 'Model', name: 'model', widget: 'string', required: false },
                   { label: 'Kategorija', name: 'category', widget: 'hidden', default: 'dizalice-topline' },
                   { label: 'Cijena (€)', name: 'price', widget: 'number', value_type: 'int', required: false },
@@ -291,7 +315,6 @@
                   { label: 'Featured (na početnoj)', name: 'featured', widget: 'boolean', default: false },
                   { label: 'Na akciji', name: 'onSale', widget: 'boolean', default: false },
                   { label: 'Popularno', name: 'popular', widget: 'boolean', default: false },
-                  { label: 'Novo u ponudi', name: 'isNew', widget: 'boolean', default: false },
                   {
                     label: 'Specifikacije',
                     name: 'specifications',
@@ -343,10 +366,18 @@
                 label_singular: 'Mikroklima uređaj',
                 folder: 'src/content/mikroklima',
                 create: true,
-                slug: '{{manufacturer}}-{{model}}-{{name}}',
+                slug: '{{uniqueId}}',
                 fields: [
-                  { label: 'Naziv proizvoda', name: 'name', widget: 'string', required: true },
+                  {
+                    label: '🔒 Jedinstveni ID proizvoda',
+                    name: 'uniqueId',
+                    widget: 'string',
+                    required: true,
+                    pattern: ['^[a-z0-9-]+$', 'GREŠKA: Samo mala slova (a-z), brojevi (0-9) i crtice (-) su dozvoljeni!'],
+                    hint: '⚠️ VAŽNO: Unesite jedinstveni identifikator proizvoda. Primjeri: mikroklima-advanced-500, fresh-air-pro, ventilator-rekuperator-350. \n\n✅ DOZVOLJENO: mala slova (a-z), brojevi (0-9), crtice (-)\n❌ NIJE DOZVOLJENO: razmaci, velika slova, zarezi, točke, kvačice, underscore\n\n🔒 Koristi se za URL i naziv datoteke. NE MOŽE SE PROMIJENITI nakon spremanja! Mora biti jedinstven - ne smije se ponavljati kod drugih proizvoda.'
+                  },
                   { label: 'Proizvođač', name: 'manufacturer', widget: 'string', required: true },
+                  { label: 'Naziv proizvoda', name: 'name', widget: 'string', required: true },
                   { label: 'Model', name: 'model', widget: 'string', required: false },
                   { label: 'Kategorija', name: 'category', widget: 'hidden', default: 'mikroklima' },
                   { label: 'Cijena (€)', name: 'price', widget: 'number', value_type: 'int', required: false },
@@ -371,7 +402,6 @@
                   { label: 'Featured (na početnoj)', name: 'featured', widget: 'boolean', default: false },
                   { label: 'Na akciji', name: 'onSale', widget: 'boolean', default: false },
                   { label: 'Popularno', name: 'popular', widget: 'boolean', default: false },
-                  { label: 'Novo u ponudi', name: 'isNew', widget: 'boolean', default: false },
                   {
                     label: 'Specifikacije',
                     name: 'specifications',
@@ -419,10 +449,18 @@
                 label_singular: 'Alat/Materijal',
                 folder: 'src/content/alati-materijali',
                 create: true,
-                slug: '{{manufacturer}}-{{name}}',
+                slug: '{{uniqueId}}',
                 fields: [
-                  { label: 'Naziv proizvoda', name: 'name', widget: 'string', required: true },
+                  {
+                    label: '🔒 Jedinstveni ID proizvoda',
+                    name: 'uniqueId',
+                    widget: 'string',
+                    required: true,
+                    pattern: ['^[a-z0-9-]+$', 'GREŠKA: Samo mala slova (a-z), brojevi (0-9) i crtice (-) su dozvoljeni!'],
+                    hint: '⚠️ VAŽNO: Unesite jedinstveni identifikator proizvoda. Primjeri: detektor-plina-pro, set-alata-premium, materijal-izolacija-50. \n\n✅ DOZVOLJENO: mala slova (a-z), brojevi (0-9), crtice (-)\n❌ NIJE DOZVOLJENO: razmaci, velika slova, zarezi, točke, kvačice, underscore\n\n🔒 Koristi se za URL i naziv datoteke. NE MOŽE SE PROMIJENITI nakon spremanja! Mora biti jedinstven - ne smije se ponavljati kod drugih proizvoda.'
+                  },
                   { label: 'Proizvođač', name: 'manufacturer', widget: 'string', required: true },
+                  { label: 'Naziv proizvoda', name: 'name', widget: 'string', required: true },
                   { label: 'Model', name: 'model', widget: 'string', required: false },
                   { label: 'Kategorija', name: 'category', widget: 'hidden', default: 'alati-materijali' },
                   { label: 'Cijena (€)', name: 'price', widget: 'number', value_type: 'int', required: false },
@@ -447,7 +485,6 @@
                   { label: 'Featured (na početnoj)', name: 'featured', widget: 'boolean', default: false },
                   { label: 'Na akciji', name: 'onSale', widget: 'boolean', default: false },
                   { label: 'Popularno', name: 'popular', widget: 'boolean', default: false },
-                  { label: 'Novo u ponudi', name: 'isNew', widget: 'boolean', default: false },
                   {
                     label: 'Specifikacije',
                     name: 'specifications',
@@ -493,8 +530,16 @@
                 label_singular: 'Usluga',
                 folder: 'src/content/montaza-servis',
                 create: true,
-                slug: '{{name}}',
+                slug: '{{uniqueId}}',
                 fields: [
+                  {
+                    label: '🔒 Jedinstveni ID usluge',
+                    name: 'uniqueId',
+                    widget: 'string',
+                    required: true,
+                    pattern: ['^[a-z0-9-]+$', 'GREŠKA: Samo mala slova (a-z), brojevi (0-9) i crtice (-) su dozvoljeni!'],
+                    hint: '⚠️ VAŽNO: Unesite jedinstveni identifikator usluge. Primjeri: montaza-klime-standard, servis-godisnji-preventivni, popravak-hitni-servis. \n\n✅ DOZVOLJENO: mala slova (a-z), brojevi (0-9), crtice (-)\n❌ NIJE DOZVOLJENO: razmaci, velika slova, zarezi, točke, kvačice, underscore\n\n🔒 Koristi se za URL i naziv datoteke. NE MOŽE SE PROMIJENITI nakon spremanja! Mora biti jedinstven - ne smije se ponavljati kod drugih usluga.'
+                  },
                   { label: 'Naziv usluge', name: 'name', widget: 'string', required: true },
                   { label: 'Proizvođač', name: 'manufacturer', widget: 'hidden', default: 'RDM Klimatizacija' },
                   { label: 'Kategorija', name: 'category', widget: 'hidden', default: 'montaza-servis' },

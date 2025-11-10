@@ -22,6 +22,14 @@ const trimmedString = (schema: z.ZodString) =>
 
 const productSchema = z.object({
   // ==================== OBAVEZNA POLJA ====================
+  // uniqueId - Jedinstveni identifikator proizvoda (koristi se za imenovanje .md datoteke)
+  // VAŽNO: Mora biti jedinstven, ne smije se ponavljati, i ne može se mijenjati nakon kreiranja
+  uniqueId: trimmedString(
+    z.string()
+      .regex(/^[a-z0-9-]+$/, 'Samo mala slova, brojevi i crtice su dozvoljeni')
+      .min(3, 'Minimalno 3 znaka')
+      .max(50, 'Maksimalno 50 znakova')
+  ),
   name: trimmedString(z.string()),
   manufacturer: trimmedString(z.string()),
   category: z.enum([
@@ -55,6 +63,7 @@ const productSchema = z.object({
     airflow: z.string().optional(), // Za MIKROKLIMA - protok zraka
     area: z.string().optional(),
     energyClass: z.enum(['A+++', 'A++', 'A+', 'A', 'B', 'C', 'D']).optional(),
+    heatingEnergyClass: z.enum(['A+++', 'A++', 'A+', 'A', 'B', 'C', 'D']).optional(),
     seer: optionalNumber(z.number()),
     scop: optionalNumber(z.number()),
     soundLevel: z.string().optional(),
@@ -116,6 +125,14 @@ const products = defineCollection({
 
 const serviceSchema = z.object({
   // ==================== OBAVEZNA POLJA ====================
+  // uniqueId - Jedinstveni identifikator usluge (koristi se za imenovanje .md datoteke)
+  // VAŽNO: Mora biti jedinstven, ne smije se ponavljati, i ne može se mijenjati nakon kreiranja
+  uniqueId: trimmedString(
+    z.string()
+      .regex(/^[a-z0-9-]+$/, 'Samo mala slova, brojevi i crtice su dozvoljeni')
+      .min(3, 'Minimalno 3 znaka')
+      .max(50, 'Maksimalno 50 znakova')
+  ),
   name: trimmedString(z.string()),
   manufacturer: trimmedString(z.string()).default('RDM Klimatizacija'),
   category: z.literal('montaza-servis'),

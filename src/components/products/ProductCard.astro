@@ -90,7 +90,7 @@ const discountPercentage = product.originalPrice && product.price
           <a href={productHref}>{product.name}</a>
         </h3>
         {product.description && (
-          <p class="product-card__subtitle-mobile">{product.description}</p>
+          <p class="product-card__subtitle-mobile" set:html={product.description.replace(/(\d+[,.]?\d*\s*kW)/gi, '<span class="power-highlight">$1</span>')} />
         )}
       </div>
     )}
@@ -189,7 +189,7 @@ const discountPercentage = product.originalPrice && product.price
       </h3>
 
       {viewMode === 'list' && product.description && (
-        <p class="product-card__description">{product.description}</p>
+        <p class="product-card__description" set:html={product.description.replace(/(\d+[,.]?\d*\s*kW)/gi, '<span class="power-highlight">$1</span>')} />
       )}
 
       {viewMode === 'list' && product.features && product.features.length > 0 && (
@@ -281,9 +281,9 @@ const discountPercentage = product.originalPrice && product.price
           {product.price && (
             <div class="product-card__price">
               {product.originalPrice && (
-                <span class="price-original">{product.originalPrice.toLocaleString('hr-HR')},00 €</span>
+                <span class="price-original">{product.originalPrice.toFixed(2).replace('.', ',')} €</span>
               )}
-              <span class="price-current">{product.price.toLocaleString('hr-HR')},00 €</span>
+              <span class="price-current">{product.price.toFixed(2).replace('.', ',')} €</span>
               <span class="price-vat">Cijena s PDV-om</span>
             </div>
           )}
@@ -312,9 +312,9 @@ const discountPercentage = product.originalPrice && product.price
         {product.price && (
           <div class="product-card__price">
             {product.originalPrice && (
-              <span class="price-original">{product.originalPrice.toLocaleString('hr-HR')}€</span>
+              <span class="price-original">{product.originalPrice.toFixed(2).replace('.', ',')}€</span>
             )}
-            <span class="price-current">{product.price.toLocaleString('hr-HR')}€</span>
+            <span class="price-current">{product.price.toFixed(2).replace('.', ',')}€</span>
             <span class="price-vat">s PDV-om</span>
           </div>
         )}
@@ -788,7 +788,7 @@ const discountPercentage = product.originalPrice && product.price
   }
 
   .product-card--list .product-card__image img {
-    padding: 20px;
+    padding: 0;
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
@@ -851,10 +851,16 @@ const discountPercentage = product.originalPrice && product.price
   /* Red description text */
   .product-card--list .product-card__description {
     font-size: 12px;
-    color: #dc2626;
-    font-weight: 500;
+    color: var(--text-muted);
+    font-weight: 400;
     line-height: 1.4;
     margin: 0;
+  }
+
+  /* Power highlight - crveno i podebljano */
+  :global(.power-highlight) {
+    color: #dc2626 !important;
+    font-weight: 700 !important;
   }
 
   /* Features list with bullet points */
@@ -1222,7 +1228,7 @@ const discountPercentage = product.originalPrice && product.price
     }
 
     .product-card--list .product-card__image img {
-      padding: 8px;
+      padding: 0;
     }
 
     /* MOBILE NASLOV - prikaži samo na mobilnom */

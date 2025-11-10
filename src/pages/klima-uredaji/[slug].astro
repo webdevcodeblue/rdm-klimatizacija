@@ -80,7 +80,7 @@ const product = {
       'Tip uređaja': 'Inverter split sistem',
       'Namjena': 'Hlađenje i grijanje',
       'Energetska klasa hlađenja': rawProduct.specifications?.energyClass || 'N/A',
-      'Energetska klasa grijanja': rawProduct.specifications?.energyClass || 'N/A',
+      'Energetska klasa grijanja': rawProduct.specifications?.heatingEnergyClass || 'N/A',
     },
     performance: {
       'Kapacitet hlađenja': formatPower(rawProduct.specifications?.cooling) || 'N/A',

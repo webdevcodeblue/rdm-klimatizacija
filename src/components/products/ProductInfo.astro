@@ -1,4 +1,6 @@
 ---
+import { formatSoundLevel, formatWarranty, formatPower, formatArea } from '../../utils/formatSpecifications';
+
 export interface Props {
   product: any;
 }
@@ -8,6 +10,21 @@ const { product } = Astro.props;
 const discountPercentage = product.originalPrice && product.price
   ? Math.round((1 - product.price / product.originalPrice) * 100)
   : 0;
+
+// Function to split model into name and power
+function splitModelIntoParts(model: string) {
+  // Match pattern: text + space + number + optional comma/dot + optional number + space + kW
+  const match = model.match(/^(.+?)\s+([\d]+[,.]?\d*\s*kW)$/i);
+  if (match) {
+    return {
+      name: match[1].trim(),
+      power: match[2].trim()
+    };
+  }
+  return { name: model, power: null };
+}
+
+const modelParts = splitModelIntoParts(product.model || '');
 ---
 
 <div class="product-info">
@@ -23,7 +40,7 @@ const discountPercentage = product.originalPrice && product.price
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
           </svg>
-          Jamstvo: {product.warranty}
+          Jamstvo: {formatWarranty(product.warranty)}
         </span>
       )}
     </div>
@@ -33,7 +50,10 @@ const discountPercentage = product.originalPrice && product.price
   <h1 class="product-info__title">
     {product.manufacturer} {product.name}
   </h1>
-  <p class="product-info__model">{product.model}</p>
+  <p class="product-info__model">
+    {modelParts.name}
+    {modelParts.power && <span class="power-highlight"> {modelParts.power}</span>}
+  </p>
 
   <!-- Quick Info Cards -->
   <div class="product-info__quick-info">
@@ -50,7 +70,7 @@ const discountPercentage = product.originalPrice && product.price
           <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
         </svg>
         <span class="quick-info-label">Snaga hlađenja</span>
-        <span class="quick-info-value">{product.specifications.cooling}</span>
+        <span class="quick-info-value">{formatPower(product.specifications.cooling)}</span>
       </div>
     )}
     {product.specifications.heating && (
@@ -67,7 +87,7 @@ const discountPercentage = product.originalPrice && product.price
           <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
         </svg>
         <span class="quick-info-label">Snaga grijanja</span>
-        <span class="quick-info-value">{product.specifications.heating}</span>
+        <span class="quick-info-value">{formatPower(product.specifications.heating)}</span>
       </div>
     )}
     {product.specifications.area && (
@@ -77,7 +97,7 @@ const discountPercentage = product.originalPrice && product.price
           <polyline points="9 22 9 12 15 12 15 22"></polyline>
         </svg>
         <span class="quick-info-label">Prikladno za prostor</span>
-        <span class="quick-info-value">{product.specifications.area}</span>
+        <span class="quick-info-value">{formatArea(product.specifications.area)}</span>
       </div>
     )}
     {product.specifications.energyClass && (
@@ -107,7 +127,7 @@ const discountPercentage = product.originalPrice && product.price
       {product.specifications.soundLevel && (
         <div class="detail-row">
           <span class="detail-row__label">Razina buke:</span>
-          <span class="detail-row__value">{product.specifications.soundLevel}</span>
+          <span class="detail-row__value">{formatSoundLevel(product.specifications.soundLevel)}</span>
         </div>
       )}
       {product.specifications.refrigerant && (
@@ -140,12 +160,12 @@ const discountPercentage = product.originalPrice && product.price
       <div class="pricing-box">
         {product.originalPrice && (
           <div class="pricing-box__discount">
-            <span class="pricing-box__original">{product.originalPrice.toLocaleString('hr-HR')},00 €</span>
+            <span class="pricing-box__original">{product.originalPrice.toFixed(2).replace('.', ',')} €</span>
             <span class="pricing-box__badge">-{discountPercentage}%</span>
           </div>
         )}
         <div class="pricing-box__current">
-          <span class="pricing-box__price">{product.price.toLocaleString('hr-HR')},00 €</span>
+          <span class="pricing-box__price">{product.price.toFixed(2).replace('.', ',')} €</span>
           <span class="pricing-box__vat">Cijena s PDV-om</span>
         </div>
       </div>
@@ -294,15 +314,21 @@ const discountPercentage = product.originalPrice && product.price
   .product-info__title {
     font-size: var(--text-3xl);
     font-weight: var(--font-bold);
-    color: var(--text-primary);
+    color: var(--color-primary);
     line-height: 1.2;
     margin: 0;
   }
 
   .product-info__model {
-    color: var(--color-gray-600);
+    color: #6b7280; /* Siva boja za naziv */
     font-size: var(--text-lg);
+    font-weight: var(--font-bold);
     margin: 0;
+  }
+
+  .product-info__model .power-highlight {
+    color: #dc2626; /* Crvena boja za snagu (kW) */
+    font-weight: var(--font-bold);
   }
 
   /* Quick Info Cards */

@@ -81,7 +81,7 @@ const product = {
       'Tip uređaja': 'Dizalica topline',
       'Namjena': 'Hlađenje i grijanje',
       'Energetska klasa hlađenja': rawProduct.specifications?.energyClass || 'N/A',
-      'Energetska klasa grijanja': rawProduct.specifications?.energyClass || 'N/A',
+      'Energetska klasa grijanja': rawProduct.specifications?.heatingEnergyClass || 'N/A',
     },
     performance: {
       'Kapacitet hlađenja': rawProduct.specifications?.cooling || 'N/A',

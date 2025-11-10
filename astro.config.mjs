@@ -7,7 +7,7 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   output: 'server', // Enable SSR for URL params to work
   adapter: vercel(),
-  site: 'https://rdm-klimatizacija.hr',
+  site: 'https://rmfrigotema.plavecstudio.com',
   compressHTML: true,
   build: {
     inlineStylesheets: 'auto'

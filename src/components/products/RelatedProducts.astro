@@ -25,7 +25,7 @@ const formattedProducts = products.map(p => ({
   scop: p.specifications.scop,
   features: p.features,
   badge: p.badge,
-  image: p.images?.[0] || p.image,
+  image: p.image || p.images?.[0],
   inStock: p.inStock !== false,
   href: p.href
 }));
@@ -152,21 +152,8 @@ const formattedProducts = products.map(p => ({
 
   .related-prev:after,
   .related-next:after {
-    content: '' !important;
-    display: none !important;
-  }
-
-  /* SVG ikone unutar buttona */
-  :global(.related-prev svg),
-  :global(.related-next svg) {
-    width: 10px !important;
-    height: 16px !important;
-  }
-
-  :global(.related-prev .swiper-navigation-icon),
-  :global(.related-next .swiper-navigation-icon) {
-    width: 10px !important;
-    height: 16px !important;
+    font-size: 20px !important;
+    font-weight: bold !important;
   }
 
   .related-prev:hover,

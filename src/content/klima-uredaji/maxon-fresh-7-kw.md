@@ -1,7 +1,7 @@
 ---
 uniqueId: maxon-fresh-7-kw
 manufacturer: Maxon
-name: Maxon Fresh 7,0 kW
+name: Fresh 7,0 kW
 model: Maxon Fresh R32 7,0 kW
 category: klima-uredaji
 price: 1059

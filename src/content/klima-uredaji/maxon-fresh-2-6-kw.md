@@ -1,7 +1,7 @@
 ---
 uniqueId: maxon-fresh-2-6-kw
 manufacturer: Maxon
-name: Maxon Fresh 2,6 kW
+name: Fresh 2,6 kW
 model: Maxon Fresh R32 2,6 kW
 category: klima-uredaji
 price: 429

@@ -1,7 +1,7 @@
 ---
 uniqueId: maxon-fresh-3-5-kw
 manufacturer: Maxon
-name: Maxon Fresh 3,5 kW
+name: Fresh 3,5 kW
 model: Maxon Fresh R32 3,8 kW
 category: klima-uredaji
 price: 449

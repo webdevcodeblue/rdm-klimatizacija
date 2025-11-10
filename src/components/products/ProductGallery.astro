@@ -205,8 +205,11 @@ const { images, productName } = Astro.props;
   }
 
   .lightbox__image {
-    max-width: 100%;
+    display: block;
+    max-width: 90vw;
     max-height: 90vh;
+    width: auto;
+    height: auto;
     object-fit: contain;
   }
 
@@ -276,15 +279,37 @@ const { images, productName } = Astro.props;
       grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
     }
 
+    .lightbox__content {
+      max-width: 95vw;
+      max-height: 85vh;
+    }
+
+    .lightbox__image {
+      width: 92vw;
+      height: auto;
+      max-height: 85vh;
+      object-fit: contain;
+    }
+
     .lightbox__nav {
-      left: var(--space-2);
-      right: var(--space-2);
+      left: 50%;
+      right: auto;
+      transform: translateY(-50%) translateX(-50%);
+      width: 92vw;
+      max-width: 92vw;
     }
 
     .lightbox__prev,
     .lightbox__next {
       width: 40px;
       height: 40px;
+    }
+
+    .lightbox__close {
+      top: var(--space-2);
+      right: var(--space-2);
+      width: 36px;
+      height: 36px;
     }
   }
 
@@ -301,6 +326,33 @@ const { images, productName } = Astro.props;
 
     .product-gallery__thumbnails {
       grid-template-columns: repeat(4, 1fr);
+    }
+
+    .lightbox__content {
+      max-width: 98vw;
+      max-height: 80vh;
+    }
+
+    .lightbox__image {
+      width: 96vw;
+      height: auto;
+      max-height: 80vh;
+      object-fit: contain;
+    }
+
+    .lightbox__nav {
+      left: 50%;
+      right: auto;
+      transform: translateY(-50%) translateX(-50%);
+      width: 96vw;
+      max-width: 96vw;
+    }
+
+    .lightbox__close {
+      top: var(--space-1);
+      right: var(--space-1);
+      width: 32px;
+      height: 32px;
     }
   }
 </style>
@@ -355,25 +407,57 @@ const { images, productName } = Astro.props;
       });
     });
 
-    // Navigation
+    // Navigation functions
+    const goToPrevImage = () => {
+      currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+      lightboxImage.src = images[currentImageIndex];
+      mainImage.src = images[currentImageIndex];
+      updateActiveThumbnail();
+    };
+
+    const goToNextImage = () => {
+      currentImageIndex = (currentImageIndex + 1) % images.length;
+      lightboxImage.src = images[currentImageIndex];
+      mainImage.src = images[currentImageIndex];
+      updateActiveThumbnail();
+    };
+
+    // Navigation buttons
     if (images.length > 1) {
       const prevBtn = lightbox.querySelector('.lightbox__prev');
       const nextBtn = lightbox.querySelector('.lightbox__next');
 
-      prevBtn?.addEventListener('click', () => {
-        currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-        lightboxImage.src = images[currentImageIndex];
-        mainImage.src = images[currentImageIndex];
-        updateActiveThumbnail();
-      });
-
-      nextBtn?.addEventListener('click', () => {
-        currentImageIndex = (currentImageIndex + 1) % images.length;
-        lightboxImage.src = images[currentImageIndex];
-        mainImage.src = images[currentImageIndex];
-        updateActiveThumbnail();
-      });
+      prevBtn?.addEventListener('click', goToPrevImage);
+      nextBtn?.addEventListener('click', goToNextImage);
     }
+
+    // Touch/Swipe functionality
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const minSwipeDistance = 50; // minimum distance for swipe in pixels
+
+    const handleSwipe = () => {
+      const swipeDistance = touchEndX - touchStartX;
+
+      if (Math.abs(swipeDistance) > minSwipeDistance && images.length > 1) {
+        if (swipeDistance > 0) {
+          // Swipe right - go to previous image
+          goToPrevImage();
+        } else {
+          // Swipe left - go to next image
+          goToNextImage();
+        }
+      }
+    };
+
+    lightbox.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    lightbox.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
 
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
@@ -382,15 +466,9 @@ const { images, productName } = Astro.props;
           lightbox.classList.remove('lightbox--active');
           document.body.style.overflow = '';
         } else if (e.key === 'ArrowLeft' && images.length > 1) {
-          currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-          lightboxImage.src = images[currentImageIndex];
-          mainImage.src = images[currentImageIndex];
-          updateActiveThumbnail();
+          goToPrevImage();
         } else if (e.key === 'ArrowRight' && images.length > 1) {
-          currentImageIndex = (currentImageIndex + 1) % images.length;
-          lightboxImage.src = images[currentImageIndex];
-          mainImage.src = images[currentImageIndex];
-          updateActiveThumbnail();
+          goToNextImage();
         }
       }
     });

@@ -4,8 +4,9 @@ manufacturer: HAIER
 name: Flexis Plus Multi 2,6 kw
 model: Haier Flexis 2,6 kw
 category: multi-klima
+price: ""
 warranty: "5 "
-inStock: true
+inStock: false
 image: /images/products/HAIER-FLEXIS-PLUS-MULTI-klima-01.jpg
 images:
   - /images/products/HAIER-FLEXIS-PLUS-MULTI-klima-01.jpg
@@ -20,12 +21,16 @@ onSale: true
 popular: true
 specifications:
   area: "30"
+  dimensions:
+    indoor: 856/197/300
+    outdoor: 800/275/553
   energyClass: A+++
   scop: 4
   heating: 3,2
   soundLevel: "38"
   weight:
-    indoor: 856x197x300
+    indoor: 9,5
+    outdoor: 27,6
   cooling: 2,6
   refrigerant: R32
   heatingEnergyClass: A++

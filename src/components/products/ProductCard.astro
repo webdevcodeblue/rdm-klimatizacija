@@ -278,13 +278,17 @@ const discountPercentage = product.originalPrice && product.price
         </span>
 
         <div class="product-card__footer">
-          {product.price && (
+          {product.price ? (
             <div class="product-card__price">
               {product.originalPrice && (
                 <span class="price-original">{product.originalPrice.toFixed(2).replace('.', ',')} €</span>
               )}
               <span class="price-current">{product.price.toFixed(2).replace('.', ',')} €</span>
               <span class="price-vat">Cijena s PDV-om</span>
+            </div>
+          ) : (
+            <div class="product-card__price-inquiry">
+              <span class="price-inquiry-text">Na upit</span>
             </div>
           )}
 
@@ -309,13 +313,17 @@ const discountPercentage = product.originalPrice && product.price
         <span class={`product-card__stock ${product.inStock ? 'product-card__stock--available' : 'product-card__stock--unavailable'}`}>
           {product.inStock ? 'Proizvod je dostupan' : 'Proizvod nije dostupan'}
         </span>
-        {product.price && (
+        {product.price ? (
           <div class="product-card__price">
             {product.originalPrice && (
               <span class="price-original">{product.originalPrice.toFixed(2).replace('.', ',')}€</span>
             )}
             <span class="price-current">{product.price.toFixed(2).replace('.', ',')}€</span>
             <span class="price-vat">s PDV-om</span>
+          </div>
+        ) : (
+          <div class="product-card__price-inquiry">
+            <span class="price-inquiry-text">Na upit</span>
           </div>
         )}
 
@@ -327,8 +335,12 @@ const discountPercentage = product.originalPrice && product.price
             </svg>
             Pošalji upit
           </button>
-          <a href={infoSheetHref} target={infoSheetTarget} rel={product.infoSheet ? 'noopener noreferrer' : undefined} class="btn btn--secondary">
-            Informacijski list proizvoda
+          <a href={productHref} class="btn btn--secondary btn--icon">
+            Detalji
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
           </a>
         </div>
       </div>
@@ -643,9 +655,26 @@ const discountPercentage = product.originalPrice && product.price
     color: var(--text-muted);
   }
 
+  /* Price Inquiry - "Na upit" styling - Simple elegant design */
+  .product-card__price-inquiry {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-3);
+    padding: var(--space-2) 0;
+  }
+
+  .price-inquiry-text {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: #2563eb;
+    letter-spacing: 0.3px;
+  }
+
   .product-card__actions {
     display: flex;
     gap: var(--space-2);
+    flex-wrap: nowrap; /* Force buttons to stay on same line */
   }
 
   .btn {
@@ -661,12 +690,14 @@ const discountPercentage = product.originalPrice && product.price
     justify-content: center;
     gap: var(--space-2);
     font-size: var(--text-sm);
+    white-space: nowrap; /* Prevent text wrapping */
   }
 
   .btn--primary {
     background: var(--color-primary);
     color: var(--color-white);
-    flex: 1;
+    flex: 1 1 auto; /* Allow shrinking if needed */
+    min-width: 0; /* Allow flex to shrink below content size */
   }
 
   .btn--primary:hover {
@@ -677,7 +708,8 @@ const discountPercentage = product.originalPrice && product.price
   .btn--secondary {
     background: var(--color-gray-100);
     color: var(--text-primary);
-    flex: 0 0 auto;
+    flex: 0 1 auto; /* Allow shrinking but prefer content size */
+    min-width: 0; /* Allow flex to shrink below content size */
   }
 
   .btn--secondary:hover {
@@ -687,6 +719,7 @@ const discountPercentage = product.originalPrice && product.price
   .btn--icon svg {
     width: 18px;
     height: 18px;
+    flex-shrink: 0; /* Prevent icon shrinking */
   }
 
   .product-card__out-of-stock {
@@ -970,12 +1003,12 @@ const discountPercentage = product.originalPrice && product.price
   }
 
   .quick-info-item--highlight {
-    background: #22c55e;
-    border-color: #22c55e;
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+    border-color: #22c55e !important;
   }
 
   .quick-info-item--highlight svg {
-    color: #ffffff;
+    color: #ffffff !important;
   }
 
   /* Energy icon image styling */
@@ -989,11 +1022,13 @@ const discountPercentage = product.originalPrice && product.price
   }
 
   .quick-info-item--highlight .quick-info-label {
-    color: #ffffff;
+    color: #ffffff !important;
+    font-weight: 600 !important;
   }
 
   .quick-info-item--highlight .quick-info-value {
-    color: #ffffff;
+    color: #ffffff !important;
+    font-weight: 700 !important;
   }
 
   .quick-info-label {
@@ -1455,6 +1490,23 @@ const discountPercentage = product.originalPrice && product.price
 
   @media (max-width: 480px) {
     /* Extra small mobile - još kompaktnije */
+
+    /* Grid view buttons - even more compact */
+    .product-card--grid .product-card__actions {
+      gap: 4px; /* Minimal gap */
+    }
+
+    .product-card--grid .btn {
+      font-size: 11px; /* Even smaller text */
+      padding: 6px 10px; /* Extra tight padding */
+    }
+
+    .product-card--grid .btn--icon svg {
+      width: 12px; /* Extra small icons */
+      height: 12px;
+    }
+
+    /* List view mobile */
     .product-card--list .product-card__image {
       height: 240px;
     }
@@ -1506,6 +1558,21 @@ const discountPercentage = product.originalPrice && product.price
   @media (max-width: 768px) {
     /* Mobile optimizations - 768px is our minimum supported breakpoint */
     /* Professional agency-level spacing optimization */
+
+    /* Grid view buttons - ensure they stay in one row */
+    .product-card--grid .product-card__actions {
+      gap: 6px; /* Smaller gap on mobile */
+    }
+
+    .product-card--grid .btn {
+      font-size: 12px; /* Slightly smaller text */
+      padding: var(--space-2) var(--space-3); /* Tighter padding */
+    }
+
+    .product-card--grid .btn--icon svg {
+      width: 14px; /* Smaller icons */
+      height: 14px;
+    }
 
     /* Quick-info cards - samo smanjenje prostora, fontovi ostaju isti */
     .product-card--list .product-card__quick-info--below-image {

@@ -156,7 +156,7 @@ const modelParts = splitModelIntoParts(product.model || '');
 
   <!-- Price Section -->
   <div class="product-info__pricing">
-    {product.price && (
+    {product.price ? (
       <div class="pricing-box">
         {product.originalPrice && (
           <div class="pricing-box__discount">
@@ -167,6 +167,13 @@ const modelParts = splitModelIntoParts(product.model || '');
         <div class="pricing-box__current">
           <span class="pricing-box__price">{product.price.toFixed(2).replace('.', ',')} €</span>
           <span class="pricing-box__vat">Cijena s PDV-om</span>
+        </div>
+      </div>
+    ) : (
+      <div class="pricing-box pricing-box--inquiry">
+        <div class="pricing-box__inquiry">
+          <span class="pricing-box__inquiry-text">Na upit</span>
+          <span class="pricing-box__inquiry-subtitle">Kontaktirajte nas za cijenu</span>
         </div>
       </div>
     )}
@@ -395,12 +402,12 @@ const modelParts = splitModelIntoParts(product.model || '');
   }
 
   .quick-info-item--highlight {
-    background: #22c55e;
-    border-color: #22c55e;
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+    border-color: #22c55e !important;
   }
 
   .quick-info-item--highlight svg {
-    color: #ffffff;
+    color: #ffffff !important;
   }
 
   /* Energy icon image styling */
@@ -414,11 +421,13 @@ const modelParts = splitModelIntoParts(product.model || '');
   }
 
   .quick-info-item--highlight .quick-info-label {
-    color: #ffffff;
+    color: #ffffff !important;
+    font-weight: 600 !important;
   }
 
   .quick-info-item--highlight .quick-info-value {
-    color: #ffffff;
+    color: #ffffff !important;
+    font-weight: 700 !important;
   }
 
   .quick-info-label {
@@ -571,6 +580,36 @@ const modelParts = splitModelIntoParts(product.model || '');
   .pricing-box__vat {
     color: var(--color-gray-600);
     font-size: var(--text-sm);
+  }
+
+  /* Inquiry Pricing - "Na upit" - Elegant blue design */
+  .pricing-box--inquiry {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-5);
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border: 2px solid #93c5fd;
+  }
+
+  .pricing-box__inquiry {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .pricing-box__inquiry-text {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2563eb;
+    letter-spacing: 0.5px;
+  }
+
+  .pricing-box__inquiry-subtitle {
+    font-size: var(--text-sm);
+    color: #6b7280;
+    font-weight: var(--font-medium);
   }
 
   /* Stock Status */

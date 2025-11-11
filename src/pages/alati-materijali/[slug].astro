@@ -9,6 +9,7 @@ import ProductTabs from '../../components/products/ProductTabs.astro';
 import RelatedProducts from '../../components/products/RelatedProducts.astro';
 import InquiryModal from '../../components/InquiryModal.astro';
 import ProductSchema from '../../components/seo/ProductSchema.astro';
+import BreadcrumbSchema from '../../components/seo/BreadcrumbSchema.astro';
 export const prerender = true;
 
 import { getCollection, getEntry } from 'astro:content';
@@ -135,10 +136,18 @@ const relatedProducts = allProducts
 // SEO meta data
 const pageTitle = `${product.manufacturer ? product.manufacturer + ' ' : ''}${product.name} - RDM Klimatizacija`;
 const pageDescription = `${product.manufacturer ? product.manufacturer + ' ' : ''}${product.model || ''} - ${product.description ? product.description.substring(0, 150) : 'Alati i materijali za klima uređaje'}${product.price ? `. Cijena: ${product.price}€` : ''}`;
+
+// Breadcrumb data for schema
+const breadcrumbItems = [
+  { name: 'Početna', href: '/' },
+  { name: 'Alati i materijali', href: '/alati-materijali' },
+  { name: `${product.manufacturer ? product.manufacturer + ' ' : ''}${product.name}`, href: `/alati-materijali/${product.slug}` }
+];
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>
   <ProductSchema product={product} category="Alati i materijali" />
+  <BreadcrumbSchema items={breadcrumbItems} />
   <Header />
 
   <main class="product-detail">

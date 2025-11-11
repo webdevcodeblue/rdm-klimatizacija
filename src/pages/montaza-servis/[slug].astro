@@ -6,6 +6,7 @@ import ProductGallery from '../../components/products/ProductGallery.astro';
 import ProductLightbox from '../../components/products/ProductLightbox.astro';
 import ProductTabs from '../../components/products/ProductTabs.astro';
 import InquiryModal from '../../components/InquiryModal.astro';
+import BreadcrumbSchema from '../../components/seo/BreadcrumbSchema.astro';
 export const prerender = true;
 
 import { getCollection, getEntry } from 'astro:content';
@@ -85,9 +86,17 @@ const relatedServices = allServices
 // SEO meta data
 const pageTitle = `${service.name} - RDM Klimatizacija`;
 const pageDescription = `${service.description ? service.description.substring(0, 150) + '...' : service.name}${service.price ? ` Cijena: ${service.price}€` : ''}`;
+
+// Breadcrumb data for schema
+const breadcrumbItems = [
+  { name: 'Početna', href: '/' },
+  { name: 'Montaža i servis', href: '/montaza-servis' },
+  { name: service.name, href: `/montaza-servis/${service.slug}` }
+];
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>
+  <BreadcrumbSchema items={breadcrumbItems} />
   <Header />
 
   <main class="service-detail">

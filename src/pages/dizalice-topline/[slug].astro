@@ -9,6 +9,7 @@ import ProductTabs from '../../components/products/ProductTabs.astro';
 import RelatedProducts from '../../components/products/RelatedProducts.astro';
 import InquiryModal from '../../components/InquiryModal.astro';
 import ProductSchema from '../../components/seo/ProductSchema.astro';
+import BreadcrumbSchema from '../../components/seo/BreadcrumbSchema.astro';
 export const prerender = true;
 
 import { getCollection, getEntry } from 'astro:content';
@@ -145,10 +146,18 @@ const relatedProducts = allProducts
 // SEO meta data
 const pageTitle = `${product.manufacturer} ${product.name} - RDM Klimatizacija`;
 const pageDescription = `${product.manufacturer} ${product.model} - Dizalica topline, energetski razred ${product.specifications.energyClass}.${product.price ? ` Cijena: ${product.price}€` : ''}`;
+
+// Breadcrumb data for schema
+const breadcrumbItems = [
+  { name: 'Početna', href: '/' },
+  { name: 'Dizalice topline', href: '/dizalice-topline' },
+  { name: `${product.manufacturer} ${product.name}`, href: `/dizalice-topline/${product.slug}` }
+];
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>
   <ProductSchema product={product} category="Dizalica topline" />
+  <BreadcrumbSchema items={breadcrumbItems} />
   <Header />
 
   <main class="product-detail">

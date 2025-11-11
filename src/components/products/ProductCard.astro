@@ -38,7 +38,7 @@ import { getCategoryPath } from '../../config/categories';
 const { product, viewMode = 'grid' } = Astro.props;
 
 // Use custom href if provided, otherwise build from category
-const productHref = product.href || `${getCategoryPath(product.category)}/${product.slug}`;
+const productHref = product.href || `${getCategoryPath(product.category, product.name)}/${product.slug}`;
 
 // Informacijski list button - otvara PDF ako postoji, inače stranicu proizvoda
 const infoSheetHref = product.infoSheet || productHref;

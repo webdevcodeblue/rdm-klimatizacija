@@ -23,7 +23,18 @@ export type CategoryKey = keyof typeof CATEGORY_PATHS;
 
 /**
  * Get category path by key with fallback
+ * Shows warning in development mode if category doesn't exist
  */
-export function getCategoryPath(category: string): string {
-  return CATEGORY_PATHS[category as CategoryKey] || '/klima-uredaji';
+export function getCategoryPath(category: string, productName?: string): string {
+  const path = CATEGORY_PATHS[category as CategoryKey];
+
+  // Development warning for unknown categories
+  if (!path && import.meta.env.DEV) {
+    console.warn(
+      `⚠️ [getCategoryPath] Unknown category: "${category}"${productName ? ` for product "${productName}"` : ''}. ` +
+      `Falling back to /klima-uredaji. Add this category to CATEGORY_PATHS in src/config/categories.ts!`
+    );
+  }
+
+  return path || '/klima-uredaji';
 }

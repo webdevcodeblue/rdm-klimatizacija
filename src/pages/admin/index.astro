@@ -630,18 +630,20 @@
                   { label: 'Featured (na početnoj)', name: 'featured', widget: 'boolean', default: false },
                   { label: 'Popularno', name: 'popular', widget: 'boolean', default: false },
                   {
-                    label: 'Uključeno u uslugu',
-                    name: 'includes',
-                    widget: 'list',
-                    required: false,
-                    field: { label: 'Stavka', name: 'item', widget: 'string' }
-                  },
-                  {
-                    label: 'Što uključuje',
+                    label: 'Što je uključeno u cijenu (opcionalno)',
                     name: 'features',
                     widget: 'list',
                     required: false,
+                    hint: 'Navedite sve stavke koje su uključene u cijenu usluge. Prikazat će se u list view proizvoda.',
                     field: { label: 'Stavka', name: 'feature', widget: 'string' }
+                  },
+                  {
+                    label: 'Što nije uključeno u cijenu (opcionalno)',
+                    name: 'excludedFromPrice',
+                    widget: 'list',
+                    required: false,
+                    hint: 'Navedite sve stavke koje NISU uključene u cijenu (npr. Za otoke nadoplata montažeru: 50€). Prikazat će se ispod "Što je uključeno u cijenu".',
+                    field: { label: 'Stavka', name: 'item', widget: 'string' }
                   },
                   {
                     label: 'Informacijski list (PDF)',

@@ -45,11 +45,12 @@ const service = {
   name: rawService.name,
   descriptionContent: renderedContent.Content,
   image: rawService.image,
-  images: rawService.images || [rawService.image],
+  images: rawService.images && rawService.images.length > 0 ? rawService.images : [rawService.image],
   price: rawService.price,
   category: 'montaza',
   included: rawService.features,
   features: rawService.features || [],
+  excludedFromPrice: rawService.excludedFromPrice || [],
   badge: rawService.badge || 'Usluga',
   inStock: rawService.inStock !== undefined ? rawService.inStock : true,
   specifications: {}, // Empty specifications object for services
@@ -119,16 +120,16 @@ const pageDescription = `${service.description ? service.description.substring(0
           <!-- Right: Service Info -->
           <div class="service-layout__info">
             <div class="service-info">
-              <!-- Header -->
-              {service.badge && (
-                <div class="service-info__header">
+              <!-- Category Label and Badge on the same line -->
+              <div class="service-info__header">
+                <p class="service-info__category">{service.category === 'montaza' ? 'MONTAŽA' : service.category === 'servis' ? 'SERVIS' : 'ČIŠĆENJE'}</p>
+                {service.badge && (
                   <span class="badge badge--{service.badge.toLowerCase()}">{service.badge}</span>
-                </div>
-              )}
+                )}
+              </div>
 
               <!-- Title -->
               <h1 class="service-info__title">{service.name}</h1>
-              <p class="service-info__category">{service.category === 'montaza' ? 'Montaža' : service.category === 'servis' ? 'Servis' : 'Čišćenje'}</p>
 
               <!-- Description -->
               {service.description && (
@@ -146,6 +147,24 @@ const pageDescription = `${service.description ? service.description.substring(0
                       <li class="included-list__item">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                           <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <!-- Excluded from Price -->
+              {service.excludedFromPrice && service.excludedFromPrice.length > 0 && (
+                <div class="service-info__excluded">
+                  <h3>Što nije uključeno u cijenu:</h3>
+                  <ul class="excluded-list">
+                    {service.excludedFromPrice.map((item) => (
+                      <li class="excluded-list__item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <line x1="18" y1="6" x2="6" y2="18"></line>
+                          <line x1="6" y1="6" x2="18" y2="18"></line>
                         </svg>
                         <span>{item}</span>
                       </li>
@@ -240,7 +259,7 @@ const pageDescription = `${service.description ? service.description.substring(0
 
   <Footer />
   <InquiryModal />
-  <ProductLightbox images={product.images} productName={product.name} />
+  <ProductLightbox images={service.images} productName={service.name} />
 </BaseLayout>
 
 <style>
@@ -334,9 +353,8 @@ const pageDescription = `${service.description ? service.description.substring(0
   .service-info__header {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     gap: var(--space-3);
-    margin-bottom: var(--space-4);
   }
 
   .badge {
@@ -364,6 +382,7 @@ const pageDescription = `${service.description ? service.description.substring(0
     font-weight: var(--font-semibold);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    margin: 0;
   }
 
   .service-info__description {
@@ -397,6 +416,41 @@ const pageDescription = `${service.description ? service.description.substring(0
 
   .included-list__item svg {
     color: var(--color-green-600);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* Excluded from Price */
+  .service-info__excluded {
+    margin-top: var(--space-4);
+  }
+
+  .service-info__excluded h3 {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--space-3);
+  }
+
+  .excluded-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .excluded-list__item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+  }
+
+  .excluded-list__item svg {
+    color: var(--color-red-600);
     flex-shrink: 0;
     margin-top: 2px;
   }

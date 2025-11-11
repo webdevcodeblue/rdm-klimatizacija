@@ -198,6 +198,14 @@ const modelParts = splitModelIntoParts(product.model || '');
     )}
   </div>
 
+  <!-- Installation Note -->
+  {product.category !== 'alati-materijali' && product.category !== 'montaza-servis' && (
+    <div class="product-info__installation-note">
+      <p>Montažu obavlja naš RM Frigo Team.</p>
+      <p>Usluga vrijedi isključivo za uređaje kupljene u našoj trgovini.</p>
+    </div>
+  )}
+
   <!-- Action Buttons -->
   <div class="product-info__actions">
     <button
@@ -633,6 +641,33 @@ const modelParts = splitModelIntoParts(product.model || '');
     color: var(--color-red-700);
   }
 
+  /* Installation Note */
+  .product-info__installation-note {
+    padding: 14px;
+    background: #f0f9ff;
+    border-left: 3px solid #3b82f6;
+    border-radius: 4px;
+    margin-bottom: var(--space-4);
+  }
+
+  .product-info__installation-note p {
+    font-size: 17px;
+    line-height: 1.6;
+    color: #475569;
+    margin: 0;
+  }
+
+  .product-info__installation-note p:first-child {
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 6px;
+  }
+
+  .product-info__installation-note p:last-child {
+    color: #dc2626;
+    font-weight: 600;
+  }
+
   /* Action Buttons */
   .product-info__actions {
     display: flex;
@@ -782,6 +817,15 @@ const modelParts = splitModelIntoParts(product.model || '');
     .btn--large {
       padding: 10px var(--space-4);
       font-size: var(--text-base);
+    }
+
+    .product-info__installation-note {
+      padding: 12px;
+      margin-bottom: var(--space-3);
+    }
+
+    .product-info__installation-note p {
+      font-size: 16px;
     }
   }
 

@@ -63,6 +63,18 @@ export function formatSoundLevel(value: string | undefined): string {
 }
 
 /**
+ * Dodaje " m³/h" na kraj ako vrijednost već nema jedinicu (za protok zraka)
+ */
+export function formatAirflow(value: string | undefined): string {
+  if (!value) return '';
+  const str = String(value).trim();
+  if (str.includes('m³/h') || str.includes('m3/h') || str.includes('M³/h')) {
+    return str;
+  }
+  return `${str} m³/h`;
+}
+
+/**
  * Dodaje pravi oblik riječi "godina/godine" prema hrvatskom pravopisu
  * 1 → godina
  * 2, 3, 4 → godine

@@ -99,7 +99,7 @@ const productSchema = z.object({
   features: z.array(z.string()).default([]),
 
   // ==================== DOKUMENTI ====================
-  infoSheet: z.string().optional(), // Informacijski list (PDF) - prikazuje se kao poseban gumb
+  infoSheet: z.string().optional().nullable(), // Informacijski list (PDF) - prikazuje se kao poseban gumb
   documents: z.array(z.object({
     name: z.string(),   // Naziv dokumenta (npr. "Upute za montažu")
     url: z.string()     // Putanja do PDF-a
@@ -147,11 +147,12 @@ const serviceSchema = z.object({
   // ==================== GALERIJA SLIKA ====================
   images: z.array(z.string()).default([]),
 
-  // ==================== ŠTO JE UKLJUČENO ====================
-  features: z.array(z.string()).default([]), // Što je uključeno u uslugu (renamed from includes)
+  // ==================== ŠTO JE UKLJUČENO / ISKLJUČENO ====================
+  features: z.array(z.string()).default([]), // Što je uključeno u cijenu
+  excludedFromPrice: z.array(z.string()).default([]), // Što nije uključeno u cijenu
 
   // ==================== DOKUMENTI ====================
-  infoSheet: z.string().optional(), // Informacijski list (PDF) - prikazuje se kao poseban gumb
+  infoSheet: z.string().optional().nullable(), // Informacijski list (PDF) - prikazuje se kao poseban gumb
   documents: z.array(z.object({
     name: z.string(),   // Naziv dokumenta (npr. "Upute za montažu")
     url: z.string()     // Putanja do PDF-a

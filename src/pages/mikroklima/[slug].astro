@@ -12,7 +12,7 @@ import ProductSchema from '../../components/seo/ProductSchema.astro';
 export const prerender = true;
 
 import { getCollection, getEntry } from 'astro:content';
-import { formatPower, formatArea, formatDimensions, formatWeight, formatSoundLevel } from '../../utils/formatSpecifications';
+import { formatPower, formatArea, formatDimensions, formatWeight, formatSoundLevel, formatAirflow } from '../../utils/formatSpecifications';
 
 // Generate static paths for all products
 export async function getStaticPaths() {
@@ -81,7 +81,7 @@ const product = {
       ...(rawProduct.specifications?.energyClass && { 'Energetska klasa': rawProduct.specifications.energyClass })
     },
     performance: {
-      ...(rawProduct.specifications?.airflow && { 'Protok zraka': rawProduct.specifications.airflow }),
+      ...(rawProduct.specifications?.airflow && { 'Protok zraka': formatAirflow(rawProduct.specifications.airflow) }),
       ...(rawProduct.specifications?.area && { 'Prikladno za prostor': rawProduct.specifications.area }),
       ...(rawProduct.specifications?.dehumidification && { 'Kapacitet odvlaživanja': rawProduct.specifications.dehumidification }),
       ...(rawProduct.specifications?.cooling && { 'Hlađenje': rawProduct.specifications.cooling }),

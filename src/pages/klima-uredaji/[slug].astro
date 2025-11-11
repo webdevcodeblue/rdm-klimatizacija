@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import ProductGallery from '../../components/products/ProductGallery.astro';
+import ProductLightbox from '../../components/products/ProductLightbox.astro';
 import ProductInfo from '../../components/products/ProductInfo.astro';
 import ProductTabs from '../../components/products/ProductTabs.astro';
 import RelatedProducts from '../../components/products/RelatedProducts.astro';
@@ -166,7 +167,7 @@ const breadcrumbItems = [
             <a href="/klima-uredaji" class="breadcrumb__link">Klima uređaji</a>
           </li>
           <li class="breadcrumb__item">
-            <span class="breadcrumb__current">{product.manufacturer} {product.model}</span>
+            <span class="breadcrumb__current">{product.manufacturer} {product.name}</span>
           </li>
         </ol>
       </div>
@@ -206,6 +207,7 @@ const breadcrumbItems = [
 
   <Footer />
   <InquiryModal />
+  <ProductLightbox images={product.images} productName={product.name} />
 </BaseLayout>
 
 <style>

@@ -1,0 +1,316 @@
+---
+export interface Props {
+  images: string[];
+  productName: string;
+}
+
+const { images, productName } = Astro.props;
+---
+
+<!-- Lightbox - Rendered at body level, outside sticky containers -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox__overlay"></div>
+  <div class="lightbox__content">
+    <button class="lightbox__close" aria-label="Close lightbox">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    <img
+      src={images[0] || '/images/products/klima.jpg'}
+      alt={productName}
+      class="lightbox__image"
+      id="lightboxImage"
+    />
+    {images.length > 1 && (
+      <div class="lightbox__nav">
+        <button class="lightbox__prev" aria-label="Previous image">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <button class="lightbox__next" aria-label="Next image">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+    )}
+  </div>
+</div>
+
+<style>
+  /* Lightbox - Global styles, no scoping issues */
+  .lightbox {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99999;
+  }
+
+  .lightbox--active {
+    display: block;
+  }
+
+  .lightbox__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    cursor: zoom-out;
+  }
+
+  .lightbox__content {
+    position: absolute;
+    top: 52%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+    height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100000;
+  }
+
+  .lightbox__image {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .lightbox__close {
+    position: absolute;
+    top: var(--space-6);
+    right: var(--space-6);
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    color: var(--color-gray-900);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 100001;
+  }
+
+  .lightbox__close svg {
+    width: 28px;
+    height: 28px;
+    stroke-width: 2.5;
+  }
+
+  .lightbox__close:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  .lightbox__nav {
+    position: absolute;
+    top: 50%;
+    left: var(--space-4);
+    right: var(--space-4);
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+  }
+
+  .lightbox__prev,
+  .lightbox__next {
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: var(--color-white);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+    pointer-events: auto;
+  }
+
+  .lightbox__prev:hover,
+  .lightbox__next:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: scale(1.1);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .lightbox__content {
+      max-width: 95vw;
+      max-height: 85vh;
+    }
+
+    .lightbox__image {
+      width: 92vw;
+      height: auto;
+      max-height: 85vh;
+      object-fit: contain;
+    }
+
+    .lightbox__nav {
+      left: 50%;
+      right: auto;
+      transform: translateY(-50%) translateX(-50%);
+      width: 92vw;
+      max-width: 92vw;
+    }
+
+    .lightbox__prev,
+    .lightbox__next {
+      width: 40px;
+      height: 40px;
+    }
+
+    .lightbox__close {
+      top: var(--space-2);
+      right: var(--space-2);
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .lightbox__content {
+      max-width: 98vw;
+      max-height: 80vh;
+    }
+
+    .lightbox__image {
+      width: 96vw;
+      height: auto;
+      max-height: 80vh;
+      object-fit: contain;
+    }
+
+    .lightbox__nav {
+      left: 50%;
+      right: auto;
+      transform: translateY(-50%) translateX(-50%);
+      width: 96vw;
+      max-width: 96vw;
+    }
+
+    .lightbox__close {
+      top: var(--space-1);
+      right: var(--space-1);
+      width: 32px;
+      height: 32px;
+    }
+  }
+</style>
+
+<script>
+  // Lightbox functionality
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImage = document.getElementById('lightboxImage') as HTMLImageElement;
+  let currentImageIndex = 0;
+
+  // Get all images from the gallery
+  const thumbnails = document.querySelectorAll('.product-gallery__thumb');
+  const images = Array.from(thumbnails).map(thumb =>
+    thumb.getAttribute('data-image')
+  ).filter(Boolean) as string[];
+
+  // Listen for custom event from ProductGallery
+  document.addEventListener('openLightbox', ((e: CustomEvent) => {
+    if (lightbox && lightboxImage) {
+      const { src, index } = e.detail;
+      lightboxImage.src = src;
+      currentImageIndex = index;
+      lightbox.classList.add('lightbox--active');
+      document.body.style.overflow = 'hidden';
+    }
+  }) as EventListener);
+
+  if (lightbox && lightboxImage) {
+    // Close lightbox
+    const closeBtn = lightbox.querySelector('.lightbox__close');
+    const overlay = lightbox.querySelector('.lightbox__overlay');
+
+    [closeBtn, overlay].forEach(element => {
+      element?.addEventListener('click', () => {
+        lightbox.classList.remove('lightbox--active');
+        document.body.style.overflow = '';
+      });
+    });
+
+    // Navigation functions
+    const goToPrevImage = () => {
+      currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+      lightboxImage.src = images[currentImageIndex];
+
+      // Update main image in gallery
+      const mainImage = document.getElementById('mainImage') as HTMLImageElement;
+      if (mainImage) mainImage.src = images[currentImageIndex];
+
+      // Update active thumbnail
+      updateActiveThumbnail();
+    };
+
+    const goToNextImage = () => {
+      currentImageIndex = (currentImageIndex + 1) % images.length;
+      lightboxImage.src = images[currentImageIndex];
+
+      // Update main image in gallery
+      const mainImage = document.getElementById('mainImage') as HTMLImageElement;
+      if (mainImage) mainImage.src = images[currentImageIndex];
+
+      // Update active thumbnail
+      updateActiveThumbnail();
+    };
+
+    // Navigation buttons
+    if (images.length > 1) {
+      const prevBtn = lightbox.querySelector('.lightbox__prev');
+      const nextBtn = lightbox.querySelector('.lightbox__next');
+
+      prevBtn?.addEventListener('click', goToPrevImage);
+      nextBtn?.addEventListener('click', goToNextImage);
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (lightbox.classList.contains('lightbox--active')) {
+        if (e.key === 'Escape') {
+          lightbox.classList.remove('lightbox--active');
+          document.body.style.overflow = '';
+        } else if (e.key === 'ArrowLeft' && images.length > 1) {
+          goToPrevImage();
+        } else if (e.key === 'ArrowRight' && images.length > 1) {
+          goToNextImage();
+        }
+      }
+    });
+  }
+
+  function updateActiveThumbnail() {
+    const thumbnails = document.querySelectorAll('.product-gallery__thumb');
+    thumbnails.forEach((thumb, index) => {
+      if (index === currentImageIndex) {
+        thumb.classList.add('product-gallery__thumb--active');
+      } else {
+        thumb.classList.remove('product-gallery__thumb--active');
+      }
+    });
+  }
+</script>

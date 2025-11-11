@@ -327,8 +327,8 @@ const discountPercentage = product.originalPrice && product.price
             </svg>
             Pošalji upit
           </button>
-          <a href={productHref} class="btn btn--secondary">
-            Detalji
+          <a href={infoSheetHref} target={infoSheetTarget} rel={product.infoSheet ? 'noopener noreferrer' : undefined} class="btn btn--secondary">
+            Informacijski list proizvoda
           </a>
         </div>
       </div>

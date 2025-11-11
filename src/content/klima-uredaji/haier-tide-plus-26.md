@@ -1,7 +1,7 @@
 ---
 uniqueId: haier-tide-plus-26
-name: Tide Plus 2,6 kW
 manufacturer: HAIER
+name: Tide Plus 2,6 kW
 model: Haier Tide 2,6 kW
 category: klima-uredaji
 price: 527.5
@@ -64,4 +64,7 @@ Pruža vam mir i tišinu, optimizirajući rad ventilatora i motora.
 
 **WI-FI kontrola
 Inteligentan zrak**
-Usmjerava strujanje zraka prema gore u modu hlađenja, te prema dolje u modu grijanja, čime postiže bolji klimatizacijski učinak.
+Usmjerava strujanje zraka prema gore u modu hlađenja, te prema dolje u modu grijanja, čime postiže bolji klimatizacijski učinak.\
+<https://rmfrigotema.plavecstudio.com/galerija-radova>
+
+https://www.youtube.com/watch?v=ufJT6YKs9L4

@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import ProductGallery from '../../components/products/ProductGallery.astro';
+import ProductLightbox from '../../components/products/ProductLightbox.astro';
 import ProductTabs from '../../components/products/ProductTabs.astro';
 import InquiryModal from '../../components/InquiryModal.astro';
 export const prerender = true;
@@ -239,6 +240,7 @@ const pageDescription = `${service.description ? service.description.substring(0
 
   <Footer />
   <InquiryModal />
+  <ProductLightbox images={product.images} productName={product.name} />
 </BaseLayout>
 
 <style>

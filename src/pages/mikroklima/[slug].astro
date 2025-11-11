@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import ProductGallery from '../../components/products/ProductGallery.astro';
+import ProductLightbox from '../../components/products/ProductLightbox.astro';
 import ProductInfo from '../../components/products/ProductInfo.astro';
 import ProductTabs from '../../components/products/ProductTabs.astro';
 import RelatedProducts from '../../components/products/RelatedProducts.astro';
@@ -95,8 +96,22 @@ const product = {
       })
     },
     dimensions: {
-      ...(rawProduct.specifications?.dimensions && { 'Dimenzije': rawProduct.specifications.dimensions }),
-      ...(rawProduct.specifications?.weight && { 'Težina': rawProduct.specifications.weight })
+      // Support both old single string format and new object format
+      ...(typeof rawProduct.specifications?.dimensions === 'string'
+        ? { 'Dimenzije': formatDimensions(rawProduct.specifications.dimensions) }
+        : {
+            ...(rawProduct.specifications?.dimensions?.indoor && { 'Dimenzije unutarnje jedinice': formatDimensions(rawProduct.specifications.dimensions.indoor) }),
+            ...(rawProduct.specifications?.dimensions?.outdoor && { 'Dimenzije vanjske jedinice': formatDimensions(rawProduct.specifications.dimensions.outdoor) })
+          }
+      ),
+      // Support both old single string format and new object format for weight
+      ...(typeof rawProduct.specifications?.weight === 'string'
+        ? { 'Težina': formatWeight(rawProduct.specifications.weight) }
+        : {
+            ...(rawProduct.specifications?.weight?.indoor && { 'Težina unutarnje jedinice': formatWeight(rawProduct.specifications.weight.indoor) }),
+            ...(rawProduct.specifications?.weight?.outdoor && { 'Težina vanjske jedinice': formatWeight(rawProduct.specifications.weight.outdoor) })
+          }
+      )
     }
   },
   inStock: rawProduct.inStock,
@@ -157,7 +172,7 @@ const pageDescription = `${product.manufacturer ? product.manufacturer + ' ' : '
             <a href="/mikroklima" class="breadcrumb__link">Mikroklima</a>
           </li>
           <li class="breadcrumb__item">
-            <span class="breadcrumb__current">{product.manufacturer ? product.manufacturer + ' ' : ''}{product.model || product.name}</span>
+            <span class="breadcrumb__current">{product.manufacturer ? product.manufacturer + ' ' : ''}{product.name}</span>
           </li>
         </ol>
       </div>
@@ -197,6 +212,7 @@ const pageDescription = `${product.manufacturer ? product.manufacturer + ' ' : '
 
   <Footer />
   <InquiryModal />
+  <ProductLightbox images={product.images} productName={product.name} />
 </BaseLayout>
 
 <style>

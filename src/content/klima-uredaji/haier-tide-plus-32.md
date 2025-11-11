@@ -62,4 +62,5 @@ Pruža vam mir i tišinu, optimizirajući rad ventilatora i motora.
 
 **WI-FI kontrola
 Inteligentan zrak**
-Usmjerava strujanje zraka prema gore u modu hlađenja, te prema dolje u modu grijanja, čime postiže bolji klimatizacijski učinak.
+Usmjerava strujanje zraka prema gore u modu hlađenja, te prema dolje u modu grijanja, čime postiže bolji klimatizacijski učinak.\
+https://www.youtube.com/watch?v=ufJT6YKs9L4

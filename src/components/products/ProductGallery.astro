@@ -47,39 +47,6 @@ const { images, productName } = Astro.props;
       ))}
     </div>
   )}
-
-  <!-- Lightbox (Hidden by default) -->
-  <div class="lightbox" id="lightbox">
-    <div class="lightbox__overlay"></div>
-    <div class="lightbox__content">
-      <button class="lightbox__close" aria-label="Close lightbox">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
-      <img
-        src={images[0] || '/images/products/klima.jpg'}
-        alt={productName}
-        class="lightbox__image"
-        id="lightboxImage"
-      />
-      {images.length > 1 && (
-        <div class="lightbox__nav">
-          <button class="lightbox__prev" aria-label="Previous image">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
-          </button>
-          <button class="lightbox__next" aria-label="Next image">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-          </button>
-        </div>
-      )}
-    </div>
-  </div>
 </div>
 
 <style>
@@ -170,104 +137,6 @@ const { images, productName } = Astro.props;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
   }
 
-  /* Lightbox */
-  .lightbox {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 9999;
-  }
-
-  .lightbox--active {
-    display: block;
-  }
-
-  .lightbox__overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.9);
-    cursor: zoom-out;
-  }
-
-  .lightbox__content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    max-width: 90vw;
-    max-height: 90vh;
-  }
-
-  .lightbox__image {
-    display: block;
-    max-width: 90vw;
-    max-height: 90vh;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-  }
-
-  .lightbox__close {
-    position: absolute;
-    top: var(--space-4);
-    right: var(--space-4);
-    background: rgba(0, 0, 0, 0.5);
-    border: none;
-    color: var(--color-white);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all var(--transition-fast);
-  }
-
-  .lightbox__close:hover {
-    background: rgba(0, 0, 0, 0.8);
-    transform: scale(1.1);
-  }
-
-  .lightbox__nav {
-    position: absolute;
-    top: 50%;
-    left: var(--space-4);
-    right: var(--space-4);
-    transform: translateY(-50%);
-    display: flex;
-    justify-content: space-between;
-    pointer-events: none;
-  }
-
-  .lightbox__prev,
-  .lightbox__next {
-    background: rgba(0, 0, 0, 0.5);
-    border: none;
-    color: var(--color-white);
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all var(--transition-fast);
-    pointer-events: auto;
-  }
-
-  .lightbox__prev:hover,
-  .lightbox__next:hover {
-    background: rgba(0, 0, 0, 0.8);
-    transform: scale(1.1);
-  }
-
   /* Responsive */
   @media (max-width: 768px) {
     .product-gallery__main-image {
@@ -277,39 +146,6 @@ const { images, productName } = Astro.props;
 
     .product-gallery__thumbnails {
       grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
-    }
-
-    .lightbox__content {
-      max-width: 95vw;
-      max-height: 85vh;
-    }
-
-    .lightbox__image {
-      width: 92vw;
-      height: auto;
-      max-height: 85vh;
-      object-fit: contain;
-    }
-
-    .lightbox__nav {
-      left: 50%;
-      right: auto;
-      transform: translateY(-50%) translateX(-50%);
-      width: 92vw;
-      max-width: 92vw;
-    }
-
-    .lightbox__prev,
-    .lightbox__next {
-      width: 40px;
-      height: 40px;
-    }
-
-    .lightbox__close {
-      top: var(--space-2);
-      right: var(--space-2);
-      width: 36px;
-      height: 36px;
     }
   }
 
@@ -327,41 +163,12 @@ const { images, productName } = Astro.props;
     .product-gallery__thumbnails {
       grid-template-columns: repeat(4, 1fr);
     }
-
-    .lightbox__content {
-      max-width: 98vw;
-      max-height: 80vh;
-    }
-
-    .lightbox__image {
-      width: 96vw;
-      height: auto;
-      max-height: 80vh;
-      object-fit: contain;
-    }
-
-    .lightbox__nav {
-      left: 50%;
-      right: auto;
-      transform: translateY(-50%) translateX(-50%);
-      width: 96vw;
-      max-width: 96vw;
-    }
-
-    .lightbox__close {
-      top: var(--space-1);
-      right: var(--space-1);
-      width: 32px;
-      height: 32px;
-    }
   }
 </style>
 
 <script>
   // Gallery functionality
   const mainImage = document.getElementById('mainImage') as HTMLImageElement;
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImage = document.getElementById('lightboxImage') as HTMLImageElement;
   let currentImageIndex = 0;
 
   // Get all images from data attributes
@@ -387,100 +194,16 @@ const { images, productName } = Astro.props;
     });
   });
 
-  // Lightbox functionality
-  if (mainImage && lightbox && lightboxImage) {
-    // Open lightbox
+  // Open lightbox on main image click
+  if (mainImage) {
     mainImage.addEventListener('click', () => {
-      lightboxImage.src = mainImage.src;
-      lightbox.classList.add('lightbox--active');
-      document.body.style.overflow = 'hidden';
-    });
-
-    // Close lightbox
-    const closeBtn = lightbox.querySelector('.lightbox__close');
-    const overlay = lightbox.querySelector('.lightbox__overlay');
-
-    [closeBtn, overlay].forEach(element => {
-      element?.addEventListener('click', () => {
-        lightbox.classList.remove('lightbox--active');
-        document.body.style.overflow = '';
-      });
-    });
-
-    // Navigation functions
-    const goToPrevImage = () => {
-      currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-      lightboxImage.src = images[currentImageIndex];
-      mainImage.src = images[currentImageIndex];
-      updateActiveThumbnail();
-    };
-
-    const goToNextImage = () => {
-      currentImageIndex = (currentImageIndex + 1) % images.length;
-      lightboxImage.src = images[currentImageIndex];
-      mainImage.src = images[currentImageIndex];
-      updateActiveThumbnail();
-    };
-
-    // Navigation buttons
-    if (images.length > 1) {
-      const prevBtn = lightbox.querySelector('.lightbox__prev');
-      const nextBtn = lightbox.querySelector('.lightbox__next');
-
-      prevBtn?.addEventListener('click', goToPrevImage);
-      nextBtn?.addEventListener('click', goToNextImage);
-    }
-
-    // Touch/Swipe functionality
-    let touchStartX = 0;
-    let touchEndX = 0;
-    const minSwipeDistance = 50; // minimum distance for swipe in pixels
-
-    const handleSwipe = () => {
-      const swipeDistance = touchEndX - touchStartX;
-
-      if (Math.abs(swipeDistance) > minSwipeDistance && images.length > 1) {
-        if (swipeDistance > 0) {
-          // Swipe right - go to previous image
-          goToPrevImage();
-        } else {
-          // Swipe left - go to next image
-          goToNextImage();
+      // Dispatch custom event for lightbox
+      document.dispatchEvent(new CustomEvent('openLightbox', {
+        detail: {
+          src: mainImage.src,
+          index: currentImageIndex
         }
-      }
-    };
-
-    lightbox.addEventListener('touchstart', (e) => {
-      touchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
-
-    lightbox.addEventListener('touchend', (e) => {
-      touchEndX = e.changedTouches[0].screenX;
-      handleSwipe();
-    }, { passive: true });
-
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-      if (lightbox.classList.contains('lightbox--active')) {
-        if (e.key === 'Escape') {
-          lightbox.classList.remove('lightbox--active');
-          document.body.style.overflow = '';
-        } else if (e.key === 'ArrowLeft' && images.length > 1) {
-          goToPrevImage();
-        } else if (e.key === 'ArrowRight' && images.length > 1) {
-          goToNextImage();
-        }
-      }
-    });
-  }
-
-  function updateActiveThumbnail() {
-    thumbnails.forEach((thumb, index) => {
-      if (index === currentImageIndex) {
-        thumb.classList.add('product-gallery__thumb--active');
-      } else {
-        thumb.classList.remove('product-gallery__thumb--active');
-      }
+      }));
     });
   }
 </script>

@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import ProductGallery from '../../components/products/ProductGallery.astro';
+import ProductLightbox from '../../components/products/ProductLightbox.astro';
 import ProductInfo from '../../components/products/ProductInfo.astro';
 import ProductTabs from '../../components/products/ProductTabs.astro';
 import RelatedProducts from '../../components/products/RelatedProducts.astro';
@@ -97,10 +98,10 @@ const product = {
       'Bučnost unutarnje': rawProduct.specifications?.soundLevel || 'N/A'
     },
     dimensions: {
-      'Unutarnja jedinica': rawProduct.specifications?.dimensions?.indoor || 'N/A',
-      'Vanjska jedinica': rawProduct.specifications?.dimensions?.outdoor || 'N/A',
-      'Težina unutarnje': rawProduct.specifications?.weight?.indoor || 'N/A',
-      'Težina vanjske': rawProduct.specifications?.weight?.outdoor || 'N/A'
+      'Unutarnja jedinica': formatDimensions(rawProduct.specifications?.dimensions?.indoor) || 'N/A',
+      'Vanjska jedinica': formatDimensions(rawProduct.specifications?.dimensions?.outdoor) || 'N/A',
+      'Težina unutarnje': formatWeight(rawProduct.specifications?.weight?.indoor) || 'N/A',
+      'Težina vanjske': formatWeight(rawProduct.specifications?.weight?.outdoor) || 'N/A'
     }
   },
   inStock: rawProduct.inStock,
@@ -160,7 +161,7 @@ const pageDescription = `${product.manufacturer} ${product.model} - Multi klima 
             <a href="/multi-klima" class="breadcrumb__link">Multi klima</a>
           </li>
           <li class="breadcrumb__item">
-            <span class="breadcrumb__current">{product.manufacturer} {product.model}</span>
+            <span class="breadcrumb__current">{product.manufacturer} {product.name}</span>
           </li>
         </ol>
       </div>
@@ -200,6 +201,7 @@ const pageDescription = `${product.manufacturer} ${product.model} - Multi klima 
 
   <Footer />
   <InquiryModal />
+  <ProductLightbox images={product.images} productName={product.name} />
 </BaseLayout>
 
 <style>

@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import ProductGallery from '../../components/products/ProductGallery.astro';
+import ProductLightbox from '../../components/products/ProductLightbox.astro';
 import ProductInfo from '../../components/products/ProductInfo.astro';
 import ProductTabs from '../../components/products/ProductTabs.astro';
 import RelatedProducts from '../../components/products/RelatedProducts.astro';
@@ -99,8 +100,10 @@ const product = {
       'Bučnost': rawProduct.specifications?.soundLevel || 'N/A'
     },
     dimensions: {
-      'Dimenzije jedinice': rawProduct.specifications?.dimensions?.indoor || rawProduct.specifications?.dimensions || 'N/A',
-      'Težina jedinice': rawProduct.specifications?.weight?.indoor || 'N/A'
+      'Dimenzije unutarnje jedinice': formatDimensions(rawProduct.specifications?.dimensions?.indoor) || 'N/A',
+      'Dimenzije vanjske jedinice': formatDimensions(rawProduct.specifications?.dimensions?.outdoor) || 'N/A',
+      'Težina unutarnje jedinice': formatWeight(rawProduct.specifications?.weight?.indoor) || 'N/A',
+      'Težina vanjske jedinice': formatWeight(rawProduct.specifications?.weight?.outdoor) || 'N/A'
     }
   },
   inStock: rawProduct.inStock,
@@ -160,7 +163,7 @@ const pageDescription = `${product.manufacturer} ${product.model} - Dizalica top
             <a href="/dizalice-topline" class="breadcrumb__link">Dizalice topline</a>
           </li>
           <li class="breadcrumb__item">
-            <span class="breadcrumb__current">{product.manufacturer} {product.model}</span>
+            <span class="breadcrumb__current">{product.manufacturer} {product.name}</span>
           </li>
         </ol>
       </div>
@@ -200,6 +203,7 @@ const pageDescription = `${product.manufacturer} ${product.model} - Dizalica top
 
   <Footer />
   <InquiryModal />
+  <ProductLightbox images={product.images} productName={product.name} />
 </BaseLayout>
 
 <style>

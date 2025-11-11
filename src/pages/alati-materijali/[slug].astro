@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/layout/Header.astro';
 import Footer from '../../components/layout/Footer.astro';
 import ProductGallery from '../../components/products/ProductGallery.astro';
+import ProductLightbox from '../../components/products/ProductLightbox.astro';
 import ProductInfo from '../../components/products/ProductInfo.astro';
 import ProductTabs from '../../components/products/ProductTabs.astro';
 import RelatedProducts from '../../components/products/RelatedProducts.astro';
@@ -87,6 +88,10 @@ const product = {
       ...(rawProduct.specifications?.material && { 'Materijal': rawProduct.specifications.material }),
       ...(rawProduct.specifications?.size && { 'Veličina': rawProduct.specifications.size }),
       ...(rawProduct.specifications?.quantity && { 'Količina': rawProduct.specifications.quantity })
+    },
+    dimensions: {
+      ...(rawProduct.specifications?.dimensions && { 'Dimenzije': formatDimensions(rawProduct.specifications.dimensions) }),
+      ...(rawProduct.specifications?.weight && { 'Težina': formatWeight(rawProduct.specifications.weight) })
     }
   },
   inStock: rawProduct.inStock,
@@ -148,7 +153,7 @@ const pageDescription = `${product.manufacturer ? product.manufacturer + ' ' : '
             <a href="/alati-materijali" class="breadcrumb__link">Alati i materijali</a>
           </li>
           <li class="breadcrumb__item">
-            <span class="breadcrumb__current">{product.manufacturer ? product.manufacturer + ' ' : ''}{product.model || product.name}</span>
+            <span class="breadcrumb__current">{product.manufacturer ? product.manufacturer + ' ' : ''}{product.name}</span>
           </li>
         </ol>
       </div>
@@ -188,6 +193,7 @@ const pageDescription = `${product.manufacturer ? product.manufacturer + ' ' : '
 
   <Footer />
   <InquiryModal />
+  <ProductLightbox images={product.images} productName={product.name} />
 </BaseLayout>
 
 <style>

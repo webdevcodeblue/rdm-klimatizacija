@@ -245,7 +245,27 @@
                       { label: 'SEER', name: 'seer', widget: 'number', value_type: 'float', required: false },
                       { label: 'SCOP', name: 'scop', widget: 'number', value_type: 'float', required: false },
                       { label: 'Bučnost', name: 'soundLevel', widget: 'string', required: false },
-                      { label: 'Rashladni plin', name: 'refrigerant', widget: 'string', default: 'R32', required: false }
+                      { label: 'Rashladni plin', name: 'refrigerant', widget: 'string', default: 'R32', required: false },
+                      {
+                        label: 'Dimenzije',
+                        name: 'dimensions',
+                        widget: 'object',
+                        required: false,
+                        fields: [
+                          { label: 'Unutarnja jedinica', name: 'indoor', widget: 'string', required: false, hint: 'Unesite dimenzije (npr. 890 x 310 x 220), mjerna jedinica mm će biti automatski dodana' },
+                          { label: 'Vanjska jedinica', name: 'outdoor', widget: 'string', required: false, hint: 'Unesite dimenzije (npr. 845 x 702 x 320), mjerna jedinica mm će biti automatski dodana' }
+                        ]
+                      },
+                      {
+                        label: 'Težina',
+                        name: 'weight',
+                        widget: 'object',
+                        required: false,
+                        fields: [
+                          { label: 'Unutarnja jedinica', name: 'indoor', widget: 'string', required: false, hint: 'Unesite samo broj (npr. 11), mjerna jedinica kg će biti automatski dodana' },
+                          { label: 'Vanjska jedinica', name: 'outdoor', widget: 'string', required: false, hint: 'Unesite samo broj (npr. 38), mjerna jedinica kg će biti automatski dodana' }
+                        ]
+                      }
                     ]
                   },
                   {
@@ -333,7 +353,27 @@
                       { label: 'SCOP', name: 'scop', widget: 'number', value_type: 'float', required: false },
                       { label: 'Temperatura', name: 'temperature', widget: 'string', required: false },
                       { label: 'Volumen bojlera', name: 'tankVolume', widget: 'string', required: false },
-                      { label: 'Rashladni plin', name: 'refrigerant', widget: 'string', default: 'R32', required: false }
+                      { label: 'Rashladni plin', name: 'refrigerant', widget: 'string', default: 'R32', required: false },
+                      {
+                        label: 'Dimenzije',
+                        name: 'dimensions',
+                        widget: 'object',
+                        required: false,
+                        fields: [
+                          { label: 'Unutarnja jedinica', name: 'indoor', widget: 'string', required: false, hint: 'Unesite dimenzije (npr. 890 x 310 x 220), mjerna jedinica mm će biti automatski dodana' },
+                          { label: 'Vanjska jedinica', name: 'outdoor', widget: 'string', required: false, hint: 'Unesite dimenzije (npr. 845 x 702 x 320), mjerna jedinica mm će biti automatski dodana' }
+                        ]
+                      },
+                      {
+                        label: 'Težina',
+                        name: 'weight',
+                        widget: 'object',
+                        required: false,
+                        fields: [
+                          { label: 'Unutarnja jedinica', name: 'indoor', widget: 'string', required: false, hint: 'Unesite samo broj (npr. 11), mjerna jedinica kg će biti automatski dodana' },
+                          { label: 'Vanjska jedinica', name: 'outdoor', widget: 'string', required: false, hint: 'Unesite samo broj (npr. 38), mjerna jedinica kg će biti automatski dodana' }
+                        ]
+                      }
                     ]
                   },
                   {
@@ -417,7 +457,26 @@
                       { label: 'Površina', name: 'area', widget: 'string', required: false },
                       { label: 'Energetska klasa', name: 'energyClass', widget: 'select', options: ['A+++', 'A++', 'A+', 'A', 'B', 'C', 'D'], required: false },
                       { label: 'Bučnost', name: 'soundLevel', widget: 'string', required: false },
-                      { label: 'Dimenzije', name: 'dimensions', widget: 'string', required: false, hint: 'Unesite dimenzije (npr. 400 x 300 x 200), mjerna jedinica cm će biti automatski dodana' }
+                      {
+                        label: 'Dimenzije',
+                        name: 'dimensions',
+                        widget: 'object',
+                        required: false,
+                        fields: [
+                          { label: 'Unutarnja jedinica', name: 'indoor', widget: 'string', required: false, hint: 'Unesite dimenzije (npr. 890 x 310 x 220), mjerna jedinica mm će biti automatski dodana' },
+                          { label: 'Vanjska jedinica', name: 'outdoor', widget: 'string', required: false, hint: 'Unesite dimenzije (npr. 845 x 702 x 320), mjerna jedinica mm će biti automatski dodana' }
+                        ]
+                      },
+                      {
+                        label: 'Težina',
+                        name: 'weight',
+                        widget: 'object',
+                        required: false,
+                        fields: [
+                          { label: 'Unutarnja jedinica', name: 'indoor', widget: 'string', required: false, hint: 'Unesite samo broj (npr. 11), mjerna jedinica kg će biti automatski dodana' },
+                          { label: 'Vanjska jedinica', name: 'outdoor', widget: 'string', required: false, hint: 'Unesite samo broj (npr. 38), mjerna jedinica kg će biti automatski dodana' }
+                        ]
+                      }
                     ]
                   },
                   {
@@ -498,7 +557,7 @@
                     fields: [
                       { label: 'Tip proizvoda', name: 'type', widget: 'string', required: false },
                       { label: 'Materijal', name: 'material', widget: 'string', required: false },
-                      { label: 'Dimenzije', name: 'dimensions', widget: 'string', required: false, hint: 'Unesite dimenzije (npr. 400 x 300 x 200), mjerna jedinica cm će biti automatski dodana' },
+                      { label: 'Dimenzije', name: 'dimensions', widget: 'string', required: false, hint: 'Unesite dimenzije (npr. 400 x 300 x 200), mjerna jedinica mm će biti automatski dodana' },
                       { label: 'Težina', name: 'weight', widget: 'string', required: false, hint: 'Unesite samo broj (npr. 25), mjerna jedinica kg će biti automatski dodana' }
                     ]
                   },

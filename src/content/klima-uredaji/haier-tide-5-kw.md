@@ -13,7 +13,7 @@ images:
   - /images/products/TIDE-PLUS-vanjska-1058x446-2.jpg
   - /images/products/Haier_Tide_4_1.jpg
 badge: Premium
-featured: true
+featured: false
 onSale: true
 popular: true
 specifications:

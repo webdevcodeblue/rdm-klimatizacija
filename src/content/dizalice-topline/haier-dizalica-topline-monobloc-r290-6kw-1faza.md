@@ -13,7 +13,7 @@ images:
   - /images/products/haier-dizalica-topline-monobloc-r290-03.webp
   - /images/products/haier-dizalica-topline-monobloc-r290-04.webp
 badge: Bestseller
-featured: true
+featured: false
 onSale: true
 popular: true
 specifications:

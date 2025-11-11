@@ -1,15 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
 import ProductCard from '../products/ProductCard.astro';
+import { CATEGORY_PATHS } from '../../config/categories';
 
-// Category configuration for paths
-const categoryPaths: Record<string, string> = {
-  'klima-uredaji': '/klima-uredaji',
-  'multi-klima': '/multi-klima',
-  'dizalice-topline': '/dizalice-topline',
-  'mikroklima': '/mikroklima',
-  'alati-materijali': '/alati-materijali'
-};
+// Use centralized category configuration
+const categoryPaths = CATEGORY_PATHS;
 
 // Collect all featured products from all categories
 const allFeaturedProducts: Array<{ entry: any; categoryPath: string }> = [];

@@ -16,7 +16,7 @@ images:
   - /images/products/Haier-Flexis-Plus-Multi-ODU-scaled-05.jpg
   - /images/products/Haier-Flexis-Plus-Multi-remote-controller-06.png
 badge: Bestseller
-featured: true
+featured: false
 onSale: true
 popular: true
 specifications:

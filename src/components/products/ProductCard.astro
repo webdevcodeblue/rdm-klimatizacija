@@ -33,21 +33,11 @@ export interface Props {
   viewMode?: 'grid' | 'list';
 }
 
+import { getCategoryPath } from '../../config/categories';
+
 const { product, viewMode = 'grid' } = Astro.props;
 
 // Use custom href if provided, otherwise build from category
-const getCategoryPath = (category: string) => {
-  const categoryMap: { [key: string]: string } = {
-    'klima-uredaji': '/klima-uredaji',
-    'multi-klima': '/multi-klima',
-    'dizalice-topline': '/dizalice-topline',
-    'mikroklima': '/mikroklima',
-    'alati-materijali': '/alati-materijali',
-    'montaza-servis': '/montaza-servis'
-  };
-  return categoryMap[category] || '/proizvodi';
-};
-
 const productHref = product.href || `${getCategoryPath(product.category)}/${product.slug}`;
 
 // Informacijski list button - otvara PDF ako postoji, inače stranicu proizvoda

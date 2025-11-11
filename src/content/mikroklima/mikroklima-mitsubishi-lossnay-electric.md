@@ -8,7 +8,7 @@ price: 495
 warranty: 2 godine
 inStock: true
 image: /images/products/mikroklima-rekuperator-zraka-mitsubishi-electric.jpg
-featured: false
+featured: true
 onSale: true
 popular: false
 specifications:

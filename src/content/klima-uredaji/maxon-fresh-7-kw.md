@@ -14,7 +14,7 @@ images:
   - /images/products/Maxon_vanjska_01.jpg
   - /images/products/Maxon_vanjska_02.jpg
 badge: Premium
-featured: true
+featured: false
 onSale: true
 popular: true
 specifications:

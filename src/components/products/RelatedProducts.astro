@@ -3,9 +3,10 @@ import ProductCard from './ProductCard.astro';
 
 export interface Props {
   products: any[];
+  currentCategory?: string; // Category of the current product
 }
 
-const { products } = Astro.props;
+const { products, currentCategory } = Astro.props;
 
 // Format products for ProductCard component
 const formattedProducts = products.map(p => ({
@@ -13,7 +14,7 @@ const formattedProducts = products.map(p => ({
   slug: p.slug,
   name: p.name,
   manufacturer: p.manufacturer,
-  category: p.category || 'Klima uređaji',
+  category: p.category || 'klima-uredaji',
   price: p.price,
   originalPrice: p.originalPrice,
   power: p.specifications.power || p.specifications.cooling,
@@ -29,6 +30,13 @@ const formattedProducts = products.map(p => ({
   inStock: p.inStock !== false,
   href: p.href
 }));
+
+// Use centralized category configuration
+import { CATEGORY_PATHS } from '../../config/categories';
+
+const categoryPath = currentCategory
+  ? CATEGORY_PATHS[currentCategory as keyof typeof CATEGORY_PATHS] || '/klima-uredaji'
+  : CATEGORY_PATHS[formattedProducts[0]?.category as keyof typeof CATEGORY_PATHS] || '/klima-uredaji';
 ---
 
 <section class="related-section">
@@ -63,7 +71,7 @@ const formattedProducts = products.map(p => ({
   )}
 
   <div class="related-section__footer">
-    <a href="/proizvodi" class="related-section__link">
+    <a href={categoryPath} class="related-section__link">
       Pogledajte svu ponudu
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="5" y1="12" x2="19" y2="12"></line>

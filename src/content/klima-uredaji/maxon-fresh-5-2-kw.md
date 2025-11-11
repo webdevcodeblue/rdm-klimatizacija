@@ -1,8 +1,8 @@
 ---
 uniqueId: maxon-fresh-5-2-kw
 manufacturer: Maxon
-name: Fresh 2,6 kW
-model: Maxon Fresh R32 2,6 kW
+name: Fresh 5,2 kW
+model: Maxon Fresh R32 5,6 kW
 category: klima-uredaji
 price: 789
 warranty: 5 godina

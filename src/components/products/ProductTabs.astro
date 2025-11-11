@@ -302,6 +302,32 @@ function getFileType(url: string): string {
     color: var(--color-primary-hover);
   }
 
+  /* YouTube Embed Styles */
+  :global(.youtube-embed-wrapper) {
+    margin: var(--space-6) 0;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    background: var(--color-black);
+  }
+
+  :global(.youtube-embed-container) {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+  }
+
+  :global(.youtube-embed-container iframe) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
   .features-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -600,4 +626,132 @@ function getFileType(url: string): string {
       });
     });
   });
+
+  // YouTube URL to Embed conversion
+  function extractYouTubeId(url) {
+    const patterns = [
+      /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/,
+      /(?:https?:\/\/)?(?:www\.)?youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
+      /(?:https?:\/\/)?(?:www\.)?youtube\.com\/v\/([a-zA-Z0-9_-]{11})/,
+      /(?:https?:\/\/)?youtu\.be\/([a-zA-Z0-9_-]{11})/,
+      /(?:https?:\/\/)?(?:www\.)?youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/
+    ];
+
+    for (const pattern of patterns) {
+      const match = url.match(pattern);
+      if (match && match[1]) {
+        return match[1];
+      }
+    }
+
+    return null;
+  }
+
+  function embedYouTubeVideos() {
+    const descriptionDiv = document.querySelector('.description');
+    if (!descriptionDiv) return;
+
+    // Find all text nodes and links in the description
+    const walker = document.createTreeWalker(
+      descriptionDiv,
+      NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT,
+      null
+    );
+
+    const nodesToReplace = [];
+    let node;
+
+    while (node = walker.nextNode()) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const text = node.textContent || '';
+        const youtubePattern = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/v\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})(?:[^\s]*)?/gi;
+
+        if (youtubePattern.test(text)) {
+          nodesToReplace.push({ node, text });
+        }
+      } else if (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'A') {
+        const href = node.getAttribute('href') || '';
+        const videoId = extractYouTubeId(href);
+
+        if (videoId) {
+          nodesToReplace.push({ node, isLink: true, videoId, href });
+        }
+      }
+    }
+
+    // Replace nodes with embedded videos
+    nodesToReplace.forEach(item => {
+      if (item.isLink) {
+        // Replace link with embedded video
+        const embedDiv = document.createElement('div');
+        embedDiv.className = 'youtube-embed-wrapper';
+        embedDiv.innerHTML = `
+          <div class="youtube-embed-container">
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/${item.videoId}?rel=0&modestbranding=1"
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+              loading="lazy"
+            ></iframe>
+          </div>
+        `;
+
+        item.node.parentNode?.replaceChild(embedDiv, item.node);
+      } else {
+        // Replace text node with embedded video
+        const text = item.text;
+        const youtubePattern = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/v\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})(?:[^\s]*)?/gi;
+
+        const fragment = document.createDocumentFragment();
+        let lastIndex = 0;
+        let match;
+
+        while ((match = youtubePattern.exec(text)) !== null) {
+          const videoId = match[1];
+
+          // Add text before the URL
+          if (match.index > lastIndex) {
+            const textNode = document.createTextNode(text.substring(lastIndex, match.index));
+            fragment.appendChild(textNode);
+          }
+
+          // Add embedded video
+          const embedDiv = document.createElement('div');
+          embedDiv.className = 'youtube-embed-wrapper';
+          embedDiv.innerHTML = `
+            <div class="youtube-embed-container">
+              <iframe
+                src="https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                loading="lazy"
+              ></iframe>
+            </div>
+          `;
+          fragment.appendChild(embedDiv);
+
+          lastIndex = youtubePattern.lastIndex;
+        }
+
+        // Add remaining text
+        if (lastIndex < text.length) {
+          const textNode = document.createTextNode(text.substring(lastIndex));
+          fragment.appendChild(textNode);
+        }
+
+        item.node.parentNode?.replaceChild(fragment, item.node);
+      }
+    });
+  }
+
+  // Run on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', embedYouTubeVideos);
+  } else {
+    embedYouTubeVideos();
+  }
 </script>

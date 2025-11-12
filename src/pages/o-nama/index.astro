@@ -237,7 +237,7 @@ const pageDescription = 'Saznajte više o RDM Klimatizaciji - vašem pouzdanom p
             </svg>
           </div>
           <h3 class="team-member__name">Ime Prezime</h3>
-          <p class="team-member__role">Tehnički savjetnik</p>
+          <p class="team-member__role">Servisni tehničar</p>
           <p class="team-member__bio">Ovdje kratki opis o članu tima...</p>
         </div>
 
@@ -1023,6 +1023,27 @@ const pageDescription = 'Saznajte više o RDM Klimatizaciji - vašem pouzdanom p
   }
 
   @media (max-width: 768px) {
+    /* Disable animations on mobile */
+    .stats::after {
+      display: none;
+    }
+
+    .hero__background {
+      animation: none;
+    }
+
+    .hero__overlay {
+      animation: none;
+    }
+
+    .hero__content {
+      animation: none;
+    }
+
+    .cta-box::before {
+      animation: none;
+    }
+
     .hero__title {
       font-size: var(--text-4xl);
     }

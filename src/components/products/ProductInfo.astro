@@ -832,25 +832,68 @@ const modelParts = splitModelIntoParts(product.model || '');
 </style>
 
 <script>
-  // Share functionality
-  const shareBtn = document.querySelector('[data-action="share"]');
-  if (shareBtn) {
-    shareBtn.addEventListener('click', async () => {
-      if (navigator.share) {
-        try {
-          await navigator.share({
-            title: document.title,
-            url: window.location.href
-          });
-        } catch (err) {
-          console.log('Share cancelled');
+  // Share functionality - works on ALL share buttons (desktop and mobile)
+  const shareButtons = document.querySelectorAll('[data-action="share"]');
+
+  shareButtons.forEach((shareBtn) => {
+    if (shareBtn) {
+      shareBtn.addEventListener('click', async (e) => {
+        // Prevent default action
+        e.preventDefault();
+
+        // Check if Web Share API is available (usually on mobile devices)
+        if (navigator.share) {
+          try {
+            await navigator.share({
+              title: document.title,
+              text: 'Pogledajte ovaj proizvod',
+              url: window.location.href
+            });
+            console.log('Successfully shared');
+          } catch (err) {
+            // User cancelled share or error occurred
+            if (err.name !== 'AbortError') {
+              console.error('Error sharing:', err);
+              // Fallback to clipboard
+              fallbackCopyToClipboard();
+            }
+          }
+        } else {
+          // Fallback for browsers that don't support Web Share API (desktop)
+          fallbackCopyToClipboard();
         }
-      } else {
-        // Fallback - copy to clipboard
-        navigator.clipboard.writeText(window.location.href);
+      });
+    }
+  });
+
+  // Fallback function to copy link to clipboard
+  function fallbackCopyToClipboard() {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(window.location.href)
+        .then(() => {
+          alert('Link kopiran u clipboard!');
+        })
+        .catch((err) => {
+          console.error('Failed to copy link:', err);
+          alert('Greška pri kopiranju linka.');
+        });
+    } else {
+      // Old browser fallback
+      const textArea = document.createElement('textarea');
+      textArea.value = window.location.href;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
         alert('Link kopiran u clipboard!');
+      } catch (err) {
+        console.error('Fallback copy failed:', err);
+        alert('Greška pri kopiranju linka.');
       }
-    });
+      document.body.removeChild(textArea);
+    }
   }
 
   // Inquiry button functionality - open modal with product data

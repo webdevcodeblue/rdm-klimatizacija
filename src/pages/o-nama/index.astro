@@ -49,13 +49,16 @@ const pageDescription = 'Saznajte više o RDM Klimatizaciji - vašem pouzdanom p
         <div class="story__content">
           <h2 class="story__title">Naša priča</h2>
           <p class="story__text">
-            RDM Klimatizacija je specijalizirani web katalog za HVAC opremu (klima uređaji, dizalice topline, ventilacijski sustavi) koji omogućava profesionalnu prezentaciju proizvoda s naprednim mogućnostima upravljanja sadržajem.
+            <strong>RDM Klimatizacija</strong> je specijalizirana trgovina za HVAC opremu s bogatim asortimanom klima uređaja, dizalica topline i ventilacijskih sustava renomiranih svjetskih brendova kao što su Toshiba, Haier i Maxon.
           </p>
           <p class="story__text">
-            Od samog početka, naš cilj je bio stvoriti platformu koja omogućava jednostavno pregledavanje i upravljanje širokim spektrom od 50-100 proizvoda, s naglaskom na "Pošalji upit" funkcionalnost umjesto klasične e-trgovine.
+            Od samog početka, naš cilj je bio pružiti klijentima najbolji izbor proizvoda uz stručnu podršku pri odabiru rješenja prilagođenih njihovim potrebama. Bilo da tražite sustav za hlađenje, grijanje ili ventilaciju vašeg doma ili poslovnog prostora, naš tim je tu da vam pomogne pronaći idealnu opciju.
           </p>
           <p class="story__text">
-            Kroz godine rada razvili smo stručnost i znanje koje nam omogućava da svojim klijentima ponudimo najbolja rješenja za klimatizaciju, grijanje i hlađenje prostora, prilagođena individualnim potrebama.
+            Uz prodaju opreme, <strong>RM Frigo Team</strong> — naš instalacijski i servisni tim — brine se o profesionalnoj ugradnji isključivo proizvoda kupljenih u našim trgovinama, te pruža redoviti servis i održavanje kako bi vaši uređaji uvijek radili besprijekorno.
+          </p>
+          <p class="story__text">
+            Kroz godine rada izgradili smo reputaciju pouzdanog partnera koji kombinira kvalitetne proizvode, stručnost i potpunu podršku - od odabira do ugradnje i servisa.
           </p>
           <div class="story__features">
             <div class="story__feature">
@@ -63,21 +66,22 @@ const pageDescription = 'Saznajte više o RDM Klimatizaciji - vašem pouzdanom p
                 <path d="M9 11l3 3L22 4"></path>
                 <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>
               </svg>
-              <span>Profesionalna kvaliteta agencijske razine</span>
+              <span>Vrhunski brendovi (Toshiba, Haier, Maxon)</span>
             </div>
             <div class="story__feature">
               <svg class="story__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="11" width="18" height="10" rx="2" ry="2"></rect>
-                <path d="M7 11V7a5 5 0 0110 0v4"></path>
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
               </svg>
-              <span>100% responzivan dizajn</span>
+              <span>Profesionalna ugradnja i servis (RM Frigo Team)</span>
             </div>
             <div class="story__feature">
               <svg class="story__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
               </svg>
-              <span>Brza i efikasna usluga</span>
+              <span>Stručno savjetovanje i personalizirani pristup</span>
             </div>
           </div>
         </div>
@@ -335,7 +339,7 @@ const pageDescription = 'Saznajte više o RDM Klimatizaciji - vašem pouzdanom p
   /* Hero Section */
   .hero {
     position: relative;
-    min-height: 500px;
+    min-height: 300px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -374,7 +378,7 @@ const pageDescription = 'Saznajte više o RDM Klimatizaciji - vašem pouzdanom p
     position: relative;
     text-align: center;
     color: var(--color-white);
-    padding: var(--space-12) var(--space-4);
+    padding: var(--space-8) var(--space-4);
     animation: fadeInUp 1s ease-out;
   }
 
@@ -1040,6 +1044,10 @@ const pageDescription = 'Saznajte više o RDM Klimatizaciji - vašem pouzdanom p
       display: none;
     }
 
+    .hero {
+      min-height: 250px;
+    }
+
     .hero__background {
       animation: none;
     }
@@ -1050,6 +1058,7 @@ const pageDescription = 'Saznajte više o RDM Klimatizaciji - vašem pouzdanom p
 
     .hero__content {
       animation: none;
+      padding: var(--space-6) var(--space-4);
     }
 
     .cta-box::before {

@@ -379,6 +379,11 @@ const discountPercentage = product.originalPrice && product.price
     height: 100%;
   }
 
+  /* Fiksna visina za grid view kartice */
+  .product-card--grid {
+    height: 580px;
+  }
+
   .product-card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-card-hover);
@@ -443,7 +448,7 @@ const discountPercentage = product.originalPrice && product.price
 
   .product-card__image {
     position: relative;
-    height: 250px;
+    height: 200px;
     background: var(--color-gray-50);
     overflow: hidden;
     display: flex;
@@ -469,6 +474,12 @@ const discountPercentage = product.originalPrice && product.price
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+  }
+
+  /* Fiksna visina glavnog content dijela u grid view */
+  .product-card--grid .product-card__main {
+    height: 220px;
+    overflow: hidden;
   }
 
   .product-card__header {

@@ -28,70 +28,41 @@ infoSheet: null
 ---
 <!--StartFragment-->
 
-Rekuperator zraka Mitsubishi Electric VL-100EU5-E Lossnay
+### **Rekuperator zraka Mitsubishi Electric VL-100EU5-E Lossnay**
 
+**Mitsubishi Electric VL-100EU5-E Lossnay** zidna rekuperatorska jedinica omogućuje **energetski učinkovitu ventilaciju** prostora uz istovremeni **povrat topline** iz odlaznog zraka. Sustav osigurava **stalnu opskrbu svježim, filtriranim zrakom** bez gubitka topline, što doprinosi zdravijem i ugodnijem boravku u zatvorenom prostoru.
 
+Zahvaljujući **kompaktnom dizajnu bez ventilacijskih kanala**, Lossnay VL100 idealan je za stanove, kuće i objekte u kojima nema mogućnosti za složeniju instalaciju sustava s izmjenjivačem topline.
 
-#### Zidna VL100 rekuperatorska jedinica za povrat svježeg zraka omogućuje energetski učinkovitu ventilaciju kako bi se osiguralo da pojedine prostorije imaju stalnu opskrbu zdravim, svježim zrakom uz dodatnu korist istovremeno iskorištavanja topline. A budući da je jedinica dizajnirana bez kanala, to znači da je sustav idealan za kuće i zgrade u kojima nema krovnog prostora za ugradnju izmjenjivača topline.
+- - -
 
- 
+### **Napredno rješenje za svjež i zdrav zrak**
 
-**Rješenja za odzračivanje topline za uravnoteženi tlak**
+Lossnay koristi **patentirani izmjenjivač topline** koji učinkovito vraća energiju iz toplog odlaznog zraka u svježi ulazni zrak, čime se smanjuju gubici energije i poboljšava kvaliteta zraka. Rezultat je **uravnotežena ventilacija**, optimalna vlažnost i manja potreba za dodatnim grijanjem.
 
-#### Rekuperator Mitsubishi Electric napredni je sustav za povrat svježeg zraka koji hvata i filtrira svježi vanjski zrak (za razliku od potkrovljenog zraka) kako bi zamijenio zatvoreni ustaljeni zrak za sve zdraviji, sušiji i topliji dom. Ali ono zbog čega se Lossnay toliko razlikuje od ostalih ventilacijskih sustava je naš patentirani izmjenjivač topline, što je tajna mogućnosti obnavljanja topline ventilacijske jedinice i pruža nekoliko važnih prednosti.
+Sustav kontinuirano dovodi **čist, suhi i ugodno topao zrak** te istovremeno uklanja vlagu, CO₂, mirise i druge zagađivače iz prostora.
 
+- - -
 
+### **Glavne prednosti uređaja**
 
- 
+* 🌬️ **Poboljšana kvaliteta zraka** – dovodi svjež, filtriran zrak i uklanja ustajali.
+* 🔁 **Povrat topline do 80%** – smanjuje troškove grijanja i hlađenja.
+* 🌡️ **Energetska učinkovitost** – prethodno zagrijava svježi zrak i smanjuje opterećenje sustava grijanja.
+* 🤫 **Tih rad (25 dB)** – idealan za spavaće sobe i dnevne prostore.
+* 💧 **Kontrola vlage i kondenzacije** – sprječava pojavu plijesni i zadržavanje vlage.
+* 🔧 **Jednostavna instalacija** – potreban samo provrt za dva instalacijska otvora, svi dijelovi uključeni.
+* 🧼 **Jednostavno održavanje** – filtri se lako uklanjaju i čiste za optimalan rad.
+* 🪟 **Svjež zrak bez otvaranja prozora** – manja buka, bolja sigurnost i stalna ventilacija.
+* 🩺 **Zdraviji dom** – posebno pogodno za osobe koje pate od alergija i astme.
 
-**Prednosti VL100 ventilacija za povrat energije:**
+- - -
 
-* Poboljšava kvalitetu zraka
-* Cirkulira svježi zrak bez propuha
-* Energija se oporavlja od ustajalog odlaznog zraka
-* Uklanja ustajali zrak
-* Balansirana ventilacija
-* Idealno za sobe u modernim kućama koje su više nepropusne za zrak
+### **Zašto odabrati Lossnay VL-100EU5-E?**
 
-####   Dobro prozračena soba od vitalnog je značaja jer održava kvalitetu zraka; stvarajući zdravije i ugodnije okruženje. Mitsubishi Electric ventilacijski sustav patentirano je rješenje za odzračivanje energije koje koristi svježi vanjski zrak za prozračivanje prostorije. Sustav djeluje tako da izvlači ustajali zrak iz prostorije i zamjenjuje ga svježim zrakom izvana, a pritom vraća toplinsku energiju iz prostornog zraka.
+Ovaj **rekuperator zraka** nudi idealnu kombinaciju **učinkovitosti, jednostavnosti i udobnosti**. Lossnay tehnologija osigurava stalnu ventilaciju prostora bez gubitka topline, smanjuje vlagu i stvaranje kondenzacije te doprinosi stvaranju zdravije mikroklime u domu.
 
-     
-
-### Jednostavna instalacija
-
-Jednostavna ugradnja kroz provrtanje 2 instalacijska otvora. Svi dijelovi potrebni za instalaciju uključeni su s jedinicom.     
-
-### Jednostavno održavanje
-
-Filtri se mogu ukloniti za redovito čišćenje kako bi uređaj bio u optimalnom radnom stanju.     
-
-### Dizajn s niskom bukom
-
-Davanjem raspona volumena zraka za svaku brzinu ventilatora, razina zvuka može se smanjiti da bi se postigla minimalna buka. (25dB pri maloj brzini ventilatora).     
-
-### Poboljšana kvaliteta zraka
-
-Uvlačenjem svježeg vanjskog zraka poboljšava se kvaliteta zraka u zatvorenom jer se iz vašeg doma uklanjaju visoki nivoi CO2, mirisi i drugi zagađivači.     
-
-### Stvara zdraviji dom
-
-Filtrirani svježi zrak poboljšava kvalitetu zraka za osobe koje pate od alergije i astme.     
-
-### Svježi zrak bez otvaranja prozora
-
-Lossnay vam omogućuje da imate dobro prozračenu kuću bez potrebe za otvaranjem prozora. To poboljšava sigurnost vašeg doma i obitelji i znači da je buka na otvorenom svedena na minimum.     
-
-### Pomaže kontroli vlage i kondenzacije
-
-Rekuperator učinkovito smanjuje vlagu u vašem domu direktnim uklanjanjem ustajalog zraka koji uzrokuje kondenzaciju.     
-
-### Energetski učinkovit
-
-Dolazni svježi zrak je prethodno zagrijan, tako da vaš sustav grijanja ne zahtijeva toliko dodatnog zagrijavanja kako bi se postigla željena temperatura. To je visoko energetski učinkovito i može pomoći u smanjivanju računa za grijanje.     
-
-### Zadržava toplinu
-
-Jedinstvena tehnologija rekuperatora vraća do 80%  prikupljene toplinske energije u odlaznom zraku koja se zatim koristi za prethodno zagrijavanje ili hlađenje svježeg zraka koji se odzračuje.\
+**Mitsubishi Electric Lossnay VL-100EU5-E** – pametno, tiho i energetski učinkovito rješenje za svjež zrak u vašem domu.\
 https://www.youtube.com/watch?v=0FQYerzFtFo
 
 <!--EndFragment-->

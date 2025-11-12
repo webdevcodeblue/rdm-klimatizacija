@@ -257,6 +257,19 @@ const discountPercentage = product.originalPrice && product.price
           )}
         </div>
       )}
+
+      {viewMode === 'grid' && product.category === 'montaza-servis' && product.features?.length > 0 && (
+        <div class="product-card__service-details-grid">
+          <ul class="service-details__list-grid">
+            {product.features.slice(0, 3).map((feature) => (
+              <li>{feature}</li>
+            ))}
+          </ul>
+          {product.features.length > 3 && (
+            <span class="feature-tag feature-tag--more">+{product.features.length - 3} više</span>
+          )}
+        </div>
+      )}
     </div>
 
     {viewMode === 'list' && (
@@ -1302,6 +1315,51 @@ const discountPercentage = product.originalPrice && product.price
     left: 0;
     color: #10b981;
     font-weight: bold;
+  }
+
+  /* Service details for montaza-servis in GRID view */
+  .product-card--grid .product-card__service-details-grid {
+    padding: 12px;
+    background: #f8fafc;
+    border-left: 3px solid #10b981;
+    border-radius: 4px;
+    margin-top: 12px;
+  }
+
+  .product-card--grid .service-details__list-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .product-card--grid .service-details__list-grid li {
+    font-size: 11px;
+    line-height: 1.5;
+    color: #475569;
+    padding-left: 16px;
+    position: relative;
+    margin-bottom: 6px;
+  }
+
+  .product-card--grid .service-details__list-grid li:last-child {
+    margin-bottom: 0;
+  }
+
+  .product-card--grid .service-details__list-grid li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #10b981;
+    font-weight: bold;
+  }
+
+  .product-card--grid .product-card__service-details-grid .feature-tag--more {
+    display: block;
+    margin-top: 8px;
+    text-align: center;
+    font-size: 11px;
+    color: #6b7280;
+    font-weight: 600;
   }
 
   /* Action buttons */

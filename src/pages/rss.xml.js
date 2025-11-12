@@ -1,13 +1,14 @@
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
+import { SITE_CONFIG, getImageUrl } from '../config/site';
 
 export async function GET(context) {
   const blog = await getCollection('blog');
 
   return rss({
-    title: 'RDM Klimatizacija Blog',
+    title: `${SITE_CONFIG.company.name} Blog`,
     description: 'Najnoviji članci o klima uređajima, dizalicama topline, ventilaciji i energetskoj učinkovitosti.',
-    site: context.site || 'https://rdm-klimatizacija.hr',
+    site: SITE_CONFIG.url,
     items: blog
       .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime())
       .map((post) => ({
@@ -15,20 +16,20 @@ export async function GET(context) {
         description: post.data.excerpt || post.data.description,
         pubDate: new Date(post.data.publishDate),
         link: `/blog/${post.slug}/`,
-        author: post.data.author || 'RDM Klimatizacija',
+        author: post.data.author || SITE_CONFIG.company.name,
         categories: post.data.tags || [],
         content: post.body ? post.body.substring(0, 500) + '...' : undefined,
       })),
     customData: `
       <language>hr-HR</language>
-      <copyright>Copyright ${new Date().getFullYear()} RDM Klimatizacija</copyright>
+      <copyright>Copyright ${new Date().getFullYear()} ${SITE_CONFIG.company.name}</copyright>
       <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
       <generator>Astro v${import.meta.env.ASTRO_VERSION || '3.0.0'}</generator>
-      <webMaster>info@rdm-klimatizacija.hr (RDM Klimatizacija)</webMaster>
+      <webMaster>${SITE_CONFIG.contact.email} (${SITE_CONFIG.company.name})</webMaster>
       <image>
-        <url>https://rdm-klimatizacija.hr/images/logo.png</url>
-        <title>RDM Klimatizacija Blog</title>
-        <link>https://rdm-klimatizacija.hr</link>
+        <url>${getImageUrl(SITE_CONFIG.brand.logo)}</url>
+        <title>${SITE_CONFIG.company.name} Blog</title>
+        <link>${SITE_CONFIG.url}</link>
       </image>
       <ttl>60</ttl>
     `,

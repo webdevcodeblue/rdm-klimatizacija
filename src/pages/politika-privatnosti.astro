@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import InquiryModal from '../components/InquiryModal.astro';
+import { SITE_CONFIG } from '../config/site';
 ---
 
 <BaseLayout
@@ -85,7 +86,7 @@ import InquiryModal from '../components/InquiryModal.astro';
                 </div>
                 <div class="info-card__row">
                   <span class="info-card__label">Adresa:</span>
-                  <span class="info-card__value">Potočka ulica 28, 48260 Križevci</span>
+                  <span class="info-card__value">{SITE_CONFIG.contact.address.formatted}</span>
                 </div>
                 <div class="info-card__row">
                   <span class="info-card__label">Email:</span>
@@ -405,7 +406,7 @@ import InquiryModal from '../components/InquiryModal.astro';
                   </svg>
                   <div>
                     <strong>Adresa:</strong>
-                    <span>Potočka ulica 28, 48260 Križevci</span>
+                    <span>{SITE_CONFIG.contact.address.formatted}</span>
                   </div>
                 </div>
               </div>

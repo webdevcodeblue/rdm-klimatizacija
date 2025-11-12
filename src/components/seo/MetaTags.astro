@@ -1,4 +1,6 @@
 ---
+import { SITE_CONFIG, getImageUrl } from '../../config/site';
+
 export interface Props {
   title?: string;
   description?: string;
@@ -12,19 +14,19 @@ export interface Props {
 }
 
 const {
-  title = 'RDM Klimatizacija - Profesionalna ugradnja i servis klima uređaja',
-  description = 'RDM Klimatizacija - voditelj u prodaji, ugradnji i servisu klima uređaja, dizalica topline i ventilacijskih sustava u Hrvatskoj. Ovlašteni serviser za Mitsubishi, Daikin, Gree.',
-  image = '/images/og-image.jpg',
+  title = SITE_CONFIG.seo.defaultTitle,
+  description = SITE_CONFIG.seo.defaultDescription,
+  image = SITE_CONFIG.seo.ogImage,
   canonicalURL = Astro.url.href,
   type = 'website',
   publishedTime,
   modifiedTime,
-  author = 'RDM Klimatizacija',
-  keywords = 'klima uređaji, dizalice topline, servis klima, ugradnja klima, Mitsubishi, Daikin, Gree, ventilacija'
+  author = SITE_CONFIG.company.name,
+  keywords = SITE_CONFIG.seo.defaultKeywords
 } = Astro.props;
 
-const siteUrl = 'https://rdm-klimatizacija.hr';
-const fullImageUrl = image.startsWith('http') ? image : `${siteUrl}${image}`;
+const siteUrl = SITE_CONFIG.url;
+const fullImageUrl = getImageUrl(image);
 ---
 
 <!-- Primary Meta Tags -->
@@ -82,10 +84,10 @@ const fullImageUrl = image.startsWith('http') ? image : `${siteUrl}${image}`;
 <meta name="format-detection" content="telephone=yes" />
 
 <!-- Geo Tags for Local SEO -->
-<meta name="geo.region" content="HR" />
-<meta name="geo.placename" content="Zagreb" />
-<meta name="geo.position" content="45.8150;15.9819" />
-<meta name="ICBM" content="45.8150, 15.9819" />
+<meta name="geo.region" content={SITE_CONFIG.contact.address.countryCode} />
+<meta name="geo.placename" content={SITE_CONFIG.contact.address.city} />
+<meta name="geo.position" content={`${SITE_CONFIG.contact.address.coordinates.latitude};${SITE_CONFIG.contact.address.coordinates.longitude}`} />
+<meta name="ICBM" content={`${SITE_CONFIG.contact.address.coordinates.latitude}, ${SITE_CONFIG.contact.address.coordinates.longitude}`} />
 
 <!-- Language alternates -->
 <link rel="alternate" hreflang="hr" href={canonicalURL} />

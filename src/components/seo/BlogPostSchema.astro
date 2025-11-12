@@ -1,4 +1,6 @@
 ---
+import { SITE_CONFIG, getImageUrl, getFullUrl } from '../../config/site';
+
 // BlogPosting Schema Component for SEO
 // Generates JSON-LD structured data for blog posts
 
@@ -16,8 +18,8 @@ export interface Props {
 }
 
 const { post } = Astro.props;
-const siteUrl = 'https://rdm-klimatizacija.hr';
-const currentUrl = `${siteUrl}${Astro.url.pathname}`;
+const siteUrl = SITE_CONFIG.url;
+const currentUrl = getFullUrl(Astro.url.pathname);
 
 // Format date to ISO string
 const publishDate = post.date instanceof Date
@@ -32,25 +34,23 @@ const blogPostingSchema = {
   description: post.description,
   author: {
     '@type': 'Person',
-    name: post.author || 'RDM Klimatizacija Tim',
+    name: post.author || `${SITE_CONFIG.company.name} Tim`,
     url: siteUrl
   },
   publisher: {
     '@type': 'Organization',
-    name: 'RDM Klimatizacija',
-    url: siteUrl,
+    name: SITE_CONFIG.company.name,
+    url: SITE_CONFIG.url,
     logo: {
       '@type': 'ImageObject',
-      url: `${siteUrl}/logo.png`,
+      url: getImageUrl(SITE_CONFIG.brand.logo),
       width: 200,
       height: 60
     }
   },
   datePublished: publishDate,
   dateModified: publishDate,
-  image: post.image
-    ? (post.image.startsWith('http') ? post.image : `${siteUrl}${post.image}`)
-    : `${siteUrl}/og-image-blog.jpg`,
+  image: post.image ? getImageUrl(post.image) : getImageUrl('/og-image-blog.jpg'),
   mainEntityOfPage: {
     '@type': 'WebPage',
     '@id': currentUrl
@@ -72,9 +72,9 @@ const blogPostingSchema = {
   isAccessibleForFree: true,
   isPartOf: {
     '@type': 'Blog',
-    name: 'RDM Klimatizacija Blog',
+    name: `${SITE_CONFIG.company.name} Blog`,
     description: 'Savjeti i vijesti o klima uređajima, dizalicama topline i ventilaciji',
-    url: `${siteUrl}/blog`
+    url: getFullUrl('/blog')
   }
 };
 ---

@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import InquiryModal from '../components/InquiryModal.astro';
+import { SITE_CONFIG } from '../config/site';
 ---
 
 <BaseLayout
@@ -44,7 +45,7 @@ import InquiryModal from '../components/InquiryModal.astro';
                   </svg>
                   <div>
                     <span class="contact-item__label">Telefon</span>
-                    <a href="tel:+385915957752" class="contact-item__value">+385 91 595 77 52</a>
+                    <a href={`tel:${SITE_CONFIG.contact.phoneFormatted}`} class="contact-item__value">{SITE_CONFIG.contact.phone}</a>
                   </div>
                 </div>
 
@@ -55,7 +56,7 @@ import InquiryModal from '../components/InquiryModal.astro';
                   </svg>
                   <div>
                     <span class="contact-item__label">Email</span>
-                    <a href="mailto:rmfrigoteam@gmail.com" class="contact-item__value">rmfrigoteam@gmail.com</a>
+                    <a href={`mailto:${SITE_CONFIG.contact.email}`} class="contact-item__value">{SITE_CONFIG.contact.email}</a>
                   </div>
                 </div>
 
@@ -66,7 +67,7 @@ import InquiryModal from '../components/InquiryModal.astro';
                   </svg>
                   <div>
                     <span class="contact-item__label">Adresa</span>
-                    <span class="contact-item__value">Potočka ulica 28, Križevci</span>
+                    <span class="contact-item__value">{SITE_CONFIG.contact.address.formatted}</span>
                   </div>
                 </div>
 
@@ -132,7 +133,7 @@ import InquiryModal from '../components/InquiryModal.astro';
                   </svg>
                   <div>
                     <span class="contact-item__label">Adresa</span>
-                    <span class="contact-item__value">Potočka ulica 28, Križevci</span>
+                    <span class="contact-item__value">{SITE_CONFIG.contact.address.formatted}</span>
                   </div>
                 </div>
               </div>

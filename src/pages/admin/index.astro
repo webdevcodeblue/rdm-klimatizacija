@@ -1,5 +1,7 @@
 ---
-// Admin panel sa inline konfiguracijom (kao CMS koji RADI)
+import { SITE_CONFIG } from '../../config/site';
+
+// Admin panel sa inline konfiguracijom (jako CMS koji RADI)
 ---
 <!DOCTYPE html>
 <html lang="hr">
@@ -7,7 +9,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex" />
-  <title>RDM Klimatizacija - Admin Panel</title>
+  <title>{SITE_CONFIG.company.name} - Admin Panel</title>
 
   <!-- Custom CMS Styles -->
   <style>
@@ -63,7 +65,7 @@
               name: 'github',
               repo: 'webdevcodeblue/rdm-klimatizacija',
               branch: 'main',
-              base_url: 'https://rmfrigotema.plavecstudio.com',
+              base_url: '{SITE_CONFIG.url}',
               auth_endpoint: '/api/auth'
             };
 

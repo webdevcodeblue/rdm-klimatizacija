@@ -1,5 +1,6 @@
 ---
 import { formatWarranty } from '../../utils/formatSpecifications';
+import { SITE_CONFIG, getImageUrl, getFullUrl } from '../../config/site';
 
 // Product Schema Component for SEO
 // Automatically generates JSON-LD structured data for products
@@ -29,8 +30,8 @@ export interface Props {
 }
 
 const { product, category = 'Klima uređaj' } = Astro.props;
-const siteUrl = 'https://rdm-klimatizacija.hr';
-const currentUrl = `${siteUrl}${Astro.url.pathname}`;
+const siteUrl = SITE_CONFIG.url;
+const currentUrl = getFullUrl(Astro.url.pathname);
 
 // Helper function to generate availability status
 const getAvailability = (inStock: boolean | undefined) => {
@@ -86,9 +87,7 @@ const structuredData = {
   }${
     product.features ? `Značajke: ${product.features.slice(0, 3).join(', ')}.` : ''
   }`,
-  image: product.images.map(img =>
-    img.startsWith('http') ? img : `${siteUrl}${img}`
-  ),
+  image: product.images.map(img => getImageUrl(img)),
   brand: {
     '@type': 'Brand',
     name: product.manufacturer
@@ -118,8 +117,8 @@ const structuredData = {
     availability: getAvailability(product.inStock),
     seller: {
       '@type': 'Organization',
-      name: 'RDM Klimatizacija',
-      url: siteUrl
+      name: SITE_CONFIG.company.name,
+      url: SITE_CONFIG.url
     },
     warranty: formatWarranty(product.warranty || '2'),
     ...(product.originalPrice && product.price && product.originalPrice > product.price ? {

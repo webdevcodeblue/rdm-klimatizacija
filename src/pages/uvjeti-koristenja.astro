@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import InquiryModal from '../components/InquiryModal.astro';
+import { SITE_CONFIG } from '../config/site';
 ---
 
 <BaseLayout
@@ -87,7 +88,7 @@ import InquiryModal from '../components/InquiryModal.astro';
                   </div>
                   <div class="info-item">
                     <span class="label">Adresa:</span>
-                    <span class="value">Potočka ulica 28, 48260 Križevci, Hrvatska</span>
+                    <span class="value">{SITE_CONFIG.contact.address.formatted}, {SITE_CONFIG.contact.address.country}</span>
                   </div>
                   <div class="info-item">
                     <span class="label">Email:</span>
@@ -487,7 +488,7 @@ import InquiryModal from '../components/InquiryModal.astro';
                     <circle cx="12" cy="10" r="3"></circle>
                   </svg>
                   <h4>Adresa</h4>
-                  <p>Potočka ulica 28<br>48260 Križevci</p>
+                  <p>{SITE_CONFIG.contact.address.street}<br>{SITE_CONFIG.contact.address.postalCode} {SITE_CONFIG.contact.address.city}</p>
                 </div>
               </div>
             </div>

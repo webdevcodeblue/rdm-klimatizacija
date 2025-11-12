@@ -1,5 +1,8 @@
 # RDM Klimatizacija Robots.txt
-# Generated: 2025-11-07
+# Last Updated: 2025-01-12
+#
+# VAŽNO: Site URL je definisan u src/config/site.ts
+# Finalna domena: https://www.rmfrigoteam.hr
 
 # Allow all search engines
 User-agent: *
@@ -10,6 +13,9 @@ Disallow: /admin/
 Disallow: /api/
 Disallow: /config.yml
 
+# Disallow search results page (avoid duplicate content)
+Disallow: /pretraga?*
+
 # Block specific bots if needed
 User-agent: AhrefsBot
 Disallow: /
@@ -17,12 +23,24 @@ Disallow: /
 User-agent: SemrushBot
 Crawl-delay: 10
 
-# Sitemap location
-Sitemap: https://rdm-klimatizacija.hr/sitemap-index.xml
+User-agent: MJ12bot
+Disallow: /
 
-# Croatian search engines
+User-agent: DotBot
+Disallow: /
+
+# Sitemap location - FINALNA DOMENA
+Sitemap: https://www.rmfrigoteam.hr/sitemap-index.xml
+
+# Croatian and regional search engines
 User-agent: SeznamBot
 Allow: /
 
 User-agent: Najdi.si
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
 Allow: /

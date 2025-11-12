@@ -29,6 +29,11 @@ const organizationSchema = getOrganizationSchema();
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="generator" content={Astro.generator}>
 
+  <!-- Security Meta Tags -->
+  <meta http-equiv="X-DNS-Prefetch-Control" content="on">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="format-detection" content="telephone=no">
+
   <!-- SEO Meta -->
   <title>{title} | {SITE_CONFIG.company.name}</title>
   <meta name="description" content={description}>

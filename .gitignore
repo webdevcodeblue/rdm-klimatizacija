@@ -36,3 +36,4 @@ Thumbs.db
 # Documentation files - ignore only in root, allow content markdown files
 /*.md
 !README.md
+!SECURITY.md

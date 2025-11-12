@@ -1014,6 +1014,24 @@ const pageDescription = 'Saznajte više o RDM Klimatizaciji - vašem pouzdanom p
     .team__grid {
       grid-template-columns: repeat(2, 1fr);
     }
+
+    /* Disable performance-heavy effects on mobile/tablet */
+    .stats::after {
+      animation: none;
+    }
+
+    .stat-card {
+      backdrop-filter: none;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .stat-card::before {
+      display: none;
+    }
+
+    .stat-card:hover {
+      transform: none;
+    }
   }
 
   @media (max-width: 768px) {

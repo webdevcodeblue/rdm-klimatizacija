@@ -5,13 +5,14 @@ manufacturer: RDM Klimatizacija
 category: montaza-servis
 price: 300
 available: true
+inStock: true
 image: /images/products/rm-frigo-team-montaza-klime.webp
 images: []
 badge: Popularno
+featured: true
+onSale: true
 includes:
   - SNAGE DO 4,5 kW u hlađenju - uključeno do 3m svih instalacija
-inStock: true
-featured: true
 popular: true
 features:
   - Montaže do 4,5 kW u hlađenju - uključeno do 3m svih instalacija

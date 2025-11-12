@@ -18,6 +18,12 @@ specifications:
     indoor: 620 x 200 x 265
   weight:
     indoor: 7,5
+features:
+  - Poboljšava kvalitetu zraka
+  - Cirkulira svježi zrak bez propuha
+  - Energija se oporavlja od ustajalog odlaznog zraka
+  - Uklanja ustajali zrak
+  - Balansirana ventilacija
 infoSheet: null
 ---
 <!--StartFragment-->

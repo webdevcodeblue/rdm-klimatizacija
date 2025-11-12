@@ -160,6 +160,7 @@ const serviceSchema = z.object({
 
   // ==================== SPECIAL FLAGS ====================
   featured: z.boolean().default(false), // Prikaži na početnoj
+  onSale: z.boolean().default(false),   // Prikaži u Akcijama
   popular: z.boolean().default(false)   // Označi kao "Popularno"
 });
 

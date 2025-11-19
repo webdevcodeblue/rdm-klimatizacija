@@ -4,8 +4,8 @@ manufacturer: HAIER
 name: Tide Plus 2,6 kW
 model: Haier Tide 2,6 kW
 category: klima-uredaji
-price: ""
-originalPrice: ""
+price: 527.5
+originalPrice: 604.33
 warranty: 5 godine
 inStock: true
 image: /images/products/Haier_Tide_4_1.jpg

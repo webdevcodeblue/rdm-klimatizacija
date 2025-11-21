@@ -26,14 +26,18 @@ import heroImage from '../../assets/images/hero/klima_uredaji_za_dom.jpg';
       </h1>
 
       <p class="hero__description">
-        Ovlašteni serviser vodećih svjetskih proizvođača.
-        Prodaja, montaža i servis klima uređaja, dizalica topline i ventilacijskih sustava.
+        Ovlašteni serviseri vodećih svjetskih proizvođača. Prodaja, montaža i
+        servis klima uređaja, dizalica topline i ventilacijskih sustava.
       </p>
 
       <div class="hero__search">
         <form class="search-box" id="heroSearchForm">
           <div class="search-box__filters">
-            <select class="search-box__select" name="category" id="heroCategory">
+            <select
+              class="search-box__select"
+              name="category"
+              id="heroCategory"
+            >
               <option value="">Sve kategorije</option>
               <option value="klima-uredaji">Klima uređaji</option>
               <option value="multi-klima">Multi klima</option>
@@ -63,7 +67,14 @@ import heroImage from '../../assets/images/hero/klima_uredaji_za_dom.jpg';
           </div>
 
           <button type="submit" class="search-box__button">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
               <circle cx="11" cy="11" r="8"></circle>
               <path d="m21 21-4.35-4.35"></path>
             </svg>
@@ -431,9 +442,15 @@ import heroImage from '../../assets/images/hero/klima_uredaji_za_dom.jpg';
       e.preventDefault();
 
       // Get selected values
-      const categorySelect = document.getElementById('heroCategory') as HTMLSelectElement;
-      const powerSelect = document.getElementById('heroPower') as HTMLSelectElement;
-      const areaSelect = document.getElementById('heroArea') as HTMLSelectElement;
+      const categorySelect = document.getElementById(
+        'heroCategory'
+      ) as HTMLSelectElement;
+      const powerSelect = document.getElementById(
+        'heroPower'
+      ) as HTMLSelectElement;
+      const areaSelect = document.getElementById(
+        'heroArea'
+      ) as HTMLSelectElement;
 
       const category = categorySelect?.value || '';
       const power = powerSelect?.value || '';

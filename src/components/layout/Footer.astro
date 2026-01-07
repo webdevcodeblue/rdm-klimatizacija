@@ -157,7 +157,7 @@ const paymentMethods = [
       <div class="footer__bottom-content">
         <div class="footer__copyright">
           <p>&copy; {currentYear} {SITE_CONFIG.company.name}. Sva prava pridržana.</p>
-          <p class="footer__design">Web dizajn i razvoj: <a href="https://example.com" target="_blank" rel="noopener">Vaša agencija</a></p>
+          <p class="footer__design">Web dizajn i razvoj: <span class="footer__studio">Plavec Studio</span></p>
         </div>
         <div class="footer__payment">
           <span class="payment__label">Sigurno plaćanje:</span>
@@ -325,6 +325,11 @@ const paymentMethods = [
 
   .footer__copyright a:hover {
     text-decoration: underline;
+  }
+
+  .footer__studio {
+    color: var(--color-primary-light);
+    font-weight: var(--font-medium);
   }
 
   .footer__payment {

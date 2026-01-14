@@ -4,7 +4,7 @@ manufacturer: MITSUBISHI
 name: REKUPERATOR ZRAKA
 model: VL-100EU5-E - Lossnay
 category: mikroklima
-price: 495
+price: 496
 warranty: 2 godine
 inStock: true
 image: /images/products/mikroklima-rekuperator-zraka-mitsubishi-electric.jpg
